@@ -49,9 +49,17 @@ export default function EspacoRevelleSite() {
                         <a href="#reviews" className="hover:text-white transition-colors">Depoimentos</a>
                     </div>
 
-                    <Button className="bg-red-600 hover:bg-red-500 text-white rounded-full px-6 text-sm font-bold">
-                        Falar com Consultor
-                    </Button>
+                    <div className="flex items-center gap-4">
+                        <Link href="/login">
+                            <Button variant="ghost" className="hidden sm:flex text-neutral-300 hover:text-white hover:bg-white/5 rounded-full px-4 text-sm font-bold transition-all">
+                                <Users className="w-4 h-4 mr-2" />
+                                Área do Aluno
+                            </Button>
+                        </Link>
+                        <Button className="bg-red-600 hover:bg-red-500 text-white rounded-full px-6 text-sm font-bold shadow-lg shadow-red-600/20 transition-all hover:scale-105 active:scale-95">
+                            Falar com Consultor
+                        </Button>
+                    </div>
                 </div>
             </nav>
 
