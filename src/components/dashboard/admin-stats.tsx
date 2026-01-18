@@ -123,57 +123,56 @@ export default function AdminDashboard() {
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                 {/* Insights and Strategic View */}
-                <Card className="lg:col-span-2 bg-card border-border shadow-sm rounded-[2.5rem] overflow-hidden border-2 border-transparent hover:border-border transition-all">
-                    <CardHeader className="p-10 border-b border-border/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <Card className="lg:col-span-2 bg-white dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-800 shadow-sm rounded-3xl overflow-hidden group">
+                    <CardHeader className="p-8 border-b border-neutral-100 dark:border-neutral-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div>
-                            <CardTitle className="text-2xl font-black uppercase tracking-tighter flex gap-3 items-center">
-                                <TrendingUp className="w-6 h-6" style={{ color: primaryColor }} />
+                            <CardTitle className="text-xl font-bold tracking-tight flex gap-3 items-center text-neutral-900 dark:text-white">
+                                <TrendingUp className="w-5 h-5" style={{ color: primaryColor }} />
                                 Análise de Crescimento
                             </CardTitle>
-                            <CardDescription className="text-sm font-bold uppercase tracking-widest text-muted-foreground mt-1">Evolução de matrículas e faturamento</CardDescription>
+                            <CardDescription className="text-xs font-medium text-neutral-500 mt-1">Evolução de matrículas e faturamento</CardDescription>
                         </div>
-                        <Button variant="ghost" size="sm" className="text-[10px] font-black uppercase tracking-widest text-[var(--primary)] hover:bg-muted p-4">Ver Gráfico Completo</Button>
+                        <Button variant="ghost" size="sm" className="text-[10px] font-bold uppercase tracking-wider text-[var(--primary)] hover:bg-neutral-50 dark:hover:bg-neutral-800/50 rounded-lg h-8 px-3">Ver Gráfico Completo</Button>
                     </CardHeader>
                     <CardContent className="p-0">
-                        <div className="h-[350px] w-full bg-muted/20 flex items-center justify-center p-10 relative">
+                        <div className="h-[300px] w-full bg-neutral-50/30 dark:bg-black/20 flex items-center justify-center p-8 relative">
                             {/* Visual Chart Bars */}
-                            <div className="absolute inset-x-10 bottom-10 top-20 flex items-end justify-between gap-6 lg:gap-8">
+                            <div className="absolute inset-x-8 bottom-8 top-16 flex items-end justify-between gap-4 lg:gap-6">
                                 {[40, 60, 45, 90, 65, 80, 100].map((h, i) => (
                                     <motion.div
                                         key={i}
                                         initial={{ height: 0 }}
                                         animate={{ height: `${h}%` }}
                                         transition={{ delay: 0.5 + i * 0.1, duration: 1, ease: 'easeOut' }}
-                                        className="flex-1 rounded-t-2xl group relative cursor-pointer"
-                                        style={{ background: `linear-gradient(to top, ${primaryColor}40, ${primaryColor}10)` }}
+                                        className="flex-1 rounded-t-xl group relative cursor-pointer opacity-90 hover:opacity-100 transition-opacity"
+                                        style={{ background: `linear-gradient(to top, ${primaryColor}60, ${primaryColor}10)` }}
                                     >
-                                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-card text-foreground text-[10px] px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 shadow-2xl border border-border transition-all font-black">
+                                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-[10px] px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 shadow-lg border border-neutral-100 dark:border-neutral-700 transition-all font-bold">
                                             R$ {h * 324}
                                         </div>
-                                        <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl" />
                                     </motion.div>
                                 ))}
                             </div>
-                            <div className="text-muted-foreground/5 font-black text-8xl lg:text-9xl select-none uppercase tracking-tighter">DATA ANALYTICS</div>
+                            <div className="text-neutral-900/5 dark:text-white/5 font-black text-6xl lg:text-8xl select-none uppercase tracking-tighter absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">DATA</div>
                         </div>
-                        <div className="p-10 grid grid-cols-2 lg:grid-cols-4 gap-8 border-t border-border/50 bg-muted/5">
+                        <div className="p-8 grid grid-cols-2 lg:grid-cols-4 gap-6 border-t border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/30">
                             <div>
-                                <div className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">Churn Rate</div>
-                                <div className="text-2xl font-black mt-1">2.4%</div>
+                                <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider">Churn Rate</div>
+                                <div className="text-xl font-bold mt-1 text-neutral-900 dark:text-white">2.4%</div>
                             </div>
                             <div>
-                                <div className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">LTV Médio</div>
-                                <div className="text-2xl font-black mt-1">R$ 4.280</div>
+                                <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider">LTV Médio</div>
+                                <div className="text-xl font-bold mt-1 text-neutral-900 dark:text-white">R$ 4.280</div>
                             </div>
                             <div>
-                                <div className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">CAC</div>
-                                <div className="text-2xl font-black mt-1">R$ 145</div>
+                                <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider">CAC</div>
+                                <div className="text-xl font-bold mt-1 text-neutral-900 dark:text-white">R$ 145</div>
                             </div>
                             <div>
-                                <div className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">Saldo</div>
-                                <div className="text-2xl font-black text-emerald-500 mt-1">R$ 18.240</div>
+                                <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider">Saldo</div>
+                                <div className="text-xl font-bold text-emerald-600 mt-1">R$ 18.240</div>
                             </div>
                         </div>
                     </CardContent>
@@ -181,64 +180,64 @@ export default function AdminDashboard() {
 
                 {/* Automation & Status Sidebar */}
                 <div className="space-y-6">
-                    <Card className="bg-card border-border shadow-sm rounded-[2.5rem] overflow-hidden border-2 border-transparent hover:border-border transition-all">
-                        <CardHeader className="p-8">
-                            <CardTitle className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-2 text-muted-foreground">
-                                <Zap className="w-4 h-4" style={{ color: primaryColor }} />
+                    <Card className="bg-white dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-800 shadow-sm rounded-3xl overflow-hidden">
+                        <CardHeader className="p-6 pb-2">
+                            <CardTitle className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-neutral-400">
+                                <Zap className="w-3.5 h-3.5" style={{ color: primaryColor }} />
                                 Operação Inteligente
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="p-8 pt-0 space-y-5">
-                            <div className="p-6 rounded-[2rem] bg-muted/30 border border-border hover:border-[var(--primary)]/30 transition-all cursor-pointer group">
-                                <div className="font-black text-sm uppercase tracking-tight mb-2 group-hover:text-[var(--primary)] transition-colors">WhatsApp Marketing</div>
-                                <p className="text-[11px] text-muted-foreground leading-relaxed font-medium">
-                                    8 mensalidades vencem hoje. Disparo programado para as 09:00.
+                        <CardContent className="p-6 pt-4 space-y-4">
+                            <div className="p-5 rounded-2xl bg-neutral-50 dark:bg-white/5 border border-neutral-100 dark:border-white/5 hover:border-[var(--primary)]/30 transition-all cursor-pointer group">
+                                <div className="font-bold text-sm mb-1 text-neutral-900 dark:text-white group-hover:text-[var(--primary)] transition-colors">WhatsApp Marketing</div>
+                                <p className="text-[11px] text-neutral-500 leading-relaxed font-medium">
+                                    8 mensalidades vencem hoje. Disparo às 09:00.
                                 </p>
-                                <div className="mt-6 flex items-center justify-between">
+                                <div className="mt-4 flex items-center justify-between">
                                     <div className="flex -space-x-2">
-                                        {[1, 2, 3].map(i => <div key={i} className="w-6 h-6 rounded-full bg-muted border-2 border-card" />)}
-                                        <div className="text-[10px] text-muted-foreground ml-5 flex items-center font-black uppercase tracking-widest">+5 pais</div>
+                                        {[1, 2, 3].map(i => <div key={i} className="w-5 h-5 rounded-full bg-neutral-200 dark:bg-neutral-700 border-2 border-white dark:border-neutral-800" />)}
+                                        <div className="text-[9px] text-neutral-500 ml-4 flex items-center font-bold uppercase tracking-wider">+5</div>
                                     </div>
-                                    <Button size="sm" variant="ghost" className="h-8 text-[10px] font-black uppercase bg-[var(--primary)]/5 text-[var(--primary)] px-4 rounded-full">Ver Lista</Button>
+                                    <Button size="sm" variant="ghost" className="h-7 text-[9px] font-bold uppercase bg-[var(--primary)]/10 text-[var(--primary)] px-3 rounded-lg hover:bg-[var(--primary)]/20">Ver Lista</Button>
                                 </div>
                             </div>
 
-                            <div className="p-6 rounded-[2rem] bg-muted/30 border border-border hover:border-[var(--primary)]/30 transition-all cursor-pointer group">
-                                <div className="font-black text-sm uppercase tracking-tight mb-2 group-hover:text-[var(--primary)] transition-colors">Site & Blog</div>
-                                <p className="text-[11px] text-muted-foreground leading-relaxed font-medium">
-                                    42 fotos novas detectadas. Posts automáticos prontos para revisão.
+                            <div className="p-5 rounded-2xl bg-neutral-50 dark:bg-white/5 border border-neutral-100 dark:border-white/5 hover:border-[var(--primary)]/30 transition-all cursor-pointer group">
+                                <div className="font-bold text-sm mb-1 text-neutral-900 dark:text-white group-hover:text-[var(--primary)] transition-colors">Site & Blog</div>
+                                <p className="text-[11px] text-neutral-500 leading-relaxed font-medium">
+                                    42 fotos novas detectadas. Posts automáticos.
                                 </p>
                                 <Link href="/diretora/galeria">
-                                    <Button size="sm" className="w-full mt-6 text-white font-black h-11 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all" style={{ backgroundColor: primaryColor }}>
-                                        Revisar Agendamentos
+                                    <Button size="sm" className="w-full mt-4 text-white font-bold h-9 rounded-xl text-[10px] uppercase tracking-wide shadow-md transition-all border-none" style={{ backgroundColor: primaryColor }}>
+                                        Revisar
                                     </Button>
                                 </Link>
                             </div>
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-neutral-900 border-none shadow-2xl rounded-[2.5rem] overflow-hidden group relative">
+                    <Card className="bg-neutral-900 border border-neutral-800 shadow-xl rounded-3xl overflow-hidden group relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50" />
-                        <CardContent className="p-10 text-center relative z-10">
-                            <div className="w-20 h-20 bg-emerald-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 border border-emerald-500/20 group-hover:rotate-12 transition-transform shadow-xl shadow-emerald-500/10">
-                                <DollarSign className="text-emerald-500" size={38} />
+                        <CardContent className="p-8 text-center relative z-10">
+                            <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-emerald-500/20 group-hover:scale-110 transition-transform shadow-lg shadow-emerald-500/20">
+                                <DollarSign className="text-emerald-500" size={28} />
                             </div>
-                            <h3 className="text-white font-black text-2xl mb-2 tracking-tighter uppercase">Meta do Mês</h3>
-                            <div className="space-y-4 mb-8">
-                                <div className="flex justify-between text-[11px] px-2 font-black uppercase tracking-[0.2em]">
+                            <h3 className="text-white font-bold text-lg mb-1 tracking-tight">Meta do Mês</h3>
+                            <div className="space-y-3 mb-6">
+                                <div className="flex justify-between text-[10px] px-1 font-bold uppercase tracking-wider">
                                     <span className="text-emerald-500">R$ 32.450</span>
                                     <span className="text-neutral-500">R$ 40.000</span>
                                 </div>
-                                <div className="h-2.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: '81%' }}
                                         transition={{ duration: 1.5, ease: 'circOut' }}
-                                        className="h-full bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                                        className="h-full bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                                     />
                                 </div>
                             </div>
-                            <Button className="w-full bg-white text-black hover:bg-neutral-100 font-black h-14 rounded-2xl tracking-tight uppercase text-xs">Acelerar Resultados</Button>
+                            <Button className="w-full bg-white text-black hover:bg-neutral-100 font-bold h-10 rounded-xl tracking-tight text-xs border-none">Acelerar Resultados</Button>
                         </CardContent>
                     </Card>
                 </div>
