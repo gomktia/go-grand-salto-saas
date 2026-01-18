@@ -359,7 +359,7 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="max-w-7xl mx-auto space-y-8"
+                        className="max-w-[1600px] mx-auto space-y-8"
                     >
                         {children}
                     </motion.div>

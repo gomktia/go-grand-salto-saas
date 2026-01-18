@@ -49,38 +49,38 @@ export default function AgendaPage() {
     const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false)
 
     return (
-        <div className="p-4 lg:p-10 space-y-10 max-w-7xl mx-auto pb-24">
+        <div className="p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto pb-24">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-                <div className="space-y-2">
-                    <Badge variant="outline" className="border-[var(--primary)]/30 text-[var(--primary)] bg-[var(--primary)]/5 px-4 py-1.5 text-[10px] uppercase font-black tracking-[0.2em] rounded-full">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="space-y-1">
+                    <Badge variant="outline" className="border-[var(--primary)]/30 text-[var(--primary)] bg-[var(--primary)]/5 px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full mb-2">
                         Planejamento Semanal
                     </Badge>
-                    <h1 className="text-3xl lg:text-5xl font-black tracking-tighter uppercase leading-none">
+                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
                         Agenda <span style={{ color: primaryColor }}>Escolar</span>
                     </h1>
-                    <p className="text-muted-foreground font-medium text-sm lg:text-lg">Otimização máxima de salas e horários na <strong className="text-foreground">{tenant?.nome}</strong>.</p>
+                    <p className="text-muted-foreground text-sm">Otimização de salas e horários na <strong className="text-foreground">{tenant?.nome}</strong>.</p>
                 </div>
                 <div className="flex gap-3">
-                    <Button variant="outline" className="h-16 px-8 rounded-2xl border-2 border-border font-black text-[10px] uppercase tracking-widest bg-card hover:bg-muted transition-all">
-                        <Filter className="w-4 h-4 mr-2" /> Filtrar Prof.
+                    <Button variant="outline" className="h-10 px-4 rounded-xl border-border font-bold text-xs bg-card hover:bg-muted transition-all">
+                        <Filter className="w-3.5 h-3.5 mr-2" /> Filtrar Prof.
                     </Button>
-                    <Button className="h-16 px-10 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-2xl shadow-[var(--primary)]/30 border-none transition-all hover:scale-105 active:scale-95" style={{ backgroundColor: primaryColor }}>
-                        <Plus className="w-5 h-5 mr-1" /> Novo Horário
+                    <Button className="h-10 px-6 rounded-xl font-bold text-xs shadow-lg shadow-[var(--primary)]/20 border-none transition-all hover:scale-105 active:scale-95 text-white" style={{ backgroundColor: primaryColor }}>
+                        <Plus className="w-4 h-4 mr-2" /> Novo Horário
                     </Button>
                 </div>
             </div>
 
             {/* Calendar Grid */}
-            <Card className="bg-card border-border shadow-2xl rounded-[3rem] overflow-hidden relative border-2 border-transparent hover:border-border transition-all">
+            <Card className="bg-card border-border shadow-sm rounded-3xl overflow-hidden relative border hover:border-border/80 transition-all">
                 <div className="overflow-x-auto custom-scrollbar">
-                    <div className="min-w-[1000px]">
+                    <div className="min-w-[800px]">
                         {/* Calendar Header */}
-                        <div className="grid grid-cols-7 border-b border-border bg-muted/20">
-                            <div className="p-6 border-r border-border text-[10px] font-black text-muted-foreground uppercase flex items-center justify-center tracking-[0.2em]">Horário</div>
+                        <div className="grid grid-cols-7 border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground">
+                            <div className="p-4 border-r border-border flex items-center justify-center tracking-wider uppercase text-[10px]">Horário</div>
                             {daysOfWeek.map((day, idx) => (
-                                <div key={idx} className="p-6 border-r border-border last:border-r-0 text-center">
-                                    <span className="text-xs font-black uppercase tracking-widest text-foreground">{day}</span>
+                                <div key={idx} className="p-4 border-r border-border last:border-r-0 text-center uppercase tracking-wider text-[10px]">
+                                    {day}
                                 </div>
                             ))}
                         </div>
@@ -88,7 +88,7 @@ export default function AgendaPage() {
                         {/* Calendar Body */}
                         {timeSlots.map((slot, sIdx) => (
                             <div key={sIdx} className="grid grid-cols-7 border-b border-border last:border-b-0 group">
-                                <div className="p-6 border-r border-border bg-muted/10 flex items-center justify-center text-xs font-black text-muted-foreground tracking-tighter">
+                                <div className="p-4 border-r border-border bg-muted/10 flex items-center justify-center text-xs font-medium text-muted-foreground">
                                     {slot}
                                 </div>
                                 {daysOfWeek.map((_, dIdx) => {
@@ -96,25 +96,24 @@ export default function AgendaPage() {
                                     return (
                                         <div
                                             key={dIdx}
-                                            className="p-1 border-r border-border last:border-r-0 min-h-[100px] relative hover:bg-muted/30 transition-colors"
+                                            className="p-1 border-r border-border last:border-r-0 min-h-[90px] relative hover:bg-muted/20 transition-colors"
                                         >
                                             {event && (
                                                 <motion.div
                                                     layoutId={`event-${event.id}`}
                                                     onClick={() => setSelectedEvent(event)}
-                                                    whileHover={{ scale: 1.02, rotate: 1 }}
-                                                    className={`w-full h-full rounded-2xl p-4 text-white shadow-xl cursor-pointer transition-all flex flex-col justify-between border-2 border-white/10`}
+                                                    whileHover={{ scale: 1.02, y: -2 }}
+                                                    className="w-full h-full rounded-xl p-3 text-white shadow-md cursor-pointer transition-all flex flex-col justify-between border border-white/5"
                                                     style={{ backgroundColor: event.color.startsWith('var') ? primaryColor : event.color }}
                                                 >
-                                                    <div className="space-y-1">
-                                                        <div className="text-[11px] font-black uppercase tracking-tight leading-none truncate">{event.name}</div>
-                                                        <div className="text-[9px] opacity-70 font-black uppercase tracking-widest">{event.teacher}</div>
+                                                    <div className="space-y-0.5">
+                                                        <div className="text-[11px] font-bold leading-tight truncate">{event.name}</div>
+                                                        <div className="text-[9px] opacity-80 font-medium uppercase tracking-wide truncate">{event.teacher}</div>
                                                     </div>
                                                     <div className="flex items-center justify-between mt-2">
-                                                        <div className="flex items-center gap-1.5 text-[9px] bg-white/20 px-2 py-1 rounded-full font-black uppercase tracking-tighter">
-                                                            <MapPin size={10} /> {event.room}
+                                                        <div className="flex items-center gap-1 text-[9px] bg-black/20 px-1.5 py-0.5 rounded-md font-semibold">
+                                                            <MapPin size={9} /> {event.room}
                                                         </div>
-                                                        <Sparkles size={12} className="opacity-40" />
                                                     </div>
                                                 </motion.div>
                                             )}
@@ -128,76 +127,78 @@ export default function AgendaPage() {
             </Card>
 
             {/* Quick Stats / Legend */}
-            <div className="flex flex-wrap gap-4 p-6 bg-muted/20 rounded-[2rem] border border-dashed border-border">
-                <div className="flex items-center gap-3 px-6 py-3 bg-card rounded-full border border-border shadow-sm text-[10px] font-black uppercase tracking-[0.1em]">
-                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: primaryColor }} /> Baby & Kids
+            <div className="flex flex-wrap gap-3">
+                <div className="flex items-center gap-2 px-4 py-2 bg-card rounded-full border border-border shadow-sm text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: primaryColor }} /> Baby & Kids
                 </div>
-                <div className="flex items-center gap-3 px-6 py-3 bg-card rounded-full border border-border shadow-sm text-[10px] font-black uppercase tracking-[0.1em]">
-                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: '#c29493' }} /> Iniciante
+                <div className="flex items-center gap-2 px-4 py-2 bg-card rounded-full border border-border shadow-sm text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#c29493' }} /> Iniciante
                 </div>
-                <div className="flex items-center gap-3 px-6 py-3 bg-card rounded-full border border-border shadow-sm text-[10px] font-black uppercase tracking-[0.1em]">
-                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: '#7d3e37' }} /> Avançado
+                <div className="flex items-center gap-2 px-4 py-2 bg-card rounded-full border border-border shadow-sm text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#7d3e37' }} /> Avançado
                 </div>
             </div>
 
             {/* Event Details Dialog */}
             <Dialog open={!!selectedEvent} onOpenChange={() => setSelectedEvent(null)}>
-                <DialogContent className="sm:max-w-md bg-card border-border rounded-[3rem] p-10">
+                <DialogContent className="sm:max-w-md bg-card border-border rounded-3xl p-6">
                     <DialogHeader>
-                        <div className="flex flex-col items-center text-center gap-6 mb-8 pt-4">
+                        <div className="flex items-start gap-5 mb-2">
                             <div
-                                className={`w-24 h-24 rounded-[2rem] flex items-center justify-center text-white shadow-2xl transition-transform hover:rotate-6`}
+                                className="w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0"
                                 style={{ backgroundColor: selectedEvent?.color.startsWith('var') ? primaryColor : selectedEvent?.color }}
                             >
-                                <FullCalendar size={48} strokeWidth={2.5} />
+                                <FullCalendar size={28} />
                             </div>
-                            <div className="space-y-2">
-                                <DialogTitle className="text-3xl font-black uppercase tracking-tighter leading-none">{selectedEvent?.name}</DialogTitle>
-                                <DialogDescription className="font-black uppercase tracking-widest text-[10px]" style={{ color: primaryColor }}>Mestra Da Aula: {selectedEvent?.teacher}</DialogDescription>
+                            <div className="space-y-1">
+                                <DialogTitle className="text-xl font-bold leading-tight">{selectedEvent?.name}</DialogTitle>
+                                <DialogDescription className="font-semibold text-xs flex items-center gap-2 text-muted-foreground">
+                                    <span style={{ color: primaryColor }}>{selectedEvent?.teacher}</span> • {selectedEvent?.level}
+                                </DialogDescription>
                             </div>
                         </div>
                     </DialogHeader>
-                    <div className="space-y-6 py-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="p-6 rounded-[1.5rem] bg-muted/30 border border-border/50">
-                                <div className="text-[10px] uppercase font-black text-muted-foreground tracking-widest mb-2">Horário Real</div>
-                                <div className="text-sm font-black flex items-center gap-2">
-                                    <Clock size={16} style={{ color: primaryColor }} /> {selectedEvent?.time}
-                                </div>
-                            </div>
-                            <div className="p-6 rounded-[1.5rem] bg-muted/30 border border-border/50">
-                                <div className="text-[10px] uppercase font-black text-muted-foreground tracking-widest mb-2">Ambiente</div>
-                                <div className="text-sm font-black flex items-center gap-2">
-                                    <MapPin size={16} className="text-blue-500" /> {selectedEvent?.room}
-                                </div>
+
+                    <div className="grid grid-cols-2 gap-3 py-4">
+                        <div className="p-4 rounded-2xl bg-muted/40 border border-border/50 space-y-1">
+                            <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Horário</span>
+                            <div className="text-sm font-bold flex items-center gap-2">
+                                <Clock size={14} className="text-muted-foreground" /> {selectedEvent?.time}
                             </div>
                         </div>
-
-                        <Card className="bg-muted/10 border-border p-6 rounded-[2rem] border-dashed">
-                            <div className="flex items-center justify-between mb-4">
-                                <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                                    <Users size={16} /> Alunas Matriculadas
-                                </span>
-                                <Badge className="bg-foreground text-background font-black py-1 px-4 rounded-full">12 / 15</Badge>
+                        <div className="p-4 rounded-2xl bg-muted/40 border border-border/50 space-y-1">
+                            <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Sala</span>
+                            <div className="text-sm font-bold flex items-center gap-2">
+                                <MapPin size={14} className="text-muted-foreground" /> {selectedEvent?.room}
                             </div>
-                            <div className="flex -space-x-4 items-center">
-                                {[1, 2, 3, 4, 5].map((i) => (
-                                    <div key={i} className="w-12 h-12 rounded-full border-4 border-card bg-neutral-200" />
-                                ))}
-                                <div className="w-12 h-12 rounded-full border-4 border-card bg-neutral-900 flex items-center justify-center text-xs text-white font-black">+7</div>
-                            </div>
-                        </Card>
+                        </div>
                     </div>
-                    <DialogFooter className="flex flex-col sm:flex-row gap-4 mt-6">
+
+                    <Card className="bg-muted/20 border-dashed border-border p-4 rounded-2xl mb-2">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 text-muted-foreground">
+                                <Users size={14} /> Alunas (12/15)
+                            </span>
+                            <Badge variant="secondary" className="text-[10px] h-5">Vagas: 3</Badge>
+                        </div>
+                        <div className="flex -space-x-2 items-center">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <div key={i} className="w-8 h-8 rounded-full border-2 border-card bg-neutral-200" />
+                            ))}
+                            <div className="w-8 h-8 rounded-full border-2 border-card bg-neutral-800 flex items-center justify-center text-[10px] text-white font-bold">+7</div>
+                        </div>
+                    </Card>
+
+                    <DialogFooter className="flex gap-2 mt-2">
                         <Button
                             onClick={() => setIsNotifyModalOpen(true)}
-                            className="flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-xs gap-3 shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            className="flex-1 h-11 rounded-xl font-bold text-xs gap-2 shadow-lg transition-all text-white"
                             style={{ backgroundColor: primaryColor }}
                         >
-                            <Bell size={18} /> Notificar Turma
+                            <Bell size={16} /> Notificar
                         </Button>
-                        <Button variant="ghost" className="h-14 w-14 p-0 rounded-2xl text-destructive hover:bg-destructive/10">
-                            <Trash2 size={24} />
+                        <Button variant="outline" className="h-11 w-11 p-0 rounded-xl text-destructive hover:bg-destructive/10 border-border">
+                            <Trash2 size={18} />
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -205,36 +206,36 @@ export default function AgendaPage() {
 
             {/* Notification Modal */}
             <Dialog open={isNotifyModalOpen} onOpenChange={() => setIsNotifyModalOpen(false)}>
-                <DialogContent className="sm:max-w-md bg-card border-border rounded-[3rem] p-10">
+                <DialogContent className="sm:max-w-[400px] bg-card border-border rounded-3xl p-6">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl font-black uppercase tracking-tighter">Disparo de Notificação</DialogTitle>
-                        <DialogDescription className="font-medium text-sm mt-2">
-                            Aviso automático para os pais da turma <strong style={{ color: primaryColor }}>{selectedEvent?.name}</strong>.
+                        <DialogTitle className="text-lg font-bold">Enviar Notificação</DialogTitle>
+                        <DialogDescription className="text-xs">
+                            Para: Turma <strong style={{ color: primaryColor }}>{selectedEvent?.name}</strong>.
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-6 py-6">
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Canal de Comunicação</label>
-                            <div className="flex gap-3">
-                                <Button className="flex-1 h-12 rounded-xl font-black uppercase text-[10px] tracking-widest gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20">
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Canal</label>
+                            <div className="grid grid-cols-2 gap-2">
+                                <Button className="h-10 rounded-xl text-xs font-bold gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/10">
                                     WhatsApp
                                 </Button>
-                                <Button variant="outline" className="flex-1 h-12 rounded-xl font-black uppercase text-[10px] tracking-widest border-border bg-muted/50">
+                                <Button variant="outline" className="h-10 rounded-xl text-xs font-bold border-border">
                                     App Push
                                 </Button>
                             </div>
                         </div>
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground font-black">Conteúdo da Mensagem</label>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Mensagem</label>
                             <textarea
-                                className="w-full min-h-[120px] bg-muted/30 border border-border rounded-2xl p-4 text-sm font-medium focus:ring-4 focus:ring-[var(--primary)]/10 outline-none transition-all"
-                                defaultValue={`Olá! Passando para lembrar da aula de ${selectedEvent?.name} hoje às ${selectedEvent?.time} na ${selectedEvent?.room}. Esperamos vocês 🩰✨`}
+                                className="w-full h-24 bg-muted/40 border border-border rounded-xl p-3 text-sm focus:ring-2 focus:ring-[var(--primary)]/20 outline-none resize-none"
+                                defaultValue={`Olá! Lembrando da aula de ${selectedEvent?.name} hoje às ${selectedEvent?.time}.`}
                             />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button className="w-full h-16 rounded-[1.5rem] font-black uppercase tracking-widest text-sm shadow-2xl gap-3 transition-all hover:scale-105 active:scale-95" style={{ backgroundColor: primaryColor }}>
-                            <CheckCircle2 size={20} /> Disparar Agora
+                        <Button className="w-full h-11 rounded-xl font-bold text-xs shadow-md gap-2 text-white" style={{ backgroundColor: primaryColor }}>
+                            <CheckCircle2 size={16} /> Enviar Agora
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -57,71 +57,71 @@ export default function TurmasPage() {
     const primaryColor = tenant?.primaryColor || '#ec4899'
 
     return (
-        <div className="p-4 lg:p-10 space-y-10 max-w-7xl mx-auto pb-24">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-                <div className="space-y-2">
-                    <Badge variant="outline" className="border-[var(--primary)]/30 text-[var(--primary)] bg-[var(--primary)]/5 px-4 py-1.5 text-[10px] uppercase font-black tracking-[0.2em] rounded-full">
+        <div className="p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto pb-24">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="space-y-1">
+                    <Badge variant="outline" className="border-[var(--primary)]/30 text-[var(--primary)] bg-[var(--primary)]/5 px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full mb-2">
                         Engenharia Acadêmica
                     </Badge>
-                    <h1 className="text-3xl lg:text-5xl font-black tracking-tighter uppercase leading-none">
+                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
                         Gestão de <span style={{ color: primaryColor }}>Turmas</span>
                     </h1>
-                    <p className="text-muted-foreground font-medium text-sm lg:text-lg">Organize salas, horários e ocupação da <strong className="text-foreground">{tenant?.nome}</strong>.</p>
+                    <p className="text-muted-foreground text-sm">Organize salas, horários e ocupação da <strong className="text-foreground">{tenant?.nome}</strong>.</p>
                 </div>
-                <Button className="h-16 px-10 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-2xl shadow-[var(--primary)]/30 border-none transition-all hover:scale-105 active:scale-95" style={{ backgroundColor: primaryColor }}>
-                    <Plus className="w-5 h-5 mr-1" />
+                <Button className="h-10 px-6 rounded-xl font-bold text-xs shadow-lg shadow-[var(--primary)]/20 border-none transition-all hover:scale-105 active:scale-95 text-white" style={{ backgroundColor: primaryColor }}>
+                    <Plus className="w-4 h-4 mr-2" />
                     Nova Turma
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {classes.map((cls) => (
-                    <motion.div key={cls.id} whileHover={{ y: -8 }} className="h-full">
-                        <Card className="bg-card border-border shadow-sm overflow-hidden group hover:border-[var(--primary)]/30 transition-all h-full flex flex-col rounded-[2.5rem] relative">
-                            <CardHeader className="p-8 pb-4 border-b border-border/50 bg-muted/20">
+                    <motion.div key={cls.id} whileHover={{ y: -4 }} className="h-full">
+                        <Card className="bg-card border-border shadow-sm overflow-hidden group hover:border-[var(--primary)]/30 transition-all h-full flex flex-col rounded-3xl relative">
+                            <CardHeader className="p-6 pb-4 border-b border-border/50 bg-muted/20">
                                 <div className="flex items-start justify-between gap-4 mb-4">
-                                    <div className="p-4 rounded-2xl bg-card border border-border shadow-sm group-hover:rotate-6 transition-transform">
-                                        <Layers className="w-6 h-6" style={{ color: primaryColor }} />
+                                    <div className="p-3 rounded-xl bg-card border border-border shadow-sm group-hover:rotate-6 transition-transform">
+                                        <Layers className="w-5 h-5" style={{ color: primaryColor }} />
                                     </div>
-                                    <Badge variant="outline" className={`text-[9px] font-black uppercase tracking-widest h-6 px-3 rounded-full ${cls.status === 'Full' ? 'border-amber-500/30 text-amber-500 bg-amber-500/5' : 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5'
+                                    <Badge variant="outline" className={`text-[9px] font-bold uppercase tracking-wider h-6 px-2.5 rounded-full ${cls.status === 'Full' ? 'border-amber-500/30 text-amber-500 bg-amber-500/5' : 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5'
                                         }`}>
                                         {cls.status === 'Full' ? 'Limite Atingido' : 'Vagas Abertas'}
                                     </Badge>
                                 </div>
-                                <CardTitle className="text-xl font-black uppercase tracking-tight truncate mb-1">{cls.name}</CardTitle>
-                                <CardDescription className="text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: primaryColor }}>{cls.teacher}</CardDescription>
+                                <CardTitle className="text-lg font-bold leading-tight truncate mb-1">{cls.name}</CardTitle>
+                                <CardDescription className="text-[10px] font-bold uppercase tracking-wider opacity-80" style={{ color: primaryColor }}>{cls.teacher}</CardDescription>
                             </CardHeader>
-                            <CardContent className="p-8 pt-6 space-y-6 flex-1 flex flex-col">
-                                <div className="grid grid-cols-2 gap-4">
+                            <CardContent className="p-6 pt-5 space-y-5 flex-1 flex flex-col">
+                                <div className="grid grid-cols-2 gap-3">
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Horário</span>
-                                        <div className="flex items-center gap-2 text-sm font-bold tracking-tight">
-                                            <Clock className="w-4 h-4 opacity-50" /> {cls.schedule}
+                                        <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">Horário</span>
+                                        <div className="flex items-center gap-1.5 text-sm font-semibold tracking-tight">
+                                            <Clock className="w-3.5 h-3.5 opacity-50" /> {cls.schedule}
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Local</span>
-                                        <div className="flex items-center gap-2 text-sm font-bold tracking-tight">
-                                            <MapPin className="w-4 h-4 opacity-50" /> {cls.room}
+                                        <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">Local</span>
+                                        <div className="flex items-center gap-1.5 text-sm font-semibold tracking-tight">
+                                            <MapPin className="w-3.5 h-3.5 opacity-50" /> {cls.room}
                                         </div>
                                     </div>
                                 </div>
-                                <div className="space-y-3 mt-auto">
+                                <div className="space-y-2 mt-auto">
                                     <div className="flex items-center justify-between text-[10px]">
-                                        <span className="text-muted-foreground font-black uppercase tracking-widest">Ocupação da Sala</span>
-                                        <span className="font-black text-foreground">{cls.students} Alunas</span>
+                                        <span className="text-muted-foreground font-bold uppercase tracking-wider">Ocupação da Sala</span>
+                                        <span className="font-bold text-foreground">{cls.students} Alunas</span>
                                     </div>
-                                    <div className="h-2.5 w-full bg-muted rounded-full overflow-hidden">
+                                    <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{ width: `${cls.fillRate}%` }}
-                                            className="h-full rounded-full transition-all shadow-lg"
-                                            style={{ backgroundColor: primaryColor, boxShadow: `0 0 10px ${primaryColor}40` }}
+                                            className="h-full rounded-full transition-all shadow-sm"
+                                            style={{ backgroundColor: primaryColor }}
                                         />
                                     </div>
                                 </div>
-                                <Button className="w-full mt-4 h-14 rounded-2xl border-2 border-border bg-card text-foreground group-hover:bg-muted group-hover:border-[var(--primary)]/30 font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2">
-                                    Configurações da Turma <ChevronRight className="w-4 h-4" />
+                                <Button variant="outline" className="w-full mt-4 h-10 rounded-xl border border-border bg-card text-foreground hover:bg-muted hover:text-foreground font-bold uppercase tracking-wide text-[10px] transition-all flex items-center justify-center gap-2">
+                                    Configurações <ChevronRight className="w-3.5 h-3.5" />
                                 </Button>
                             </CardContent>
                         </Card>
