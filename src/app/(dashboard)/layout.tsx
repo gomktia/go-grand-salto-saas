@@ -128,15 +128,15 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
                     variant="outline"
                     size="icon"
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="absolute -right-3 top-9 h-6 w-6 rounded-full border shadow-sm z-50 bg-background text-foreground hover:bg-accent hidden group-hover/sidebar:flex items-center justify-center transition-opacity"
+                    className="absolute -right-3 top-9 h-6 w-6 rounded-full border border-neutral-200 dark:border-neutral-800 shadow-sm z-50 bg-background text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800 hidden group-hover/sidebar:flex items-center justify-center transition-all bg-white dark:bg-neutral-900"
                 >
                     {isCollapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
                 </Button>
 
                 <div className={`p-6 flex items-center ${isCollapsed ? 'justify-center' : 'gap-4'} h-20`}>
                     <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shrink-0 shadow-lg transition-transform hover:scale-110"
-                        style={{ backgroundColor: primaryColor, boxShadow: `0 10px 15px -3px ${primaryColor}40` }}
+                        className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shrink-0 shadow-lg shadow-neutral-900/5 transition-transform hover:scale-105"
+                        style={{ backgroundColor: primaryColor }}
                     >
                         {tenant?.logo_url ? (
                             <img src={tenant.logo_url} alt="Logo" className="w-6 h-6 object-contain" />
@@ -150,37 +150,37 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
                             animate={{ opacity: 1, x: 0 }}
                             className="flex flex-col overflow-hidden"
                         >
-                            <span className="text-lg font-black tracking-tighter leading-none uppercase truncate">
+                            <span className="text-base font-bold tracking-tight leading-none truncate text-neutral-900 dark:text-white">
                                 {tenant?.nome || 'Plataforma'}
                             </span>
-                            <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
+                            <span className="text-[11px] text-neutral-500 font-medium tracking-wide mt-1">
                                 Painel de Gestão
                             </span>
                         </motion.div>
                     )}
                 </div>
 
-                <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+                <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
                     {config.items.map((item: any) => {
                         const isActive = pathname === item.href
                         return (
                             <Link key={item.name} href={item.href}>
                                 <div className={`
-                                    flex items-center gap-3 px-3 py-3 rounded-2xl transition-all group relative cursor-pointer
+                                    flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group relative cursor-pointer
                                     ${isActive
-                                        ? 'text-white'
-                                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'}
+                                        ? 'text-white shadow-md shadow-black/5'
+                                        : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5 hover:text-neutral-900 dark:hover:text-white'}
                                     ${isCollapsed ? 'justify-center' : ''}
                                 `}
-                                    style={isActive ? { backgroundColor: primaryColor, boxShadow: `0 4px 20px -5px ${primaryColor}50` } : {}}
+                                    style={isActive ? { backgroundColor: primaryColor } : {}}
                                 >
-                                    <item.icon className={`w-5 h-5 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : 'group-hover:text-foreground'}`} />
+                                    <item.icon className={`w-4 h-4 shrink-0 transition-transform ${isActive ? 'text-white' : 'group-hover:text-current'}`} />
 
                                     {!isCollapsed && (
                                         <motion.span
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
-                                            className="font-semibold text-sm whitespace-nowrap"
+                                            className="font-medium text-sm whitespace-nowrap"
                                         >
                                             {item.name}
                                         </motion.span>
@@ -188,7 +188,7 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
 
                                     {/* Tooltip for Collapsed State */}
                                     {isCollapsed && (
-                                        <div className="absolute left-full ml-4 px-3 py-1.5 bg-neutral-900 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[60] font-bold uppercase tracking-widest border border-white/10 shadow-xl transition-opacity duration-200">
+                                        <div className="absolute left-full ml-4 px-3 py-1.5 bg-neutral-900 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[60] font-medium tracking-wide border border-white/10 shadow-xl transition-opacity duration-200">
                                             {item.name}
                                         </div>
                                     )}
@@ -203,25 +203,25 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
                         <motion.div
                             initial={{ scale: 0.95 }}
                             animate={{ scale: 1 }}
-                            className="p-4 rounded-2xl bg-muted/40 border border-border group transition-all hover:border-[var(--primary)]/30 hover:bg-muted/60"
+                            className="p-3.5 rounded-xl bg-neutral-50 dark:bg-white/5 border border-border/50 group transition-all hover:bg-neutral-100 dark:hover:bg-white/10"
                         >
                             <div className="flex items-center gap-3 mb-3">
-                                <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-background border border-border/50">
+                                <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white dark:bg-neutral-800 border border-border/50 shadow-sm">
                                     <Globe className="w-4 h-4" style={{ color: primaryColor }} />
                                 </div>
                                 <div className="overflow-hidden">
-                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Loja Online</div>
-                                    <div className="text-xs font-bold truncate">revelle.com.br</div>
+                                    <div className="text-[10px] font-medium text-neutral-500 uppercase tracking-wider">Loja Online</div>
+                                    <div className="text-xs font-semibold truncate text-neutral-900 dark:text-white">revelle.com.br</div>
                                 </div>
                             </div>
-                            <Button variant="outline" size="sm" className="w-full text-[10px] font-bold h-8 border-border hover:bg-background bg-transparent hover:text-[var(--primary)] transition-colors">
+                            <Button variant="outline" size="sm" className="w-full text-[10px] font-semibold h-8 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
                                 <Settings className="w-3 h-3 mr-2" />
                                 Configurar
                             </Button>
                         </motion.div>
                     ) : (
                         <div className="flex justify-center">
-                            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl">
+                            <Button variant="ghost" size="icon" className="text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl">
                                 <Settings className="w-5 h-5" />
                             </Button>
                         </div>
@@ -229,11 +229,11 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
                 </div>
 
                 <div className={`p-4 flex items-center ${isCollapsed ? 'flex-col gap-4' : 'justify-between'} pb-8`}>
-                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-colors">
+                    <Button variant="ghost" size="icon" className="text-neutral-400 hover:text-red-500 hover:bg-red-500/5 rounded-xl transition-colors">
                         <LogOut className="w-5 h-5" />
                     </Button>
                     {!isCollapsed && (
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-50">v1.2.0</span>
+                        <span className="text-[10px] font-medium text-neutral-400 tracking-wider">v1.2.0</span>
                     )}
                 </div>
             </motion.aside>

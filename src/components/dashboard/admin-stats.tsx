@@ -64,27 +64,30 @@ export default function AdminDashboard() {
     ]
 
     return (
-        <div className="space-y-8 lg:space-y-12 p-4 lg:p-10 pb-24 max-w-[1600px] mx-auto">
+        <div className="space-y-8 lg:space-y-10 p-4 lg:p-8 pb-20 max-w-[1600px] mx-auto font-sans">
             {/* Executive Welcome */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-                <div className="space-y-2">
-                    <Badge variant="outline" className="border-[var(--primary)]/30 text-[var(--primary)] bg-[var(--primary)]/5 px-4 py-1.5 text-[10px] uppercase tracking-[0.2em] font-black rounded-full">
-                        Modo Administração
-                    </Badge>
-                    <h1 className="text-3xl lg:text-6xl font-black tracking-tighter text-foreground uppercase">
-                        Sua Escola: <span style={{ color: primaryColor }}>{tenant?.nome || 'Escola'}</span>
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-3 mb-2">
+                        <Badge variant="secondary" className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
+                            Painel de Controle
+                        </Badge>
+                        <span className="text-xs font-medium text-neutral-400">v1.2.0</span>
+                    </div>
+                    <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white">
+                        Olá, <span style={{ color: primaryColor }}>{tenant?.nome || 'Diretora'}</span>
                     </h1>
-                    <p className="text-muted-foreground text-sm lg:text-lg max-w-2xl font-medium leading-relaxed">
-                        Olá, Diretora! Aqui está o pulso estratégico do seu negócio em tempo real.
+                    <p className="text-neutral-500 dark:text-neutral-400 text-base max-w-xl leading-relaxed">
+                        Bem-vinda de volta. Aqui está o resumo financeiro e operacional da sua escola hoje.
                     </p>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-                    <Button variant="outline" className="h-14 px-8 rounded-2xl border-border font-bold uppercase tracking-widest text-[10px] hover:bg-muted transition-all">
-                        Relatório Estratégico
+                <div className="flex flex-col sm:flex-row gap-3 shadow-sm">
+                    <Button variant="outline" className="h-11 px-6 rounded-xl border-neutral-200 dark:border-neutral-800 font-semibold text-sm hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-all">
+                        Relatórios
                     </Button>
                     <Link href="/diretora/turmas">
-                        <Button className="h-14 px-10 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-2xl shadow-[var(--primary)]/30 border-none transition-all hover:scale-105 active:scale-95" style={{ backgroundColor: primaryColor }}>
-                            <Plus className="w-5 h-5 mr-1" />
+                        <Button className="h-11 px-6 rounded-xl font-bold text-sm shadow-lg shadow-black/5 border-none transition-all hover:translate-y-px active:translate-y-0.5 text-white" style={{ backgroundColor: primaryColor }}>
+                            <Plus className="w-4 h-4 mr-2" />
                             Nova Turma
                         </Button>
                     </Link>
@@ -92,33 +95,28 @@ export default function AdminDashboard() {
             </div>
 
             {/* Smart Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                 {stats.map((stat, i) => (
                     <motion.div
                         key={stat.title}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
+                        transition={{ delay: i * 0.05 }}
                     >
-                        <Card className="bg-card border-border shadow-sm hover:shadow-2xl hover:border-[var(--primary)]/30 transition-all duration-500 group rounded-[2.5rem] overflow-hidden">
-                            <CardHeader className="p-8 pb-4">
-                                <div className="flex items-center justify-between mb-6">
-                                    <div className={`p-4 rounded-[1.5rem] ${stat.bg} ${stat.color} group-hover:rotate-6 transition-transform shadow-sm`}>
-                                        <stat.icon size={26} strokeWidth={2.5} />
-                                    </div>
-                                    <div className={`flex items-center text-xs font-black ${stat.trendUp ? 'text-emerald-500' : 'text-red-500'} bg-muted/50 px-3 py-1 rounded-full`}>
-                                        {stat.trend} <ArrowUpRight size={14} className="ml-1" />
-                                    </div>
+                        <Card className="bg-white dark:bg-neutral-900/50 border border-neutral-100 dark:border-white/5 shadow-sm hover:shadow-md transition-all duration-300 group rounded-3xl overflow-hidden hover:-translate-y-1">
+                            <CardHeader className="p-6 pb-2 flex flex-row items-center justify-between space-y-0">
+                                <div className={`p-2.5 rounded-xl ${stat.bg} ${stat.color} bg-opacity-10 transition-colors`}>
+                                    <stat.icon size={20} strokeWidth={2} />
                                 </div>
-                                <CardTitle className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
-                                    {stat.title}
-                                </CardTitle>
+                                <div className={`flex items-center text-[10px] font-bold ${stat.trendUp ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'text-red-600 bg-red-50'} px-2.5 py-1 rounded-full`}>
+                                    {stat.trend} <ArrowUpRight size={12} className="ml-1" />
+                                </div>
                             </CardHeader>
-                            <CardContent className="p-8 pt-0">
-                                <div className="text-4xl font-black tracking-tighter">{stat.value}</div>
-                                <p className="text-[11px] text-muted-foreground mt-2 font-bold leading-none">
-                                    {stat.description}
+                            <CardContent className="p-6 pt-2">
+                                <p className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-2">
+                                    {stat.title}
                                 </p>
+                                <div className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">{stat.value}</div>
                             </CardContent>
                         </Card>
                     </motion.div>
