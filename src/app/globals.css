@@ -68,11 +68,10 @@
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
+    --border: 240 5% 92%;
+    --input: 240 5% 92%;
     --ring: 0 0% 9%;
     --radius: 1rem;
-    /* More rounded premium feel */
   }
 
   .dark {
@@ -88,14 +87,14 @@
     --primary-foreground: 0 0% 100%;
     --secondary: 240 4% 16%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 16%;
+    --muted: 240 4% 12%;
     --muted-foreground: 240 5% 65%;
-    --accent: 240 4% 16%;
+    --accent: 240 4% 12%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
+    --border: 240 4% 12%;
+    --input: 240 4% 12%;
     --ring: var(--primary, 0 0% 98%);
   }
 }
