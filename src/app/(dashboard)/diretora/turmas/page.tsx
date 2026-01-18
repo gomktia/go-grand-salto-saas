@@ -57,7 +57,6 @@ export default function TurmasPage() {
     const primaryColor = tenant?.primaryColor || '#ec4899'
 
     return (
-    return (
         <div className="p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto pb-24 font-sans">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="space-y-1">
