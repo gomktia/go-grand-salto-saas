@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
     Users,
@@ -15,15 +15,30 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useTenant } from '@/hooks/use-tenant'
 import Link from 'next/link'
+import { getStats } from '@/app/actions/admin'
 
 export default function AdminDashboard() {
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#ec4899'
+    const [realStats, setRealStats] = useState({ totalStudents: 0, totalTurmas: 0 })
+
+    useEffect(() => {
+        loadStats()
+    }, [])
+
+    async function loadStats() {
+        try {
+            const result = await getStats()
+            setRealStats(result.data)
+        } catch (err) {
+            console.error('Erro ao carregar stats:', err)
+        }
+    }
 
     const stats = [
         {
             title: 'Alunos Ativos',
-            value: '248',
+            value: realStats.totalStudents.toString(),
             description: 'Total de matrículas vigentes',
             icon: Users,
             trend: '+12%',
@@ -32,9 +47,9 @@ export default function AdminDashboard() {
             bg: 'bg-[var(--primary)]/10'
         },
         {
-            title: 'Receita Mensal (MRR)',
-            value: 'R$ 32.450',
-            description: 'Previsão de faturamento',
+            title: 'Turmas Ativas',
+            value: realStats.totalTurmas.toString(),
+            description: 'Classes em andamento',
             icon: DollarSign,
             trend: '+8.4%',
             trendUp: true,

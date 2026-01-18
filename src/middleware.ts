@@ -1,15 +1,16 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 
 /**
- * Middleware de Roteamento Multi-Tenant
- * Pensa em "Grande": Suporta domínios customizados e subdomínios.
+ * Middleware de Roteamento Multi-Tenant + Auth Protection
+ * Protege rotas privadas e suporta domínios customizados
  */
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const url = request.nextUrl
     const hostname = request.headers.get('host') || ''
 
-    // 1. Definir o domínio principal do SaaS (ajuste conforme seu domínio real)
+    // 1. Definir o domínio principal do SaaS
     const mainDomain = process.env.NEXT_PUBLIC_MAIN_DOMAIN || 'grandsalto.ia'
 
     // 2. Limpar o hostname para remover portas em desenvolvimento
@@ -25,44 +26,81 @@ export function middleware(request: NextRequest) {
         return NextResponse.next()
     }
 
-    // 4. Lógica de Domínio Customizado
-    // Aqui simulamos uma busca que futuramente será no banco de dados ou Edge Config
+    // 4. Criar cliente Supabase para verificar autenticação
+    let response = NextResponse.next({
+        request: {
+            headers: request.headers,
+        },
+    })
+
+    const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+            cookies: {
+                getAll() {
+                    return request.cookies.getAll()
+                },
+                setAll(cookiesToSet) {
+                    cookiesToSet.forEach(({ name, value, options }) => {
+                        request.cookies.set(name, value)
+                        response.cookies.set(name, value, options)
+                    })
+                },
+            },
+        }
+    )
+
+    // 5. Verificar autenticação
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // 6. Definir rotas protegidas (que exigem login)
+    const protectedRoutes = ['/diretora', '/professor', '/aluno', '/responsavel', '/superadmin']
+    const isProtectedRoute = protectedRoutes.some(route => url.pathname.startsWith(route))
+
+    // 7. Redirecionar para login se não autenticado
+    if (isProtectedRoute && !user) {
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('redirectTo', url.pathname)
+        return NextResponse.redirect(loginUrl)
+    }
+
+    // 8. Lógica de Domínio Customizado (Multi-Tenancy)
     const customDomainsMap: Record<string, string> = {
         'espacorevelle.com.br': 'espaco-revelle',
         'www.espacorevelle.com.br': 'espaco-revelle',
-        'revelle.grandsalto.ia': 'espaco-revelle', // Exemplo de subdomínio
+        'revelle.grandsalto.ia': 'espaco-revelle',
     }
 
     const tenantSlug = customDomainsMap[currentHost]
 
     if (tenantSlug) {
-        console.log(`[Middleware] Roteando domínio ${currentHost} para o tenant: ${tenantSlug}`)
-        // Se a URL já começar com o tenantSlug, não precisamos reescrever duplicado
-        // Isso evita loops ou caminhos como /espaco-revelle/espaco-revelle
         if (url.pathname.startsWith(`/${tenantSlug}`)) {
-            return NextResponse.next()
+            return response
         }
 
         // Faz o rewrite transparente
-        return NextResponse.rewrite(new URL(`/espaco-revelle${url.pathname}`, request.url))
+        const rewriteUrl = new URL(`/espaco-revelle${url.pathname}`, request.url)
+        return NextResponse.rewrite(rewriteUrl, {
+            request: {
+                headers: response.headers,
+            },
+        })
     }
 
-    // 4.5 Casos de Acesso via Caminho (Path-Based)
-    // Permite acessar https://go-grand-salto.../espaco-revelle diretamente
-    // Sem precisar de DNS configurado. Útil para onboarding.
+    // 9. Casos de Acesso via Caminho (Path-Based)
     if (url.pathname.startsWith('/espaco-revelle')) {
-        return NextResponse.next()
+        return response
     }
 
-    // 5. Lógica de Subdomínios Dinâmicos (ex: escola1.grandsalto.ia)
+    // 10. Lógica de Subdomínios Dinâmicos
     if (currentHost.endsWith(`.${mainDomain}`) && currentHost !== mainDomain) {
         const subdomain = currentHost.replace(`.${mainDomain}`, '')
-        // Aqui você poderia rotear para uma pasta genérica de sites dinâmicos
-        // return NextResponse.rewrite(new URL(`/(sites)/${subdomain}${url.pathname}`, request.url))
+        // Futuro: rotear para sites dinâmicos
     }
 
-    // 6. Se for o domínio principal ou não houver match, segue o fluxo normal (Página de Vendas do SaaS)
-    return NextResponse.next()
+    // 11. Fluxo padrão
+    return response
 }
 
 export const config = {

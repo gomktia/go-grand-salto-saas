@@ -5,67 +5,82 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Sparkles, Mail, Lock, ArrowRight, Loader2, Search, Building } from 'lucide-react'
+import { Sparkles, Mail, Lock, ArrowRight, Loader2, Search, Building, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getTenantByHostname, TenantConfig } from '@/lib/tenant-resolver'
+import { createClient } from '@/utils/supabase/client'
 
 export default function LoginPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState<string | null>(null)
     const [tenant, setTenant] = useState<TenantConfig | null>(null)
     const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
         setIsMounted(true)
-        // Simulação de detecção de domínio para ambiente de desenvolvimento/demo
-        // Em produção, isso viria de `window.location.hostname`
         const searchParams = new URLSearchParams(window.location.search)
         const forcedHost = searchParams.get('host')
-
-        // Se host=admin ou não especificado em dev, poderíamos cair no default.
-        // Aqui mantemos 'revelle' como default para facilitar o fluxo da Diretora,
-        // mas permitimos '?host=platform' para ver a tela do Super Admin.
         const hostname = forcedHost || 'revelle.grandsalto.ia'
 
         const detectedTenant = getTenantByHostname(hostname)
         setTenant(detectedTenant)
     }, [])
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
+        setError(null)
 
-        // Simulação de Autenticação e Roteamento
-        setTimeout(() => {
-            // Validação de Senha (Mock)
-            // Senha padrão para todos os usuários de demo: 123456
-            if (password !== '123456') {
-                setIsLoading(false)
-                alert('Senha incorreta! Para fins de demonstração, a senha é: 123456')
-                return
+        try {
+            const supabase = createClient()
+
+            // Autenticação real com Supabase
+            const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            })
+
+            if (authError) {
+                throw new Error(authError.message)
             }
 
+            if (!authData.user) {
+                throw new Error('Falha na autenticação')
+            }
+
+            // Buscar perfil e role do usuário
+            const { data: perfil, error: perfilError } = await supabase
+                .from('perfis')
+                .select('role, escola_id, full_name')
+                .eq('id', authData.user.id)
+                .single()
+
+            if (perfilError || !perfil) {
+                throw new Error('Perfil não encontrado. Contate o administrador.')
+            }
+
+            // Redirecionar baseado no role real do banco
+            const roleRoutes: Record<string, string> = {
+                'diretora': '/diretora',
+                'professor': '/professor',
+                'estudante': '/aluno',
+                'pai': '/responsavel',
+                'super_admin': '/superadmin'
+            }
+
+            const redirectPath = roleRoutes[perfil.role] || '/diretora'
+            router.push(redirectPath)
+            router.refresh()
+
+        } catch (err) {
+            console.error('Erro no login:', err)
+            setError(err instanceof Error ? err.message : 'Erro ao fazer login. Verifique suas credenciais.')
             setIsLoading(false)
-
-            // Lógica simples de roteamento baseada no email (Demo)
-            if (email.includes('admin') || email.includes('diretora')) {
-                router.push('/diretora')
-            } else if (email.includes('prof')) {
-                router.push('/professor')
-            } else if (email.includes('aluno')) {
-                router.push('/aluno')
-            } else if (email.includes('pai') || email.includes('responsavel')) {
-                router.push('/responsavel')
-            } else if (email.includes('super')) {
-                router.push('/superadmin')
-            } else {
-                // Default fallback
-                router.push('/diretora')
-            }
-        }, 1500)
+        }
     }
 
     // Cores dinâmicas ou padrão do SaaS
@@ -129,6 +144,12 @@ export default function LoginPage() {
                     </CardHeader>
                     <CardContent className="pt-6">
                         <form onSubmit={handleLogin} className="space-y-5">
+                            {error && (
+                                <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
+                                    <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
+                                    <p className="text-xs text-red-300 leading-relaxed">{error}</p>
+                                </div>
+                            )}
                             <div className="space-y-2">
                                 <div className="relative group">
                                     <Mail className="absolute left-3 top-3.5 h-4 w-4 text-neutral-500 group-focus-within:text-white transition-colors" />
