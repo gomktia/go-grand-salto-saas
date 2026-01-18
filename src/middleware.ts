@@ -7,26 +7,7 @@ import { createServerClient } from '@supabase/ssr'
  * Protege rotas privadas e suporta domínios customizados
  */
 export async function middleware(request: NextRequest) {
-    const url = request.nextUrl
-    const hostname = request.headers.get('host') || ''
-
-    // 1. Definir o domínio principal do SaaS
-    const mainDomain = process.env.NEXT_PUBLIC_MAIN_DOMAIN || 'grandsalto.ia'
-
-    // 2. Limpar o hostname para remover portas em desenvolvimento
-    const currentHost = hostname.replace(':3000', '')
-
-    // 3. Casos Especiais: Ignorar arquivos estáticos e API
-    if (
-        url.pathname.startsWith('/_next') ||
-        url.pathname.startsWith('/api') ||
-        url.pathname.startsWith('/static') ||
-        url.pathname.includes('.') // Ignora arquivos com extensão (favicon.ico, png, etc)
-    ) {
-        return NextResponse.next()
-    }
-
-    // 4. Criar cliente Supabase para verificar autenticação
+    // 1. Inicializar response base
     let response = NextResponse.next({
         request: {
             headers: request.headers,
@@ -58,55 +39,53 @@ export async function middleware(request: NextRequest) {
         }
     )
 
-    // 5. Verificar autenticação
+    // 2. Verificar autenticação (refresca sessão se necessário)
     const { data: { user } } = await supabase.auth.getUser()
 
-    // 6. Definir rotas protegidas (que exigem login)
+    // 3. Definir URL e Host
+    const url = request.nextUrl
+    const hostname = request.headers.get('host') || ''
+    const currentHost = hostname.replace(':3000', '')
+    const mainDomain = process.env.NEXT_PUBLIC_MAIN_DOMAIN || 'grandsalto.ia'
+
+    // 4. Ignorar estáticos (redundante com matcher, mas seguro)
+    if (
+        url.pathname.startsWith('/_next') ||
+        url.pathname.startsWith('/api') ||
+        url.pathname.startsWith('/static') ||
+        url.pathname.includes('.')
+    ) {
+        return response
+    }
+
+    // 5. Proteção de Rotas
     const protectedRoutes = ['/diretora', '/professor', '/aluno', '/responsavel', '/superadmin']
     const isProtectedRoute = protectedRoutes.some(route => url.pathname.startsWith(route))
 
-    // 7. Redirecionar para login se não autenticado
     if (isProtectedRoute && !user) {
-        const loginUrl = new URL('/login', request.url)
+        const loginUrl = request.nextUrl.clone()
+        loginUrl.pathname = '/login'
         loginUrl.searchParams.set('redirectTo', url.pathname)
         return NextResponse.redirect(loginUrl)
     }
 
-    // 8. Lógica de Domínio Customizado (Multi-Tenancy)
+    // 6. Multi-Tenancy (Custom Domains & Subdomains)
     const customDomainsMap: Record<string, string> = {
         'espacorevelle.com.br': 'espaco-revelle',
         'www.espacorevelle.com.br': 'espaco-revelle',
         'revelle.grandsalto.ia': 'espaco-revelle',
     }
-
     const tenantSlug = customDomainsMap[currentHost]
 
     if (tenantSlug) {
-        if (url.pathname.startsWith(`/${tenantSlug}`)) {
-            return response
+        if (!url.pathname.startsWith(`/${tenantSlug}`)) {
+            // Rewrite transparente: Mantém URL do navegador, serve conteúdo do tenant
+            const rewriteUrl = request.nextUrl.clone()
+            rewriteUrl.pathname = `/${tenantSlug}${url.pathname}`
+            return NextResponse.rewrite(rewriteUrl)
         }
-
-        // Faz o rewrite transparente
-        const rewriteUrl = new URL(`/espaco-revelle${url.pathname}`, request.url)
-        return NextResponse.rewrite(rewriteUrl, {
-            request: {
-                headers: response.headers,
-            },
-        })
     }
 
-    // 9. Casos de Acesso via Caminho (Path-Based)
-    if (url.pathname.startsWith('/espaco-revelle')) {
-        return response
-    }
-
-    // 10. Lógica de Subdomínios Dinâmicos
-    if (currentHost.endsWith(`.${mainDomain}`) && currentHost !== mainDomain) {
-        const subdomain = currentHost.replace(`.${mainDomain}`, '')
-        // Futuro: rotear para sites dinâmicos
-    }
-
-    // 11. Fluxo padrão
     return response
 }
 
