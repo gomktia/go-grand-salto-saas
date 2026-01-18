@@ -22,28 +22,28 @@ import { Badge } from '@/components/ui/badge'
 
 export default function LandingPage() {
     return (
-        <div className="min-h-screen bg-neutral-950 text-white selection:bg-pink-500/30 font-sans">
+        <div className="min-h-screen bg-neutral-950 text-white selection:bg-amber-500/30 font-sans">
             {/* Navigation */}
             <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/60 backdrop-blur-2xl">
                 <div className="container mx-auto px-6 h-20 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-pink-500/20">
-                            <Sparkles className="text-white w-6 h-6" />
+                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-white/5">
+                            <Sparkles className="text-black w-5 h-5" />
                         </div>
-                        <span className="text-2xl font-bold tracking-tighter">Grand Salto<span className="text-pink-500">.IA</span></span>
+                        <span className="text-2xl font-bold tracking-tighter">Grand Salto<span className="text-amber-400">.IA</span></span>
                     </div>
 
                     <div className="hidden md:flex items-center gap-10 text-sm font-medium text-neutral-400">
                         <a href="#features" className="hover:text-white transition-colors">Plataforma</a>
                         <a href="#solutions" className="hover:text-white transition-colors">Soluções</a>
-                        <a href="#premium" className="hover:text-white transition-colors text-pink-500">Premium</a>
+                        <a href="#premium" className="hover:text-amber-400 transition-colors text-amber-500">Premium</a>
                     </div>
 
                     <div className="flex items-center gap-4">
                         <Link href="/login">
                             <Button variant="ghost" className="text-neutral-400 hover:text-white">Entrar</Button>
                         </Link>
-                        <Button className="bg-gradient-to-r from-pink-600 to-violet-600 hover:from-pink-500 hover:to-violet-500 border-none px-6 rounded-full shadow-lg shadow-pink-500/20 font-bold">
+                        <Button className="bg-amber-500 hover:bg-amber-400 text-black border-none px-6 rounded-full shadow-lg shadow-amber-500/20 font-bold transition-all">
                             Experimentar Grátis
                         </Button>
                     </div>
@@ -52,7 +52,7 @@ export default function LandingPage() {
 
             {/* Hero Section */}
             <section className="relative pt-48 pb-32 overflow-hidden">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-pink-500/10 blur-[130px] rounded-full -z-10" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-amber-500/5 blur-[130px] rounded-full -z-10" />
 
                 <div className="container mx-auto px-6 text-center">
                     <motion.div
@@ -60,11 +60,11 @@ export default function LandingPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 text-pink-400 text-xs font-bold uppercase tracking-widest mb-8">
-                            <Star className="w-3 h-3 fill-pink-400" />
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 text-amber-400 text-xs font-bold uppercase tracking-widest mb-8">
+                            <Star className="w-3 h-3 fill-amber-400" />
                             SaaS LÍDER PARA ESCOLAS DE DANÇA
                         </div>
-                        <h1 className="text-7xl md:text-9xl font-extrabold tracking-tighter mb-10 leading-[0.9] bg-gradient-to-b from-white via-white to-neutral-600 bg-clip-text text-transparent">
+                        <h1 className="text-7xl md:text-9xl font-extrabold tracking-tighter mb-10 leading-[0.9] text-white">
                             Onde a Arte <br />encontra a IA.
                         </h1>
                         <p className="text-xl md:text-2xl text-neutral-400 mb-14 leading-relaxed max-w-3xl mx-auto font-light">
@@ -103,17 +103,17 @@ export default function LandingPage() {
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         <FeatureCard
-                            icon={<Camera className="w-6 h-6 text-pink-500" />}
+                            icon={<Camera className="w-6 h-6 text-amber-400" />}
                             title="Momento do Palco"
                             description="Galerias inteligentes que os pais amam. Sistema de favoritos e compartilhamento seguro que aumenta o engajamento em 300%."
                         />
                         <FeatureCard
-                            icon={<Zap className="w-6 h-6 text-violet-500" />}
+                            icon={<Zap className="w-6 h-6 text-white" />}
                             title="IA Content Assistant"
                             description="Transforme fotos de ensaios em posts de blog otimizados para SEO em segundos. Sua escola sempre no topo das buscas."
                         />
                         <FeatureCard
-                            icon={<Heart className="w-6 h-6 text-blue-500" />}
+                            icon={<Heart className="w-6 h-6 text-neutral-400" />}
                             title="Métricas do Corpo"
                             description="Gestão de medidas (busto, cintura, quadril) integrada ao estoque de figurinos. Nunca mais erre no tamanho do Tutu."
                         />
@@ -153,7 +153,7 @@ export default function LandingPage() {
                                         <h3 className="text-2xl font-bold">Espaço Revelle</h3>
                                         <p className="text-neutral-500 text-sm">Escola de Dança em Santa Maria - RS</p>
                                     </div>
-                                    <Badge className="bg-red-500/20 text-red-500 hover:bg-red-500/20 border-red-500/20">Site Premium</Badge>
+                                    <Badge className="bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 border-amber-500/20">Site Premium</Badge>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@ export default function LandingPage() {
 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
     return (
-        <Card className="p-10 bg-neutral-900/40 border-white/5 hover:border-pink-500/40 transition-all group cursor-default backdrop-blur-md">
+        <Card className="p-10 bg-neutral-900/40 border-white/5 hover:border-amber-500/40 transition-all group cursor-default backdrop-blur-md">
             <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-inner shadow-white/5">
                 {icon}
             </div>
