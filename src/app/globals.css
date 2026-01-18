@@ -56,7 +56,8 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 346.8 77.2% 49.8%;
+    --primary: 0 0% 9%;
+    /* Black / Neutral-900 */
     --primary-foreground: 0 0% 100%;
     --secondary: 240 5% 96%;
     /* Lighter Secondary */
@@ -69,7 +70,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 6% 90%;
     --input: 240 6% 90%;
-    --ring: 346.8 77.2% 49.8%;
+    --ring: 0 0% 9%;
     --radius: 1rem;
     /* More rounded premium feel */
   }
@@ -83,7 +84,7 @@
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 4%;
     --popover-foreground: 0 0% 98%;
-    --primary: var(--primary, 346.8 77.2% 49.8%);
+    --primary: var(--primary, 0 0% 98%);
     --primary-foreground: 0 0% 100%;
     --secondary: 240 4% 16%;
     --secondary-foreground: 0 0% 98%;
@@ -95,7 +96,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 4% 16%;
     --input: 240 4% 16%;
-    --ring: var(--primary, 346.8 77.2% 49.8%);
+    --ring: var(--primary, 0 0% 98%);
   }
 }
 
