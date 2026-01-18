@@ -157,11 +157,12 @@ export default function LoginPage() {
                         </div>
 
                         {/* Atalhos de Demo (Apenas para visualização) */}
-                        <div className="grid grid-cols-4 gap-1 opacity-20 hover:opacity-100 transition-opacity">
+                        <div className="grid grid-cols-5 gap-1 opacity-20 hover:opacity-100 transition-opacity">
                             <Link href="/diretora"><div className="h-1 bg-pink-500 rounded-full" title="Diretora" /></Link>
                             <Link href="/professor"><div className="h-1 bg-violet-500 rounded-full" title="Professor" /></Link>
                             <Link href="/aluno"><div className="h-1 bg-emerald-500 rounded-full" title="Aluno" /></Link>
                             <Link href="/responsavel"><div className="h-1 bg-amber-500 rounded-full" title="Responsável" /></Link>
+                            <Link href="/superadmin"><div className="h-1 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" title="Super Admin" /></Link>
                         </div>
                     </CardFooter>
                 </Card>
