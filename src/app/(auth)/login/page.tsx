@@ -7,10 +7,13 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sparkles, Mail, Lock, ArrowRight, Loader2, Search, Building } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { getTenantByHostname, TenantConfig } from '@/lib/tenant-resolver'
 
 export default function LoginPage() {
+    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
+    const [email, setEmail] = useState('')
     const [tenant, setTenant] = useState<TenantConfig | null>(null)
     const [isMounted, setIsMounted] = useState(false)
 
@@ -33,7 +36,27 @@ export default function LoginPage() {
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
-        setTimeout(() => setIsLoading(false), 2000)
+
+        // Simulação de Autenticação e Roteamento
+        setTimeout(() => {
+            setIsLoading(false)
+
+            // Lógica simples de roteamento baseada no email (Demo)
+            if (email.includes('admin') || email.includes('diretora')) {
+                router.push('/diretora')
+            } else if (email.includes('prof')) {
+                router.push('/professor')
+            } else if (email.includes('aluno')) {
+                router.push('/aluno')
+            } else if (email.includes('pai') || email.includes('responsavel')) {
+                router.push('/responsavel')
+            } else if (email.includes('super')) {
+                router.push('/superadmin')
+            } else {
+                // Default fallback
+                router.push('/diretora')
+            }
+        }, 1500)
     }
 
     // Cores dinâmicas ou padrão do SaaS
@@ -105,6 +128,8 @@ export default function LoginPage() {
                                         type="email"
                                         className="h-11 pl-10 bg-black/40 border-white/10 text-white placeholder:text-neutral-600 focus:border-[var(--primary)]/50 rounded-xl transition-all"
                                         style={{ '--primary': primaryColor } as React.CSSProperties}
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required
                                     />
                                 </div>
