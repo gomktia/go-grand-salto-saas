@@ -37,10 +37,21 @@ export function middleware(request: NextRequest) {
 
     if (tenantSlug) {
         console.log(`[Middleware] Roteando domínio ${currentHost} para o tenant: ${tenantSlug}`)
+        // Se a URL já começar com o tenantSlug, não precisamos reescrever duplicado
+        // Isso evita loops ou caminhos como /espaco-revelle/espaco-revelle
+        if (url.pathname.startsWith(`/${tenantSlug}`)) {
+            return NextResponse.next()
+        }
 
-        // Faz o rewrite para a pasta do site do cliente
-        // O usuário vê 'espacorevelle.com.br/' mas o Next serve 'src/app/(sites)/espaco-revelle/page.tsx'
+        // Faz o rewrite transparente
         return NextResponse.rewrite(new URL(`/espaco-revelle${url.pathname}`, request.url))
+    }
+
+    // 4.5 Casos de Acesso via Caminho (Path-Based)
+    // Permite acessar https://go-grand-salto.../espaco-revelle diretamente
+    // Sem precisar de DNS configurado. Útil para onboarding.
+    if (url.pathname.startsWith('/espaco-revelle')) {
+        return NextResponse.next()
     }
 
     // 5. Lógica de Subdomínios Dinâmicos (ex: escola1.grandsalto.ia)

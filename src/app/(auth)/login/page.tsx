@@ -18,7 +18,14 @@ export default function LoginPage() {
         setIsMounted(true)
         // Simulação de detecção de domínio para ambiente de desenvolvimento/demo
         // Em produção, isso viria de `window.location.hostname`
-        const hostname = 'revelle.grandsalto.ia' // Simule 'grandsalto.ia' para ver o padrão
+        const searchParams = new URLSearchParams(window.location.search)
+        const forcedHost = searchParams.get('host')
+
+        // Se host=admin ou não especificado em dev, poderíamos cair no default.
+        // Aqui mantemos 'revelle' como default para facilitar o fluxo da Diretora,
+        // mas permitimos '?host=platform' para ver a tela do Super Admin.
+        const hostname = forcedHost || 'revelle.grandsalto.ia'
+
         const detectedTenant = getTenantByHostname(hostname)
         setTenant(detectedTenant)
     }, [])
@@ -137,6 +144,11 @@ export default function LoginPage() {
                     <CardFooter className="flex flex-col gap-6 pt-2">
                         <div className="text-center text-[10px] text-neutral-500 font-medium">
                             Problemas para entrar? <Link href="#" className="hover:underline" style={{ color: primaryColor }}>Recuperar acesso</Link>
+                        </div>
+                        <div className="text-center">
+                            <Link href="/login?host=platform" className="text-[9px] text-neutral-600 uppercase tracking-widest hover:text-white transition-colors">
+                                Login Administrativo (SaaS)
+                            </Link>
                         </div>
 
                         {!tenant && (
