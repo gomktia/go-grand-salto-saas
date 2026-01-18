@@ -14,6 +14,7 @@ export default function LoginPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [tenant, setTenant] = useState<TenantConfig | null>(null)
     const [isMounted, setIsMounted] = useState(false)
 
@@ -39,6 +40,14 @@ export default function LoginPage() {
 
         // Simulação de Autenticação e Roteamento
         setTimeout(() => {
+            // Validação de Senha (Mock)
+            // Senha padrão para todos os usuários de demo: 123456
+            if (password !== '123456') {
+                setIsLoading(false)
+                alert('Senha incorreta! Para fins de demonstração, a senha é: 123456')
+                return
+            }
+
             setIsLoading(false)
 
             // Lógica simples de roteamento baseada no email (Demo)
@@ -142,6 +151,8 @@ export default function LoginPage() {
                                         type="password"
                                         className="h-11 pl-10 bg-black/40 border-white/10 text-white placeholder:text-neutral-600 focus:border-[var(--primary)]/50 rounded-xl transition-all"
                                         style={{ '--primary': primaryColor } as React.CSSProperties}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                         required
                                     />
                                 </div>
