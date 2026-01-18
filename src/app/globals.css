@@ -6,7 +6,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -49,54 +49,60 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* Pure White */
+    --foreground: 240 10% 2%;
+    /* Deep Black Text */
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     --primary: 346.8 77.2% 49.8%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 4.8% 95.9%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 96%;
+    /* Lighter Secondary */
     --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 240 5% 96%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
     --ring: 346.8 77.2% 49.8%;
-    --radius: 0.75rem;
+    --radius: 1rem;
+    /* More rounded premium feel */
   }
 
   .dark {
-    --background: var(--tenant-bg, 240 10% 3.9%);
-    --foreground: var(--tenant-paper, 0 0% 98%);
-    --card: var(--tenant-bg, 240 10% 3.9%);
-    --card-foreground: var(--tenant-paper, 0 0% 98%);
-    --popover: var(--tenant-bg, 240 10% 3.9%);
-    --popover-foreground: var(--tenant-paper, 0 0% 98%);
+    --background: var(--tenant-bg, 0 0% 3%);
+    /* Deep Dark Background #080808 */
+    --foreground: 0 0% 98%;
+    --card: var(--tenant-bg, 0 0% 4%);
+    /* Slightly lighter card #0a0a0a */
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
     --primary: var(--primary, 346.8 77.2% 49.8%);
-    --primary-foreground: var(--tenant-paper, 355.7 100% 97.3%);
-    --secondary: var(--secondary, 240 3.7% 15.9%);
-    --secondary-foreground: var(--tenant-paper, 0 0% 98%);
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: var(--accent, 240 3.7% 15.9%);
-    --accent-foreground: var(--tenant-paper, 0 0% 98%);
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
     --ring: var(--primary, 346.8 77.2% 49.8%);
   }
 }
 
 @layer utilities {
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
@@ -104,12 +110,13 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--primary);
+    background: var(--border);
     border-radius: 10px;
-    opacity: 0.3;
+    opacity: 0.5;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
     opacity: 1;
   }
 }
@@ -120,6 +127,6 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
   }
 }
