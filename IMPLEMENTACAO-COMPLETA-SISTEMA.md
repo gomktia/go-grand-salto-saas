@@ -299,7 +299,7 @@ supabase/schema-financeiro-e-fotos-FIXED.sql
 **b) Schema de Blog:**
 ```sql
 -- Copie TUDO do arquivo:
-supabase/schema-blog-posts.sql
+supabase/schema-blog-posts-FIXED.sql
 -- Cole no SQL Editor e clique em RUN
 ```
 
