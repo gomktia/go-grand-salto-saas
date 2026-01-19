@@ -195,12 +195,12 @@ alter table public.fotos enable row level security;
 alter table public.fotos_favoritas enable row level security;
 alter table public.checkins enable row level security;
 
--- Global Policy Helper: Is Diretora?
+-- Global Policy Helper: Is Diretora or Super Admin?
 create or replace function public.is_diretora() returns boolean as $$
 begin
   return exists (
-    select 1 from public.perfis 
-    where id = auth.uid() and role = 'diretora'
+    select 1 from public.perfis
+    where id = auth.uid() and role in ('diretora', 'super_admin')
   );
 end;
 $$ language plpgsql security definer;

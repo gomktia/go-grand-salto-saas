@@ -409,7 +409,13 @@ export async function getTurmas() {
             ),
             matriculas_turmas (
                 id,
-                status
+                status,
+                estudantes:estudante_id (
+                    id,
+                    nome_responsavel,
+                    data_nascimento,
+                    status_matricula
+                )
             ),
             agenda_aulas (
                 id,
