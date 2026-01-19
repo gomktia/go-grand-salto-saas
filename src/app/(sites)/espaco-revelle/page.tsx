@@ -257,13 +257,10 @@ export default function EspacoRevelleSite() {
                 </div>
             </section>
 
-            {/* @ts-expect-error Server Component */}
             <BlogSection />
 
-            {/* @ts-expect-error Server Component */}
             <VideosSection />
 
-            {/* @ts-expect-error Server Component */}
             <CalendarSection />
 
             {/* Testimonials */}

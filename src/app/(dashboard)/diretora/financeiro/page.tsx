@@ -86,7 +86,7 @@ export default async function FinanceiroPage() {
             title: 'Inadimplência',
             value: `${stats?.taxaInadimplencia || '0'}%`,
             icon: AlertCircle,
-            trend: stats?.totalAtrasadas > 0 ? `${stats.totalAtrasadas} atrasadas` : 'Nenhuma',
+            trend: (stats?.totalAtrasadas || 0) > 0 ? `${stats?.totalAtrasadas} atrasadas` : 'Nenhuma',
             color: 'text-red-500'
         },
         {
