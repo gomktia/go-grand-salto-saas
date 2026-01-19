@@ -1,33 +1,45 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Calendar, MapPin, Clock } from 'lucide-react'
-import { getEventosCalendario } from '@/app/actions/fotos-venda'
 
-export async function CalendarSection() {
-    let eventos = []
-
-    try {
-        const result = await getEventosCalendario(true) // isPublic = true
-        eventos = result.data.slice(0, 4) // Show next 4 events
-    } catch (e: any) {
-        console.log('Calendar events not available yet, using fallback')
-        // Fallback events
-        eventos = [
-            {
-                titulo: "Apresentação de Final de Ano",
-                data_inicio: "2026-12-20T19:00:00",
-                local: "Teatro Municipal",
-                tipo: "recital",
-                cor: "#ec4899"
-            },
-            {
-                titulo: "Aula Experimental Gratuita",
-                data_inicio: "2026-02-15T14:00:00",
-                local: "Espaço Revelle",
-                tipo: "aula_aberta",
-                cor: "#22c55e"
-            }
-        ]
+const fallbackEventos = [
+    {
+        titulo: "Apresentação de Final de Ano",
+        data_inicio: "2026-12-20T19:00:00",
+        local: "Teatro Municipal",
+        tipo: "recital",
+        cor: "#ec4899"
+    },
+    {
+        titulo: "Aula Experimental Gratuita",
+        data_inicio: "2026-02-15T14:00:00",
+        local: "Espaço Revelle",
+        tipo: "aula_aberta",
+        cor: "#22c55e"
     }
+]
+
+export function CalendarSection() {
+    const [eventos, setEventos] = useState<any[]>(fallbackEventos)
+
+    useEffect(() => {
+        async function fetchEventos() {
+            try {
+                const response = await fetch('/api/calendario/publico')
+                if (response.ok) {
+                    const data = await response.json()
+                    if (data.length > 0) {
+                        setEventos(data.slice(0, 4))
+                    }
+                }
+            } catch (e) {
+                // Use fallback events
+            }
+        }
+        fetchEventos()
+    }, [])
 
     const formatDate = (dateStr: string) => {
         const date = new Date(dateStr)

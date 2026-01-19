@@ -1,41 +1,48 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getPostsDestaque } from '@/app/actions/blog'
 
-export async function BlogSection() {
-    let posts = []
-    let error = null
-
-    try {
-        const result = await getPostsDestaque(2)
-        posts = result.data
-    } catch (e: any) {
-        error = e.message
-        console.log('Blog posts not available yet, using fallback')
+const fallbackPosts = [
+    {
+        titulo: "Inscrições Abertas para o Espetáculo 2026",
+        data_publicacao: "2026-01-18T00:00:00",
+        descricao_curta: "O momento mais aguardado do ano está chegando. Saiba como participar da audição.",
+        imagem_capa: "https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?q=80&w=2083&auto=format&fit=crop",
+        slug: "inscricoes-espetaculo-2026"
+    },
+    {
+        titulo: "Benefícios do Ballet para Crianças",
+        data_publicacao: "2026-01-15T00:00:00",
+        descricao_curta: "Descubra como a dança ajuda no desenvolvimento motor e social dos pequenos.",
+        imagem_capa: "https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=2070&auto=format&fit=crop",
+        slug: "beneficios-ballet-criancas"
     }
+]
 
-    // Fallback posts if database not ready
-    const fallbackPosts = [
-        {
-            titulo: "Inscrições Abertas para o Espetáculo 2026",
-            data_publicacao: "2026-01-18T00:00:00",
-            descricao_curta: "O momento mais aguardado do ano está chegando. Saiba como participar da audição.",
-            imagem_capa: "https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?q=80&w=2083&auto=format&fit=crop",
-            slug: "inscricoes-espetaculo-2026"
-        },
-        {
-            titulo: "Benefícios do Ballet para Crianças",
-            data_publicacao: "2026-01-15T00:00:00",
-            descricao_curta: "Descubra como a dança ajuda no desenvolvimento motor e social dos pequenos.",
-            imagem_capa: "https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=2070&auto=format&fit=crop",
-            slug: "beneficios-ballet-criancas"
+export function BlogSection() {
+    const [posts, setPosts] = useState<any[]>(fallbackPosts)
+
+    useEffect(() => {
+        async function fetchPosts() {
+            try {
+                const response = await fetch('/api/blog/destaque')
+                if (response.ok) {
+                    const data = await response.json()
+                    if (data.length > 0) {
+                        setPosts(data)
+                    }
+                }
+            } catch (e) {
+                // Use fallback posts
+            }
         }
-    ]
-
-    const displayPosts = posts.length > 0 ? posts : fallbackPosts
+        fetchPosts()
+    }, [])
 
     const formatDate = (dateStr: string) => {
         const date = new Date(dateStr)
@@ -58,7 +65,7 @@ export async function BlogSection() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {displayPosts.map((post: any, i: number) => (
+                    {posts.map((post: any, i: number) => (
                         <Link key={i} href={`/espaco-revelle/blog/${post.slug}`}>
                             <Card className="bg-neutral-950 border-white/5 overflow-hidden group cursor-pointer hover:border-red-600/30 transition-all">
                                 <div className="grid grid-cols-1 md:grid-cols-2">

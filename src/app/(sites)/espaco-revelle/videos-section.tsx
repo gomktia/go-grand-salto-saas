@@ -1,41 +1,53 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Play } from 'lucide-react'
-import { getVideosSite } from '@/app/actions/fotos-venda'
 import Image from 'next/image'
 
-export async function VideosSection() {
-    let videos = []
-
-    try {
-        const result = await getVideosSite()
-        videos = result.data.slice(0, 3) // Show latest 3 videos
-    } catch (e: any) {
-        console.log('Videos not available yet, using fallback')
-        // Fallback videos
-        videos = [
-            {
-                titulo: "Espetáculo 2025 - Destaques",
-                descricao: "Os melhores momentos da nossa apresentação de fim de ano",
-                url_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                thumbnail_url: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?q=80&w=2070&auto=format&fit=crop",
-                is_destaque: true
-            },
-            {
-                titulo: "Aula de Ballet Baby",
-                descricao: "Veja como funciona uma aula para os pequenos",
-                url_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                thumbnail_url: "https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=2070&auto=format&fit=crop",
-                is_destaque: false
-            },
-            {
-                titulo: "Tour pelo Espaço Revelle",
-                descricao: "Conheça nossa estrutura completa",
-                url_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                thumbnail_url: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=2069&auto=format&fit=crop",
-                is_destaque: false
-            }
-        ]
+const fallbackVideos = [
+    {
+        titulo: "Espetáculo 2025 - Destaques",
+        descricao: "Os melhores momentos da nossa apresentação de fim de ano",
+        url_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        thumbnail_url: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?q=80&w=2070&auto=format&fit=crop",
+        is_destaque: true
+    },
+    {
+        titulo: "Aula de Ballet Baby",
+        descricao: "Veja como funciona uma aula para os pequenos",
+        url_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        thumbnail_url: "https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=2070&auto=format&fit=crop",
+        is_destaque: false
+    },
+    {
+        titulo: "Tour pelo Espaço Revelle",
+        descricao: "Conheça nossa estrutura completa",
+        url_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        thumbnail_url: "https://images.unsplash.com/photo-1547153760-18fc86d19e6a?q=80&w=2069&auto=format&fit=crop",
+        is_destaque: false
     }
+]
+
+export function VideosSection() {
+    const [videos, setVideos] = useState<any[]>(fallbackVideos)
+
+    useEffect(() => {
+        async function fetchVideos() {
+            try {
+                const response = await fetch('/api/videos/site')
+                if (response.ok) {
+                    const data = await response.json()
+                    if (data.length > 0) {
+                        setVideos(data.slice(0, 3))
+                    }
+                }
+            } catch (e) {
+                // Use fallback videos
+            }
+        }
+        fetchVideos()
+    }, [])
 
     const getYouTubeId = (url: string) => {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
