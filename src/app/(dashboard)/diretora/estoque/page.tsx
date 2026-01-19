@@ -26,6 +26,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useTenant } from '@/hooks/use-tenant'
+import { toast } from 'sonner'
 
 const costumeInventory = [
     {
@@ -73,11 +74,16 @@ export default function FigurinosPage() {
                     </h1>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all">
+                    <Button
+                        onClick={() => toast.info('A tabela de medidas será liberada na próxima atualização.')}
+                        variant="outline"
+                        className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all font-bold"
+                    >
                         <Ruler className="w-3.5 h-3.5 mr-2" />
                         TABELA MEDIDAS
                     </Button>
                     <Button
+                        onClick={() => toast.info('O cadastro de novos figurinos será liberado na próxima atualização.')}
                         style={{ backgroundColor: primaryColor }}
                         className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-pink-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                     >

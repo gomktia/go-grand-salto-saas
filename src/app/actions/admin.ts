@@ -11,7 +11,8 @@ import {
     turmaUpdateSchema,
     agendaAulaSchema,
     agendaAulaUpdateSchema,
-    matriculaSchema
+    matriculaSchema,
+    tenantSettingsSchema
 } from '@/lib/validations/admin'
 
 /**
@@ -1108,4 +1109,65 @@ export async function incrementarVisualizacoes(recursoId: string) {
     }
 
     return { success: true }
+}
+
+// ==================== CONFIGURAÇÕES / TENANT ====================
+
+export async function updateTenantSettings(rawData: {
+    nome?: string
+    logo_url?: string
+    primary_color?: string
+}) {
+    const { user, perfil } = await getAuthenticatedUser()
+    requireDiretora(perfil.role)
+
+    const supabase = await createClient()
+    const validated = tenantSettingsSchema.parse(rawData)
+
+    const { data, error } = await supabase
+        .from('escolas')
+        .update({
+            nome: validated.nome,
+            logo_url: validated.logo_url,
+            configuracoes: {
+                primary_color: validated.primary_color
+            }
+        })
+        .eq('id', perfil.escola_id)
+        .select()
+        .single()
+
+    if (error) {
+        console.error('Erro ao atualizar configurações:', error)
+        throw new Error(`Erro ao atualizar configurações: ${error.message}`)
+    }
+
+    revalidatePath('/diretora/configuracoes')
+    return { success: true, data }
+}
+
+export async function sendNotification(rawData: {
+    titulo: string
+    mensagem: string
+    tipo: 'geral' | 'financeiro' | 'evento'
+    destinatario_id?: string
+}) {
+    const { perfil } = await getAuthenticatedUser()
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+        .from('notificacoes')
+        .insert([{
+            ...rawData,
+            escola_id: perfil.escola_id,
+            lido: false
+        }])
+        .select()
+        .single()
+
+    if (error) throw new Error(`Erro ao enviar notificação: ${error.message}`)
+
+    revalidatePath('/diretora/notificacoes')
+    revalidatePath('/responsavel')
+    return { success: true, data }
 }

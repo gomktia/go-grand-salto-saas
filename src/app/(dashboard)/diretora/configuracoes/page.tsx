@@ -24,15 +24,31 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTenant } from '@/hooks/use-tenant'
+import { updateTenantSettings } from '@/app/actions/admin'
+import { toast } from 'sonner'
 
 export default function WhiteLabelSettings() {
     const tenant = useTenant()
     const [primaryColor, setPrimaryColor] = useState(tenant?.primaryColor || '#ec4899')
+    const [escolaNome, setEscolaNome] = useState(tenant?.nome || '')
+    const [logoUrl, setLogoUrl] = useState(tenant?.logo_url || '')
     const [isSaving, setIsSaving] = useState(false)
 
-    const handleSave = () => {
+    const handleSave = async () => {
         setIsSaving(true)
-        setTimeout(() => setIsSaving(false), 1500)
+        try {
+            await updateTenantSettings({
+                nome: escolaNome,
+                logo_url: logoUrl,
+                primary_color: primaryColor
+            })
+            toast.success('Configurações salvas com sucesso!')
+        } catch (error) {
+            toast.error('Erro ao salvar configurações')
+            console.error(error)
+        } finally {
+            setIsSaving(false)
+        }
     }
 
     return (
@@ -106,8 +122,13 @@ export default function WhiteLabelSettings() {
                                     </div>
                                     <div className="text-center md:text-left space-y-1">
                                         <p className="text-xs font-bold uppercase tracking-tight text-zinc-900 dark:text-zinc-100">Logotipo Oficial</p>
-                                        <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest leading-relaxed">Formatos: PNG ou SVG transparente</p>
-                                        <Button variant="outline" className="h-8 mt-2 px-4 rounded-lg border-zinc-200 dark:border-zinc-800 uppercase font-bold text-[9px] tracking-widest hover:bg-zinc-100 dark:hover:bg-zinc-800">Alterar</Button>
+                                        <Input
+                                            value={logoUrl}
+                                            onChange={(e) => setLogoUrl(e.target.value)}
+                                            placeholder="URL da logo..."
+                                            className="h-8 mt-2 text-[10px] bg-white dark:bg-zinc-900"
+                                        />
+                                        <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest leading-relaxed mt-2">Formatos: PNG ou SVG transparente</p>
                                     </div>
                                 </div>
                             </CardContent>
@@ -230,8 +251,12 @@ export default function WhiteLabelSettings() {
                             <CardContent className="px-6 pb-6 space-y-6">
                                 <div className="space-y-4">
                                     <div className="space-y-1.5">
-                                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Nome do Remetente</label>
-                                        <Input defaultValue={tenant?.nome} className="h-10 bg-zinc-50 dark:bg-black/20 border-zinc-200 dark:border-zinc-800 rounded-lg font-bold px-4 text-sm shadow-none" />
+                                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Nome do Remetente (Escola)</label>
+                                        <Input
+                                            value={escolaNome}
+                                            onChange={(e) => setEscolaNome(e.target.value)}
+                                            className="h-10 bg-zinc-50 dark:bg-black/20 border-zinc-200 dark:border-zinc-800 rounded-lg font-bold px-4 text-sm shadow-none"
+                                        />
                                     </div>
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">E-mail de Resposta</label>

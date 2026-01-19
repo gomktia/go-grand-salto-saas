@@ -27,6 +27,8 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTenant } from '@/hooks/use-tenant'
 import Link from 'next/link'
+import { getPostsBlog, deletePostBlog, updatePostBlog } from '@/app/actions/blog'
+import { toast } from 'sonner'
 
 export default function SiteManagementPage() {
     const [activeTab, setActiveTab] = useState('blog')
@@ -57,6 +59,7 @@ export default function SiteManagementPage() {
                         </Button>
                     </Link>
                     <Button
+                        onClick={() => toast.info('O editor de postagens será liberado na próxima atualização.')}
                         className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                         style={{ backgroundColor: primaryColor }}
                     >
@@ -111,11 +114,45 @@ export default function SiteManagementPage() {
 }
 
 function BlogTab({ primaryColor }: { primaryColor: string }) {
-    const posts = [
-        { id: 1, title: 'Inscrições Abertas para o Espetáculo 2026', date: '18 Jan 2026', status: 'Publicado', views: 450, category: 'EVENTOS' },
-        { id: 2, title: 'Benefícios do Ballet para Crianças de 3 a 5 anos', date: '15 Jan 2026', status: 'Rascunho', views: 0, category: 'ARTIGOS' },
-        { id: 3, title: 'Workshop de Jazz Contemporâneo com Prof. Carlos', date: '10 Jan 2026', status: 'Publicado', views: 1250, category: 'WORKSHOPS' },
-    ]
+    const [posts, setPosts] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
+    React.useEffect(() => {
+        loadPosts()
+    }, [])
+
+    async function loadPosts() {
+        try {
+            setLoading(true)
+            const result = await getPostsBlog()
+            setPosts(result.data)
+        } catch (error) {
+            toast.error('Erro ao carregar posts')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Deseja excluir este post?')) return
+        try {
+            await deletePostBlog(id)
+            toast.success('Post excluído com sucesso!')
+            loadPosts()
+        } catch (error) {
+            toast.error('Erro ao excluir post')
+        }
+    }
+
+    const handleToggleStatus = async (post: any) => {
+        try {
+            await updatePostBlog(post.id, { is_publicado: !post.is_publicado })
+            toast.success(`Post ${!post.is_publicado ? 'publicado' : 'movido para rascunho'}`)
+            loadPosts()
+        } catch (error) {
+            toast.error('Erro ao atualizar status')
+        }
+    }
 
     return (
         <div className="space-y-8">
@@ -147,24 +184,29 @@ function BlogTab({ primaryColor }: { primaryColor: string }) {
                                         <div className="flex items-center gap-4">
                                             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: primaryColor }} />
                                             <div>
-                                                <div className="font-black text-xl italic uppercase tracking-tighter text-zinc-900 dark:text-white group-hover:text-pink-500 transition-colors">{post.title}</div>
+                                                <div className="font-black text-xl italic uppercase tracking-tighter text-zinc-900 dark:text-white group-hover:text-pink-500 transition-colors">{post.titulo || post.title}</div>
                                                 <div className="flex items-center gap-3 mt-1">
-                                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{post.category}</span>
+                                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{post.categoria}</span>
                                                     <span className="text-[10px] text-muted-foreground/30">•</span>
-                                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{post.date}</span>
+                                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+                                                        {post.data_publicacao ? new Date(post.data_publicacao).toLocaleDateString() : 'N/A'}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="p-8">
-                                        <Badge className={`px-4 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest ${post.status === 'Publicado' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-muted text-muted-foreground'}`}>
-                                            {post.status}
+                                        <Badge
+                                            onClick={() => handleToggleStatus(post)}
+                                            className={`px-4 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest cursor-pointer hover:opacity-80 transition-all ${post.is_publicado ? 'bg-emerald-500/10 text-emerald-500' : 'bg-muted text-muted-foreground'}`}
+                                        >
+                                            {post.is_publicado ? 'Publicado' : 'Rascunho'}
                                         </Badge>
                                     </td>
                                     <td className="p-8">
                                         <div className="flex items-center gap-2">
                                             <Eye className="w-4 h-4 text-muted-foreground" />
-                                            <span className="text-sm font-mono font-bold text-zinc-900 dark:text-white">{post.views.toLocaleString()}</span>
+                                            <span className="text-sm font-mono font-bold text-zinc-900 dark:text-white">{(post.visualizacoes || 0).toLocaleString()}</span>
                                         </div>
                                     </td>
                                     <td className="p-8 text-right">
@@ -172,7 +214,12 @@ function BlogTab({ primaryColor }: { primaryColor: string }) {
                                             <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all">
                                                 <Edit2 className="w-4 h-4" />
                                             </Button>
-                                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-white/5 hover:bg-red-500/10 hover:text-red-500 transition-all">
+                                            <Button
+                                                onClick={() => handleDelete(post.id)}
+                                                size="icon"
+                                                variant="ghost"
+                                                className="h-12 w-12 rounded-xl border border-white/5 hover:bg-red-500/10 hover:text-red-500 transition-all"
+                                            >
                                                 <Trash2 className="w-4 h-4" />
                                             </Button>
                                         </div>

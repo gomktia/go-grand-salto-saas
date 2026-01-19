@@ -1,6 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { getMinhasTurmas, registrarFrequencia } from '@/app/actions/professor'
+import { toast } from 'sonner'
 import { motion } from 'framer-motion'
 import {
     Users,
@@ -28,17 +30,67 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTenant } from '@/hooks/use-tenant'
 
-const studentsInClass = [
-    { id: 1, name: 'Valentina Silva', age: '6 anos', progress: 85, attendance: '100%', status: 'Presente' },
-    { id: 2, name: 'Heloísa Oliveira', age: '5 anos', progress: 72, attendance: '92%', status: 'Pendente' },
-    { id: 3, name: 'Alice Santos', age: '6 anos', progress: 91, attendance: '100%', status: 'Presente' },
-    { id: 4, name: 'Julia Costa', age: '5 anos', progress: 65, attendance: '85%', status: 'Ausente' },
-]
+// Retirado studentsInClass mock
 
 export default function ProfessorDashboard() {
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#ec4899'
     const [activeTab, setActiveTab] = useState('diario')
+    const [isLoading, setIsLoading] = useState(true)
+    const [turmas, setTurmas] = useState<any[]>([])
+    const [selectedTurma, setSelectedTurma] = useState<any>(null)
+    const [attendance, setAttendance] = useState<Record<string, boolean>>({})
+
+    useEffect(() => {
+        loadData()
+    }, [])
+
+    async function loadData() {
+        try {
+            setIsLoading(true)
+            const result = await getMinhasTurmas()
+            setTurmas(result.data)
+            if (result.data.length > 0) {
+                setSelectedTurma(result.data[0])
+                // Initialize attendance
+                const initial: Record<string, boolean> = {}
+                result.data[0].matriculas_turmas.forEach((m: any) => {
+                    initial[m.estudantes.id] = false
+                })
+                setAttendance(initial)
+            }
+        } catch (error) {
+            toast.error('Erro ao carregar turmas')
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const toggleAttendance = (estudanteId: string) => {
+        setAttendance(prev => ({
+            ...prev,
+            [estudanteId]: !prev[estudanteId]
+        }))
+    }
+
+    const handleSaveAttendance = async () => {
+        if (!selectedTurma) return
+
+        const presencas = Object.entries(attendance).map(([id, present]) => ({
+            estudante_id: id,
+            presente: present
+        }))
+
+        try {
+            await registrarFrequencia({
+                turma_id: selectedTurma.id,
+                presencas
+            })
+            toast.success('Frequência registrada com sucesso!')
+        } catch (error) {
+            toast.error('Erro ao registrar frequência')
+        }
+    }
 
     return (
         <div className="p-4 lg:p-10 space-y-10 max-w-7xl mx-auto pb-24">
@@ -55,16 +107,27 @@ export default function ProfessorDashboard() {
                         <Badge variant="outline" className="border-[var(--primary)]/30 text-[var(--primary)] bg-[var(--primary)]/5 px-4 py-1.5 text-[10px] uppercase font-black tracking-[0.2em] rounded-full">
                             Excelência Docente
                         </Badge>
-                        <h1 className="text-3xl lg:text-5xl font-black tracking-tighter uppercase leading-none">Olá, <span style={{ color: primaryColor }}>Prof. Marina!</span></h1>
-                        <p className="text-muted-foreground font-bold text-sm lg:text-lg">Você possui <strong className="text-foreground">2 aulas</strong> magnéticas hoje no <strong className="text-foreground">{tenant?.nome}</strong>.</p>
+                        <h1 className="text-3xl lg:text-5xl font-black tracking-tighter uppercase leading-none">Olá, <span style={{ color: primaryColor }}>Professor(a)!</span></h1>
+                        <p className="text-muted-foreground font-bold text-sm lg:text-lg">Você possui <strong className="text-foreground">{turmas.length} turmas</strong> sob sua gestão no <strong className="text-foreground">{tenant?.nome}</strong>.</p>
                     </div>
                 </div>
                 <div className="flex flex-wrap gap-4">
-                    <Button variant="outline" className="h-16 px-8 rounded-2xl border-2 border-border font-black uppercase tracking-widest text-[10px] bg-card hover:bg-muted transition-all">
+                    <Button
+                        onClick={() => toast.info('A agenda detalhada será liberada na próxima atualização.')}
+                        variant="outline"
+                        className="h-16 px-8 rounded-2xl border-2 border-border font-black uppercase tracking-widest text-[10px] bg-card hover:bg-muted transition-all"
+                    >
                         <Calendar className="w-5 h-5 mr-3" style={{ color: primaryColor }} />
                         Minha Agenda
                     </Button>
-                    <Button className="h-16 px-12 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-2xl shadow-[var(--primary)]/30 border-none transition-all hover:scale-105 active:scale-95 text-white" style={{ backgroundColor: primaryColor }}>
+                    <Button
+                        onClick={() => {
+                            const diarioSection = document.getElementById('diario-section')
+                            if (diarioSection) diarioSection.scrollIntoView({ behavior: 'smooth' })
+                        }}
+                        className="h-16 px-12 rounded-2xl font-black uppercase tracking-tighter text-lg shadow-2xl shadow-[var(--primary)]/30 border-none transition-all hover:scale-105 active:scale-95 text-white"
+                        style={{ backgroundColor: primaryColor }}
+                    >
                         <Zap className="w-6 h-6 mr-2" />
                         Chamada Digital
                     </Button>
@@ -92,7 +155,7 @@ export default function ProfessorDashboard() {
                             ))}
                         </TabsList>
 
-                        <TabsContent value="diario" className="mt-0 focus-visible:outline-none">
+                        <TabsContent id="diario-section" value="diario" className="mt-0 focus-visible:outline-none">
                             <Card className="bg-card border-border shadow-sm rounded-[3rem] overflow-hidden">
                                 <CardHeader className="p-12 border-b border-border/50 bg-muted/20">
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -107,30 +170,40 @@ export default function ProfessorDashboard() {
                                 </CardHeader>
                                 <CardContent className="p-12 space-y-6">
                                     <div className="space-y-4">
-                                        {studentsInClass.map((student) => (
-                                            <div key={student.id} className="flex items-center justify-between p-8 rounded-[2.5rem] bg-muted/20 border-2 border-transparent hover:border-[var(--primary)]/20 transition-all group cursor-pointer">
+                                        {!selectedTurma ? (
+                                            <p className="text-center text-muted-foreground py-12 font-bold uppercase text-[10px] tracking-widest">Nenhuma turma encontrada</p>
+                                        ) : selectedTurma.matriculas_turmas.map((m: any) => (
+                                            <div
+                                                key={m.estudantes.id}
+                                                onClick={() => toggleAttendance(m.estudantes.id)}
+                                                className={`flex items-center justify-between p-8 rounded-[2.5rem] bg-muted/20 border-2 transition-all group cursor-pointer ${attendance[m.estudantes.id] ? 'border-emerald-500/20' : 'border-transparent hover:border-[var(--primary)]/20'}`}
+                                            >
                                                 <div className="flex items-center gap-6">
                                                     <Avatar className="h-16 w-16 border-2 border-border shadow-inner">
-                                                        <AvatarFallback className="bg-card font-black text-lg uppercase" style={{ color: primaryColor }}>{student.name.charAt(0)}</AvatarFallback>
+                                                        <AvatarImage src={m.estudantes.perfis?.avatar_url} />
+                                                        <AvatarFallback className="bg-card font-black text-lg uppercase" style={{ color: primaryColor }}>{m.estudantes.nome_responsavel?.charAt(0)}</AvatarFallback>
                                                     </Avatar>
                                                     <div className="space-y-1">
-                                                        <div className="font-black text-lg uppercase tracking-tight">{student.name}</div>
+                                                        <div className="font-black text-lg uppercase tracking-tight">{m.estudantes.nome_responsavel}</div>
                                                         <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-black flex items-center gap-3">
-                                                            <span>{student.age}</span>
-                                                            <span className="w-1 h-1 rounded-full bg-border" />
-                                                            <span className="text-[var(--primary)]">{student.attendance} Frequência</span>
+                                                            <span>Aluno da Turma</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center gap-4">
-                                                    <Button variant="outline" className={`h-12 px-8 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${student.status === 'Presente' ? 'bg-emerald-500 text-white border-none shadow-xl shadow-emerald-500/30' : 'hover:border-[var(--primary)] hover:bg-[var(--primary)]/5'}`}>
-                                                        {student.status === 'Presente' ? 'Confirmado' : 'Marcar Presença'}
+                                                    <Button variant="outline" className={`h-12 px-8 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${attendance[m.estudantes.id] ? 'bg-emerald-500 text-white border-none shadow-xl shadow-emerald-500/30' : 'hover:border-[var(--primary)] hover:bg-[var(--primary)]/5'}`}>
+                                                        {attendance[m.estudantes.id] ? 'Presente' : 'Ausente'}
                                                     </Button>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-                                    <Button className="w-full mt-12 h-20 rounded-[2rem] font-black uppercase tracking-widest text-lg shadow-2xl transition-all hover:scale-[1.02] border-none" style={{ backgroundColor: primaryColor }}>
+                                    <Button
+                                        onClick={handleSaveAttendance}
+                                        disabled={!selectedTurma}
+                                        className="w-full mt-12 h-20 rounded-[2rem] font-black uppercase tracking-widest text-lg shadow-2xl transition-all hover:scale-[1.02] border-none text-white outline-none focus:outline-none"
+                                        style={{ backgroundColor: primaryColor }}
+                                    >
                                         Consolidar Diário e Notificar Pais
                                     </Button>
                                 </CardContent>
@@ -157,7 +230,13 @@ export default function ProfessorDashboard() {
                                 <p className="text-[13px] leading-relaxed font-black uppercase tracking-tight text-foreground">
                                     &quot;Marina, o repertório do festival de inverno precisa ser fechado até sexta.&quot;
                                 </p>
-                                <Button variant="ghost" className="w-full h-11 rounded-2xl bg-foreground text-background font-black uppercase text-[10px] tracking-widest hover:bg-neutral-800">Responder Digitalmente</Button>
+                                <Button
+                                    onClick={() => toast.info('A central de mensagens será liberada na próxima atualização.')}
+                                    variant="ghost"
+                                    className="w-full h-11 rounded-xl bg-foreground text-background font-black uppercase text-[10px] tracking-widest hover:bg-neutral-800"
+                                >
+                                    Responder Digitalmente
+                                </Button>
                             </div>
 
                             <div className="p-8 rounded-[2.5rem] bg-muted/30 border-2 border-border space-y-2 group/msg hover:border-[var(--primary)]/30 transition-all cursor-pointer">
@@ -180,7 +259,12 @@ export default function ProfessorDashboard() {
                             </div>
                             <h3 className="text-white font-black text-3xl mb-4 tracking-tighter uppercase leading-none">Momento <span style={{ color: primaryColor }}>Mágico</span></h3>
                             <p className="text-xs text-neutral-400 font-black uppercase tracking-widest mb-10 leading-relaxed max-w-[200px] mx-auto opacity-70">Capture e envie fotos profissionais direto para o portal dos pais.</p>
-                            <Button className="w-full bg-white text-black hover:bg-neutral-100 font-black h-16 rounded-[1.5rem] tracking-widest uppercase text-xs shadow-2xl hover:scale-105 transition-all outline-none border-none">Ativar Lente de Captura</Button>
+                            <Button
+                                onClick={() => toast.info('A funcionalidade de captura será liberada na próxima atualização.')}
+                                className="w-full bg-white text-black hover:bg-neutral-100 font-black h-16 rounded-[1.5rem] tracking-widest uppercase text-xs shadow-2xl hover:scale-105 transition-all outline-none border-none"
+                            >
+                                Ativar Lente de Captura
+                            </Button>
                         </CardContent>
                     </Card>
                 </div>

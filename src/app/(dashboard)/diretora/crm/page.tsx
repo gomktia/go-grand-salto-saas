@@ -22,6 +22,11 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useTenant } from '@/hooks/use-tenant'
+import { getLeads, createLead, updateLeadStatus } from '@/app/actions/crm'
+import { toast } from 'sonner'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const leads = [
     {
@@ -57,6 +62,55 @@ export default function CRMLeadsPage() {
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#ec4899'
 
+    const [leads, setLeads] = React.useState<any[]>([])
+    const [loading, setLoading] = React.useState(true)
+    const [showNewLeadModal, setShowNewLeadModal] = React.useState(false)
+    const [newLead, setNewLead] = React.useState({ nome: '', interesse: '', contato: '', prioridade: 'Média' })
+
+    React.useEffect(() => {
+        loadLeads()
+    }, [])
+
+    async function loadLeads() {
+        try {
+            setLoading(true)
+            const result = await getLeads()
+            setLeads(result.data)
+        } catch (error) {
+            toast.error('Erro ao carregar leads')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleCreateLead = async () => {
+        try {
+            await createLead(newLead)
+            toast.success('Lead criado com sucesso!')
+            setShowNewLeadModal(false)
+            setNewLead({ nome: '', interesse: '', contato: '', prioridade: 'Média' })
+            loadLeads()
+        } catch (error) {
+            toast.error('Erro ao criar lead')
+        }
+    }
+
+    const handleAdvanceStatus = async (leadId: string, currentStatus: string) => {
+        const statusMap: Record<string, string> = {
+            'Novo': 'Aula Experimental',
+            'Aula Experimental': 'Aguardando Resposta',
+            'Aguardando Resposta': 'Matriculado'
+        }
+        const nextStatus = statusMap[currentStatus] || 'Finalizado'
+        try {
+            await updateLeadStatus(leadId, nextStatus)
+            toast.success(`Lead avançado para: ${nextStatus}`)
+            loadLeads()
+        } catch (error) {
+            toast.error('Erro ao atualizar lead')
+        }
+    }
+
     return (
         <div className="space-y-6 pb-12">
             {/* Header Section */}
@@ -82,7 +136,7 @@ export default function CRMLeadsPage() {
                         FILTROS
                     </Button>
                     <Button
-                        onClick={() => { }}
+                        onClick={() => setShowNewLeadModal(true)}
                         className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                         style={{ backgroundColor: primaryColor }}
                     >
@@ -165,7 +219,10 @@ export default function CRMLeadsPage() {
                                         <Button size="icon" variant="outline" className="h-8 w-8 rounded-lg border-zinc-200 dark:border-zinc-800 hover:text-blue-500 hover:border-blue-500 transition-all">
                                             <Phone className="w-3.5 h-3.5" />
                                         </Button>
-                                        <Button className="h-8 px-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 font-bold uppercase text-[9px] tracking-widest rounded-lg transition-all border-none">
+                                        <Button
+                                            onClick={() => handleAdvanceStatus(lead.id, lead.status)}
+                                            className="h-8 px-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 font-bold uppercase text-[9px] tracking-widest rounded-lg transition-all border-none"
+                                        >
                                             AVANÇAR
                                         </Button>
                                     </div>
@@ -175,6 +232,47 @@ export default function CRMLeadsPage() {
                     </div>
                 </CardContent>
             </Card>
+
+            {/* New Lead Modal */}
+            <Dialog open={showNewLeadModal} onOpenChange={setShowNewLeadModal}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Novo Lead</DialogTitle>
+                        <DialogDescription>Cadastre um novo contato interessado</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label>Nome Completo (ou Responsável)</Label>
+                            <Input value={newLead.nome} onChange={e => setNewLead({ ...newLead, nome: e.target.value })} placeholder="Ex: Maria Silva" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Interesse</Label>
+                            <Input value={newLead.interesse} onChange={e => setNewLead({ ...newLead, interesse: e.target.value })} placeholder="Ex: Ballet Baby" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Contato (WhatsApp/Telefone)</Label>
+                            <Input value={newLead.contato} onChange={e => setNewLead({ ...newLead, contato: e.target.value })} placeholder="(00) 00000-0000" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Prioridade</Label>
+                            <Select value={newLead.prioridade} onValueChange={v => setNewLead({ ...newLead, prioridade: v })}>
+                                <SelectTrigger>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Baixa">Baixa</SelectItem>
+                                    <SelectItem value="Média">Média</SelectItem>
+                                    <SelectItem value="Alta">Alta</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                    <div className="flex justify-end gap-3">
+                        <Button variant="outline" onClick={() => setShowNewLeadModal(false)}>Cancelar</Button>
+                        <Button onClick={handleCreateLead} style={{ backgroundColor: primaryColor }} className="text-white border-none">Criar Lead</Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Filter } from 'lucide-react'
 import { getEstatisticasFinanceiras, getMensalidades } from '@/app/actions/financeiro'
+import { getStudents } from '@/app/actions/admin'
 import { ClientFinanceiroContent } from './client-content'
 
 export const dynamic = 'force-dynamic'
@@ -10,19 +11,22 @@ export default async function FinanceiroPage() {
     // Fetch real data from database
     let stats = null
     let mensalidades = []
+    let students = []
     let error = null
 
     try {
-        const [statsResult, mensalidadesResult] = await Promise.all([
+        const [statsResult, mensalidadesResult, studentsResult] = await Promise.all([
             getEstatisticasFinanceiras(),
             getMensalidades({
                 mes: new Date().getMonth() + 1,
                 ano: new Date().getFullYear()
-            })
+            }),
+            getStudents()
         ])
 
         stats = statsResult.data
         mensalidades = mensalidadesResult.data
+        students = studentsResult.data
     } catch (e: any) {
         error = e.message || 'Erro desconhecido'
     }
@@ -97,6 +101,7 @@ export default async function FinanceiroPage() {
             <ClientFinanceiroContent
                 financialStats={financialStats}
                 recentMensalidades={recentMensalidades}
+                students={students}
             />
         </div>
     )

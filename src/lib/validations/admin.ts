@@ -147,3 +147,10 @@ export const documentoFileSchema = z.object({
         'Formato de documento não suportado. Use: PDF, DOC ou DOCX'
     ),
 })
+
+// Configurações do Tenant (White Label)
+export const tenantSettingsSchema = z.object({
+    nome: z.string().min(2, 'Nome da escola é obrigatório').optional(),
+    logo_url: z.string().url('URL da logo inválida').optional().or(z.literal('')),
+    primary_color: z.string().regex(/^#[0-9A-F]{6}$/i, 'Cor inválida').optional(),
+})

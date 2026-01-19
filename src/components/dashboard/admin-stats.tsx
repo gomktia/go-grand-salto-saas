@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge'
 import { useTenant } from '@/hooks/use-tenant'
 import Link from 'next/link'
 import { getStats } from '@/app/actions/admin'
+import { toast } from 'sonner'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 export default function AdminDashboard() {
@@ -93,7 +94,11 @@ export default function AdminDashboard() {
                     </h1>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                    <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 font-bold text-[10px] hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all uppercase tracking-widest text-zinc-600 dark:text-zinc-400">
+                    <Button
+                        onClick={() => toast.info('A geração de relatórios PDF está sendo processada e será enviada para o seu e-mail.')}
+                        variant="outline"
+                        className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 font-bold text-[10px] hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all uppercase tracking-widest text-zinc-600 dark:text-zinc-400"
+                    >
                         RELATÓRIO PDF
                     </Button>
                     <Link href="/diretora/turmas">

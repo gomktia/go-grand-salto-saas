@@ -26,6 +26,8 @@ import { useTenant } from '@/hooks/use-tenant'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { sendNotification } from '@/app/actions/admin'
+import { toast } from 'sonner'
 
 const templates = [
     { id: 1, title: 'Mensalidade Atrazada', channel: 'WhatsApp', text: 'Olá [Nome], notamos que sua mensalidade de [Mês] está em aberto. Podemos ajudar?' },
@@ -35,12 +37,33 @@ const templates = [
 
 export default function NotificacoesPage() {
     const [isSending, setIsSending] = useState(false)
+    const [message, setMessage] = useState('')
+    const [title, setTitle] = useState('')
+    const [type, setType] = useState<'geral' | 'financeiro' | 'evento'>('geral')
+
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#db2777'
 
-    const simulateSend = () => {
+    const handleSend = async () => {
+        if (!message || !title) {
+            toast.error('Título e mensagem são obrigatórios')
+            return
+        }
         setIsSending(true)
-        setTimeout(() => setIsSending(false), 2000)
+        try {
+            await sendNotification({
+                titulo: title,
+                mensagem: message,
+                tipo: type
+            })
+            toast.success('Notificação enviada com sucesso!')
+            setMessage('')
+            setTitle('')
+        } catch (error) {
+            toast.error('Erro ao enviar notificação')
+        } finally {
+            setIsSending(false)
+        }
     }
 
     return (
@@ -88,8 +111,20 @@ export default function NotificacoesPage() {
                         </div>
 
                         <div className="space-y-2">
+                            <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Título do Aviso</label>
+                            <Input
+                                value={title}
+                                onChange={e => setTitle(e.target.value)}
+                                placeholder="Ex: Aviso Importante"
+                                className="bg-zinc-50 dark:bg-black/40 border-none rounded-xl p-6 text-sm font-medium focus-visible:ring-1 focus-visible:ring-blue-500/50"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
                             <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Mensagem do Sistema</label>
                             <Textarea
+                                value={message}
+                                onChange={e => setMessage(e.target.value)}
                                 placeholder="Olá! Gostaríamos de lembrar que..."
                                 className="min-h-[160px] bg-zinc-50 dark:bg-black/40 border-none rounded-xl p-6 text-sm font-medium focus-visible:ring-1 focus-visible:ring-blue-500/50 resize-none shadow-inner"
                             />
@@ -100,7 +135,7 @@ export default function NotificacoesPage() {
                                 <Send className="w-4 h-4" /> ENVIAR WHATSAPP
                             </Button>
                             <Button
-                                onClick={simulateSend}
+                                onClick={handleSend}
                                 disabled={isSending}
                                 className="flex-1 h-12 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black uppercase text-[10px] tracking-widest gap-2 transition-all hover:scale-[1.02] active:scale-95 border-none"
                             >

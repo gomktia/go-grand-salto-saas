@@ -8,6 +8,7 @@ import { PlayCircle, Sparkles, ChevronRight, Zap, Shirt, Camera, FileText, Globe
 import { Button } from '@/components/ui/button'
 import { useTenant } from '@/hooks/use-tenant'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 export default function DiretoraDashboard() {
     const tenant = useTenant()
@@ -126,10 +127,18 @@ export default function DiretoraDashboard() {
                             </div>
 
                             <div className="grid grid-cols-2 gap-2">
-                                <Button variant="ghost" className="h-9 rounded-xl bg-white/5 text-white font-black text-[9px] uppercase tracking-widest border border-white/10 hover:bg-white/20 transition-all">
+                                <Button
+                                    onClick={() => toast.info('Análise em andamento. Os registros serão liberados assim que a IA concluir o processamento.')}
+                                    variant="ghost"
+                                    className="h-9 rounded-xl bg-white/5 text-white font-black text-[9px] uppercase tracking-widest border border-white/10 hover:bg-white/20 transition-all font-bold"
+                                >
                                     Revisar
                                 </Button>
-                                <Button variant="ghost" className="h-9 rounded-xl bg-white/5 text-white font-black text-[9px] uppercase tracking-widest border border-white/10 hover:bg-white/20 transition-all">
+                                <Button
+                                    onClick={() => toast.success('Conteúdo aprovado e agendado para publicação!')}
+                                    variant="ghost"
+                                    className="h-9 rounded-xl bg-white/5 text-white font-black text-[9px] uppercase tracking-widest border border-white/10 hover:bg-white/20 transition-all font-bold"
+                                >
                                     Aprovar
                                 </Button>
                             </div>

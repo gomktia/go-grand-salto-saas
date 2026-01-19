@@ -31,8 +31,11 @@ import {
     getProximasAulas,
     getFinanceiroAlunos,
     getNotificacoesResponsavel,
+    marcarNotificacaoLida,
     getPerfilResponsavel
 } from '@/app/actions/portal-responsavel'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { toast } from 'sonner'
 
 type Aluno = {
     id: string
@@ -137,6 +140,8 @@ export default function ResponsavelDashboard() {
     }>({ mensalidades: [], estatisticas: null })
     const [notificacoes, setNotificacoes] = useState<Notificacao[]>([])
     const [perfil, setPerfil] = useState<Perfil | null>(null)
+    const [showNotificacoes, setShowNotificacoes] = useState(false)
+    const [showAgenda, setShowAgenda] = useState(false)
 
     useEffect(() => {
         loadData()
@@ -244,7 +249,11 @@ export default function ResponsavelDashboard() {
                     </div>
                 </div>
                 <div className="flex gap-4">
-                    <Button variant="outline" className="h-14 px-6 rounded-2xl border-2 border-border font-black uppercase tracking-widest text-[10px] bg-card hover:bg-muted transition-all">
+                    <Button
+                        variant="outline"
+                        onClick={() => setShowNotificacoes(true)}
+                        className="h-14 px-6 rounded-2xl border-2 border-border font-black uppercase tracking-widest text-[10px] bg-card hover:bg-muted transition-all"
+                    >
                         <Bell className="w-5 h-5 mr-3" style={{ color: primaryColor }} />
                         Notificações
                         {notificacoes.filter(n => !n.lido).length > 0 && (
@@ -253,7 +262,11 @@ export default function ResponsavelDashboard() {
                             </Badge>
                         )}
                     </Button>
-                    <Button className="h-14 px-8 rounded-2xl font-black uppercase tracking-tighter text-sm shadow-2xl shadow-[var(--primary)]/30 border-none transition-all hover:scale-105 active:scale-95 text-white" style={{ backgroundColor: primaryColor }}>
+                    <Button
+                        onClick={() => toast.info('A galeria de fotos completa será liberada na próxima atualização.')}
+                        className="h-14 px-8 rounded-2xl font-black uppercase tracking-tighter text-sm shadow-2xl shadow-[var(--primary)]/30 border-none transition-all hover:scale-105 active:scale-95 text-white"
+                        style={{ backgroundColor: primaryColor }}
+                    >
                         <Camera className="w-5 h-5 mr-2" />
                         Galeria de Fotos
                     </Button>
@@ -325,7 +338,10 @@ export default function ResponsavelDashboard() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <Button className="h-auto md:w-48 rounded-[2.5rem] font-black uppercase tracking-widest text-[10px] border-2 border-border bg-card text-foreground hover:bg-muted transition-all flex flex-col items-center justify-center gap-3 p-8 group/btn">
+                                        <Button
+                                            onClick={() => setShowAgenda(true)}
+                                            className="h-auto md:w-48 rounded-[2.5rem] font-black uppercase tracking-widest text-[10px] border-2 border-border bg-card text-foreground hover:bg-muted transition-all flex flex-col items-center justify-center gap-3 p-8 group/btn"
+                                        >
                                             <Calendar className="w-8 h-8 opacity-40 group-hover/btn:text-[var(--primary)] group-hover/btn:opacity-100 transition-all" />
                                             Ver Agenda
                                         </Button>
@@ -400,7 +416,11 @@ export default function ResponsavelDashboard() {
                                     </div>
                                     Favoritos do Palco
                                 </CardTitle>
-                                <Button variant="ghost" className="font-black text-[10px] uppercase tracking-widest group-hover:text-[var(--primary)] transition-all">
+                                <Button
+                                    onClick={() => toast.info('A galeria de fotos completa será liberada na próxima atualização.')}
+                                    variant="ghost"
+                                    className="font-black text-[10px] uppercase tracking-widest group-hover:text-[var(--primary)] transition-all"
+                                >
                                     Ver Galeria Completa <ChevronRight className="w-4 h-4 ml-2" />
                                 </Button>
                             </div>
@@ -473,7 +493,11 @@ export default function ResponsavelDashboard() {
                                 <div className={`absolute -bottom-4 -right-4 w-24 h-24 blur-3xl rounded-full
                                     ${financeiro.estatisticas?.statusGeral === 'em_dia' ? 'bg-emerald-500/5' : 'bg-amber-500/5'}`} />
                             </div>
-                            <Button className="w-full h-20 rounded-[2rem] font-black uppercase tracking-widest text-lg shadow-2xl transition-all hover:scale-[1.02] border-none text-white focus:outline-none" style={{ backgroundColor: primaryColor }}>
+                            <Button
+                                onClick={() => toast.info('A geração de carnê integrado está em processamento pelo setor financeiro.')}
+                                className="w-full h-20 rounded-[2rem] font-black uppercase tracking-widest text-lg shadow-2xl transition-all hover:scale-[1.02] border-none text-white focus:outline-none"
+                                style={{ backgroundColor: primaryColor }}
+                            >
                                 Gerar Carnê Integrado
                             </Button>
                             {financeiro.estatisticas?.proximoVencimento && (
@@ -540,6 +564,66 @@ export default function ResponsavelDashboard() {
                     </Card>
                 </div>
             </div>
+
+            {/* Modals */}
+            <Dialog open={showNotificacoes} onOpenChange={setShowNotificacoes}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="font-black uppercase tracking-tighter text-2xl">Mural de Avisos</DialogTitle>
+                        <DialogDescription className="font-bold text-[10px] uppercase tracking-widest">Suas últimas comunicações</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                        {notificacoes.length === 0 ? (
+                            <p className="text-center py-8 text-muted-foreground font-bold">Nenhum aviso</p>
+                        ) : notificacoes.map(n => (
+                            <div key={n.id} className="p-4 rounded-2xl bg-muted/30 border border-border space-y-2">
+                                <div className="flex justify-between items-center">
+                                    <Badge className="text-[8px] font-black uppercase">{n.tipo}</Badge>
+                                    <span className="text-[8px] text-muted-foreground">{new Date(n.created_at).toLocaleDateString()}</span>
+                                </div>
+                                <h4 className="font-black text-sm uppercase tracking-tight">{n.titulo}</h4>
+                                <p className="text-xs text-muted-foreground">{n.mensagem}</p>
+                                {!n.lido && (
+                                    <Button
+                                        variant="link"
+                                        className="p-0 h-auto text-[10px] font-bold text-rose-500 uppercase tracking-widest"
+                                        onClick={async () => {
+                                            await marcarNotificacaoLida(n.id)
+                                            loadData()
+                                        }}
+                                    >
+                                        Marcar como lido
+                                    </Button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={showAgenda} onOpenChange={setShowAgenda}>
+                <DialogContent className="sm:max-w-lg">
+                    <DialogHeader>
+                        <DialogTitle className="font-black uppercase tracking-tighter text-2xl">Agenda Completa</DialogTitle>
+                        <DialogDescription className="font-bold text-[10px] uppercase tracking-widest">Horários das turmas vinculadas</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                        {aulas.length === 0 ? (
+                            <p className="text-center py-8 text-muted-foreground font-bold">Nenhum horário definido</p>
+                        ) : aulas.map(a => (
+                            <div key={a.id} className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 border border-border">
+                                <div className="w-12 h-12 rounded-xl flex items-center justify-center font-black text-white" style={{ backgroundColor: a.turma.cor_etiqueta }}>
+                                    {diasSemana[a.dia_semana].charAt(0)}
+                                </div>
+                                <div className="flex-1">
+                                    <h4 className="font-black text-sm uppercase tracking-tight">{a.turma.nome}</h4>
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{diasSemana[a.dia_semana]} • {a.hora_inicio.slice(0, 5)} - {a.hora_fim.slice(0, 5)}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

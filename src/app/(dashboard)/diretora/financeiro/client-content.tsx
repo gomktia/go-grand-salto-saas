@@ -60,9 +60,10 @@ type Mensalidade = {
 type Props = {
     financialStats: FinancialStat[]
     recentMensalidades: Mensalidade[]
+    students: any[]
 }
 
-export function ClientFinanceiroContent({ financialStats, recentMensalidades }: Props) {
+export function ClientFinanceiroContent({ financialStats, recentMensalidades, students }: Props) {
     const tenant = useTenant()
     const router = useRouter()
     const primaryColor = tenant?.primaryColor || '#ec4899'
@@ -74,9 +75,13 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
     const [paymentData, setPaymentData] = useState<{
         metodo_pagamento: 'pix' | 'cartao_credito' | 'cartao_debito' | 'boleto' | 'dinheiro';
         data_pagamento: string;
+        estudante_id: string;
+        valor: string;
     }>({
         metodo_pagamento: 'pix',
         data_pagamento: new Date().toISOString().split('T')[0],
+        estudante_id: '',
+        valor: '',
     })
 
     const handleRegisterPayment = async () => {
@@ -85,9 +90,9 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
         setIsSubmitting(true)
         try {
             await registrarPagamento({
-                mensalidade_id: selectedMensalidade.id,
-                estudante_id: selectedMensalidade.estudante_id,
-                valor: selectedMensalidade.valor,
+                mensalidade_id: selectedMensalidade?.id,
+                estudante_id: selectedMensalidade?.estudante_id || paymentData.estudante_id,
+                valor: selectedMensalidade?.valor || parseFloat(paymentData.valor),
                 metodo_pagamento: paymentData.metodo_pagamento,
                 data_pagamento: new Date(paymentData.data_pagamento).toISOString(),
             })
@@ -365,6 +370,38 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                             </div>
                         )}
 
+                        {!selectedMensalidade && (
+                            <>
+                                <div className="space-y-2">
+                                    <Label>Estudante</Label>
+                                    <Select
+                                        value={paymentData.estudante_id}
+                                        onValueChange={(value) => setPaymentData({ ...paymentData, estudante_id: value })}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Selecione o aluno" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {students?.map((student) => (
+                                                <SelectItem key={student.id} value={student.id}>
+                                                    {student.nome_responsavel}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Valor do Pagamento</Label>
+                                    <Input
+                                        type="number"
+                                        placeholder="0,00"
+                                        value={paymentData.valor}
+                                        onChange={(e) => setPaymentData({ ...paymentData, valor: e.target.value })}
+                                    />
+                                </div>
+                            </>
+                        )}
+
                         <div className="space-y-2">
                             <Label htmlFor="metodo">Método de Pagamento</Label>
                             <Select
@@ -406,7 +443,7 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                         </Button>
                         <Button
                             onClick={handleRegisterPayment}
-                            disabled={!selectedMensalidade || isSubmitting}
+                            disabled={isSubmitting || (!selectedMensalidade && (!paymentData.estudante_id || !paymentData.valor))}
                             className="flex-1"
                             style={{ backgroundColor: primaryColor }}
                         >

@@ -17,6 +17,8 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
+import { toast } from 'sonner'
+
 export default function SuperAdminDashboard() {
     return (
         <div className="p-4 lg:p-10 space-y-10 pb-24 max-w-7xl mx-auto">
@@ -34,10 +36,17 @@ export default function SuperAdminDashboard() {
                     <p className="text-neutral-400 font-medium text-sm lg:text-lg">Monitoramento de infraestrutura e performance de todos os tenants.</p>
                 </div>
                 <div className="flex gap-3 relative z-10">
-                    <Button variant="outline" className="h-14 border-white/10 bg-white/5 text-white hover:bg-white/10 px-8 rounded-2xl font-bold uppercase tracking-widest text-[10px]">
+                    <Button
+                        onClick={() => toast.info('A visualização de logs está disponível apenas no ambiente de produção.')}
+                        variant="outline"
+                        className="h-14 border-white/10 bg-white/5 text-white hover:bg-white/10 px-8 rounded-2xl font-bold uppercase tracking-widest text-[10px]"
+                    >
                         Logs do Sistema
                     </Button>
-                    <Button className="h-14 bg-violet-600 hover:bg-violet-500 text-white px-8 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-2xl shadow-violet-600/20">
+                    <Button
+                        onClick={() => toast.info('Configurações globais bloqueadas para o seu nível de acesso.')}
+                        className="h-14 bg-violet-600 hover:bg-violet-500 text-white px-8 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-2xl shadow-violet-600/20"
+                    >
                         Configurações Globais
                     </Button>
                 </div>

@@ -24,6 +24,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useTenant } from '@/hooks/use-tenant'
+import { toast } from 'sonner'
 import { useCompletion } from '@ai-sdk/react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -83,10 +84,15 @@ export default function GaleriaPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all">
+                    <Button
+                        onClick={() => toast.info('A funcionalidade de álbuns será liberada na próxima atualização.')}
+                        variant="outline"
+                        className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
+                    >
                         CRIAR ÁLBUM
                     </Button>
                     <Button
+                        onClick={() => toast.info('O upload de mídia será liberado na próxima atualização.')}
                         style={{ backgroundColor: primaryColor }}
                         className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                     >

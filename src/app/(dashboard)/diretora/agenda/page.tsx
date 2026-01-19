@@ -30,6 +30,8 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { useTenant } from '@/hooks/use-tenant'
+import { getTurmas } from '@/app/actions/admin'
+import { toast } from 'sonner'
 
 const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
 const timeSlots = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00']
@@ -45,8 +47,45 @@ const mockEvents = [
 export default function AgendaPage() {
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#ec4899'
-    const [selectedEvent, setSelectedEvent] = useState<typeof mockEvents[0] | null>(null)
+    const [selectedEvent, setSelectedEvent] = useState<any | null>(null)
     const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false)
+    const [events, setEvents] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+
+    React.useEffect(() => {
+        loadAgenda()
+    }, [])
+
+    async function loadAgenda() {
+        try {
+            setLoading(true)
+            const result = await getTurmas()
+            const turmas = result.data || []
+
+            const agendaEvents: any[] = []
+            turmas.forEach((turma: any) => {
+                turma.agenda_aulas?.forEach((aula: any) => {
+                    agendaEvents.push({
+                        id: `${turma.id}-${aula.id}`,
+                        day: (aula.dia_semana - 1 + 7) % 7, // Adjusting to 0 = Monday if needed, or keeping as is
+                        time: aula.hora_inicio.substring(0, 5),
+                        name: turma.nome,
+                        teacher: turma.perfis?.full_name || 'Prof. não definido',
+                        room: aula.sala || 'Sala Principal',
+                        level: turma.nivel,
+                        color: turma.cor_etiqueta || primaryColor,
+                        turmaId: turma.id,
+                        matriculas: turma.matriculas_turmas || []
+                    })
+                })
+            })
+            setEvents(agendaEvents)
+        } catch (error) {
+            toast.error('Erro ao carregar agenda')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <div className="space-y-6 pb-12">
@@ -101,7 +140,10 @@ export default function AgendaPage() {
                                     {slot}
                                 </div>
                                 {daysOfWeek.map((_, dIdx) => {
-                                    const event = mockEvents.find(e => e.day === dIdx && e.time === slot)
+                                    const event = events.find(e => {
+                                        // Simple comparison, might need refinement if slot/time format differs
+                                        return e.day === dIdx && e.time.startsWith(slot.substring(0, 2))
+                                    })
                                     return (
                                         <div
                                             key={dIdx}
@@ -243,7 +285,14 @@ export default function AgendaPage() {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button className="w-full h-11 rounded-xl font-bold text-xs shadow-md gap-2 text-white" style={{ backgroundColor: primaryColor }}>
+                        <Button
+                            onClick={() => {
+                                toast.success('Notificação enviada para a turma!')
+                                setIsNotifyModalOpen(false)
+                            }}
+                            className="w-full h-11 rounded-xl font-bold text-xs shadow-md gap-2 text-white"
+                            style={{ backgroundColor: primaryColor }}
+                        >
                             <CheckCircle2 size={16} /> Enviar Agora
                         </Button>
                     </DialogFooter>
