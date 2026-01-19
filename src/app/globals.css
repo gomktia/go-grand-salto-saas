@@ -48,61 +48,89 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    /* Pure White */
-    --foreground: 240 10% 2%;
-    /* Deep Black Text */
+    --background: 0 0% 98%;
+    --foreground: 224 10% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 224 10% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 0 0% 9%;
-    /* Black / Neutral-900 */
+    --popover-foreground: 224 10% 10%;
+    --primary: 340 82% 45%;
     --primary-foreground: 0 0% 100%;
     --secondary: 240 5% 96%;
-    /* Lighter Secondary */
-    --secondary-foreground: 240 5.9% 10%;
+    --secondary-foreground: 224 10% 15%;
     --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
-    --accent: 240 5% 96%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5% 92%;
-    --input: 240 5% 92%;
-    --ring: 0 0% 9%;
-    --radius: 1rem;
+    --muted-foreground: 224 5% 40%;
+    --accent: 340 75% 95%;
+    --accent-foreground: 340 82% 40%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 340 82% 45%;
+    --radius: 0.75rem;
+
+    /* Chart colors */
+    --chart-1: 340 82% 45%;
+    --chart-2: 262 83% 58%;
+    --chart-3: 173 80% 40%;
+    --chart-4: 43 96% 56%;
+    --chart-5: 27 96% 61%;
+
+    /* Sidebar light */
+    --sidebar: 0 0% 98%;
+    --sidebar-foreground: 224 10% 10%;
+    --sidebar-primary: 340 82% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 340 75% 95%;
+    --sidebar-accent-foreground: 340 82% 40%;
+    --sidebar-border: 240 6% 90%;
+    --sidebar-ring: 340 82% 45%;
   }
 
   .dark {
-    --background: var(--tenant-bg, 0 0% 3%);
-    /* Deep Dark Background #080808 */
-    --foreground: 0 0% 98%;
-    --card: var(--tenant-bg, 0 0% 4%);
-    /* Slightly lighter card #0a0a0a */
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 4%;
-    --popover-foreground: 0 0% 98%;
-    --primary: var(--primary, 0 0% 98%);
+    --background: 224 15% 6%;
+    --foreground: 0 0% 95%;
+    --card: 224 15% 8%;
+    --card-foreground: 0 0% 95%;
+    --popover: 224 15% 8%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 340 82% 52%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 12%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 4% 12%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 12%;
-    --input: 240 4% 12%;
-    --ring: var(--primary, 0 0% 98%);
+    --secondary: 224 10% 14%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 224 10% 14%;
+    --muted-foreground: 224 5% 55%;
+    --accent: 224 10% 16%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 224 10% 18%;
+    --input: 224 10% 18%;
+    --ring: 340 82% 52%;
+
+    /* Chart colors dark */
+    --chart-1: 340 82% 55%;
+    --chart-2: 262 83% 65%;
+    --chart-3: 173 80% 50%;
+    --chart-4: 43 96% 60%;
+    --chart-5: 27 96% 65%;
+
+    /* Sidebar dark */
+    --sidebar: 224 15% 6%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 340 82% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 224 10% 14%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 224 10% 15%;
+    --sidebar-ring: 340 82% 52%;
   }
 }
 
 @layer utilities {
   .custom-scrollbar::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
@@ -110,14 +138,78 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--border);
+    background: hsl(var(--border));
     border-radius: 10px;
-    opacity: 0.5;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--muted-foreground);
-    opacity: 1;
+    background: hsl(var(--muted-foreground));
+  }
+
+  /* Glass effect utilities */
+  .glass {
+    @apply bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl;
+  }
+
+  .glass-card {
+    @apply bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/50 dark:border-white/10;
+  }
+
+  /* Better text visibility */
+  .text-subtle {
+    @apply text-neutral-600 dark:text-neutral-300;
+  }
+
+  .text-muted-visible {
+    @apply text-neutral-500 dark:text-neutral-400;
+  }
+
+  /* Card variants */
+  .card-elevated {
+    @apply bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700/50 shadow-sm;
+  }
+
+  .card-interactive {
+    @apply bg-white dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700/50
+           hover:border-neutral-300 dark:hover:border-neutral-600
+           hover:shadow-md transition-all duration-200;
+  }
+
+  /* Input improvements */
+  .input-enhanced {
+    @apply bg-white dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-600
+           text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500
+           focus:border-pink-500 dark:focus:border-pink-400 focus:ring-2 focus:ring-pink-500/20;
+  }
+
+  /* Status colors with better visibility */
+  .status-active {
+    @apply bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400
+           border border-emerald-200 dark:border-emerald-500/30;
+  }
+
+  .status-pending {
+    @apply bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400
+           border border-amber-200 dark:border-amber-500/30;
+  }
+
+  .status-inactive {
+    @apply bg-neutral-100 dark:bg-neutral-700/50 text-neutral-600 dark:text-neutral-400
+           border border-neutral-200 dark:border-neutral-600;
+  }
+
+  /* Table improvements */
+  .table-header {
+    @apply bg-neutral-50 dark:bg-neutral-800/50 text-neutral-700 dark:text-neutral-200 font-semibold;
+  }
+
+  .table-row {
+    @apply border-b border-neutral-100 dark:border-neutral-800
+           hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors;
+  }
+
+  .table-cell {
+    @apply text-neutral-700 dark:text-neutral-200;
   }
 }
 
@@ -127,6 +219,16 @@
   }
 
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
+    @apply bg-background text-foreground antialiased;
+  }
+
+  /* Better focus states */
+  :focus-visible {
+    @apply outline-none ring-2 ring-pink-500/50 ring-offset-2 ring-offset-background;
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-pink-500/20 text-inherit;
   }
 }

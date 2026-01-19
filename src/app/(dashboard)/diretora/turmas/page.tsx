@@ -69,24 +69,22 @@ type Turma = {
     }>
 }
 
-const DIAS_SEMANA_ABREV = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+const DIAS_SEMANA_ABREV = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']
 
 export default function TurmasPage() {
     const tenant = useTenant()
-    const primaryColor = tenant?.primaryColor || '#ec4899'
+    const primaryColor = tenant?.primaryColor || '#e11d48'
 
     const [turmas, setTurmas] = useState<Turma[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [viewMode, setViewMode] = useState<'grid' | 'calendar'>('grid')
 
-    // Dialogs state
     const [turmaDialogOpen, setTurmaDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [horariosDialogOpen, setHorariosDialogOpen] = useState(false)
     const [matriculasDialogOpen, setMatriculasDialogOpen] = useState(false)
     const [recursosDialogOpen, setRecursosDialogOpen] = useState(false)
-
     const [selectedTurma, setSelectedTurma] = useState<Turma | null>(null)
 
     useEffect(() => {
@@ -142,12 +140,10 @@ export default function TurmasPage() {
     }
 
     const getHorarioDisplay = (agenda: Turma['agenda_aulas']) => {
-        if (!agenda || agenda.length === 0) return 'Sem horários'
-
+        if (!agenda || agenda.length === 0) return 'Sem horarios'
         const sorted = [...agenda].sort((a, b) => a.dia_semana - b.dia_semana)
         const dias = sorted.map(h => DIAS_SEMANA_ABREV[h.dia_semana]).join('/')
         const horario = sorted[0] ? sorted[0].hora_inicio : ''
-
         return `${dias} ${horario}`
     }
 
@@ -162,33 +158,28 @@ export default function TurmasPage() {
     }
 
     return (
-        <div className="p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto pb-24">
+        <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="secondary" className="px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
-                            Engenharia Acadêmica
-                        </Badge>
-                    </div>
-                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">
-                        Gestão de <span style={{ color: primaryColor }}>Turmas</span>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
+                        Gestao de Turmas
                     </h1>
-                    <p className="text-neutral-500 dark:text-neutral-400 text-sm max-w-2xl">
-                        Organize salas, horários e ocupação da <strong className="font-semibold text-neutral-900 dark:text-white">{tenant?.nome}</strong>.
+                    <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
+                        Organize salas, horarios e ocupacao da {tenant?.nome}.
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
                     {/* View Toggle */}
-                    <div className="flex items-center gap-1 p-1 rounded-xl bg-neutral-900/50 border border-white/5">
+                    <div className="flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
                         <Button
                             onClick={() => setViewMode('grid')}
                             variant="ghost"
                             size="sm"
                             className={`h-8 px-3 rounded-lg transition-all ${
                                 viewMode === 'grid'
-                                    ? 'bg-white/10 text-white'
-                                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                                    ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm'
+                                    : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
                             }`}
                         >
                             <LayoutGrid className="w-4 h-4 mr-1.5" />
@@ -200,17 +191,17 @@ export default function TurmasPage() {
                             size="sm"
                             className={`h-8 px-3 rounded-lg transition-all ${
                                 viewMode === 'calendar'
-                                    ? 'bg-white/10 text-white'
-                                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                                    ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm'
+                                    : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
                             }`}
                         >
                             <CalendarIcon className="w-4 h-4 mr-1.5" />
-                            Calendário
+                            Calendario
                         </Button>
                     </div>
                     <Button
                         onClick={handleAddTurma}
-                        className="h-10 px-6 rounded-xl font-bold text-xs shadow-lg shadow-black/5 border-none transition-all hover:translate-y-px active:translate-y-0.5 text-white"
+                        className="h-10 px-5 rounded-xl font-semibold text-white shadow-lg shadow-pink-500/20"
                         style={{ backgroundColor: primaryColor }}
                     >
                         <Plus className="w-4 h-4 mr-2" />
@@ -219,84 +210,90 @@ export default function TurmasPage() {
                 </div>
             </div>
 
-            {/* Stats Cards */}
+            {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Card className="bg-card border-border p-6 rounded-2xl shadow-sm">
+                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total de Turmas</p>
-                            <p className="text-3xl font-bold text-foreground mt-2">{turmas.length}</p>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                                Total de Turmas
+                            </p>
+                            <p className="text-3xl font-bold text-neutral-900 dark:text-white mt-1">{turmas.length}</p>
                         </div>
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${primaryColor}15` }}>
-                            <Layers className="w-6 h-6" style={{ color: primaryColor }} />
+                        <div className="w-12 h-12 rounded-xl bg-pink-100 dark:bg-pink-500/20 flex items-center justify-center">
+                            <Layers className="w-6 h-6 text-pink-600 dark:text-pink-400" />
                         </div>
                     </div>
                 </Card>
 
-                <Card className="bg-card border-border p-6 rounded-2xl shadow-sm">
+                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total de Alunos</p>
-                            <p className="text-3xl font-bold mt-2" style={{ color: primaryColor }}>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                                Total de Alunos
+                            </p>
+                            <p className="text-3xl font-bold text-pink-600 dark:text-pink-400 mt-1">
                                 {turmas.reduce((acc, t) => acc + t.matriculas_turmas.filter(m => m.status === 'ativo').length, 0)}
                             </p>
                         </div>
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${primaryColor}15` }}>
-                            <Users className="w-6 h-6" style={{ color: primaryColor }} />
+                        <div className="w-12 h-12 rounded-xl bg-pink-100 dark:bg-pink-500/20 flex items-center justify-center">
+                            <Users className="w-6 h-6 text-pink-600 dark:text-pink-400" />
                         </div>
                     </div>
                 </Card>
 
-                <Card className="bg-card border-border p-6 rounded-2xl shadow-sm">
+                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Ocupação Média</p>
-                            <p className="text-3xl font-bold mt-2" style={{ color: primaryColor }}>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                                Ocupacao Media
+                            </p>
+                            <p className="text-3xl font-bold text-pink-600 dark:text-pink-400 mt-1">
                                 {turmas.length > 0
                                     ? Math.round(turmas.reduce((acc, t) => acc + calculateFillRate(t), 0) / turmas.length)
                                     : 0}%
                             </p>
                         </div>
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${primaryColor}15` }}>
-                            <CalendarIcon className="w-6 h-6" style={{ color: primaryColor }} />
+                        <div className="w-12 h-12 rounded-xl bg-pink-100 dark:bg-pink-500/20 flex items-center justify-center">
+                            <CalendarIcon className="w-6 h-6 text-pink-600 dark:text-pink-400" />
                         </div>
                     </div>
                 </Card>
             </div>
 
-            {/* Turmas Content */}
+            {/* Content */}
             {isLoading ? (
                 <div className="flex items-center justify-center p-12">
-                    <Loader2 className="w-8 h-8 animate-spin" style={{ color: primaryColor }} />
+                    <Loader2 className="w-8 h-8 animate-spin text-pink-500" />
                 </div>
             ) : error ? (
                 <div className="p-12 text-center">
-                    <p className="text-destructive text-sm mb-4">{error}</p>
-                    <Button onClick={loadTurmas} variant="outline" className="border-border">
+                    <p className="text-red-600 dark:text-red-400 text-sm mb-4">{error}</p>
+                    <Button onClick={loadTurmas} variant="outline" className="border-neutral-300 dark:border-neutral-700">
                         Tentar Novamente
                     </Button>
                 </div>
             ) : turmas.length === 0 ? (
-                <div className="p-12 text-center">
-                    <Layers className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-foreground font-medium mb-2">Nenhuma turma cadastrada</p>
-                    <p className="text-muted-foreground text-sm mb-6">Comece criando sua primeira turma</p>
+                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-12 text-center rounded-xl">
+                    <Layers className="w-12 h-12 mx-auto text-neutral-400 mb-4" />
+                    <p className="text-neutral-700 dark:text-neutral-300 font-medium mb-2">Nenhuma turma cadastrada</p>
+                    <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-6">Comece criando sua primeira turma</p>
                     <Button
                         onClick={handleAddTurma}
-                        className="text-white shadow-lg"
+                        className="text-white"
                         style={{ backgroundColor: primaryColor }}
                     >
                         <Plus className="w-4 h-4 mr-2" />
                         Criar Primeira Turma
                     </Button>
-                </div>
+                </Card>
             ) : viewMode === 'calendar' ? (
                 <TurmasCalendarView
                     turmas={turmas}
                     onTurmaClick={handleManageMatriculas}
                 />
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {turmas.map((turma) => {
                         const fillRate = calculateFillRate(turma)
                         const numeroAlunos = getNumeroAlunos(turma)
@@ -305,70 +302,74 @@ export default function TurmasPage() {
 
                         return (
                             <motion.div key={turma.id} whileHover={{ y: -2 }} className="h-full">
-                                <Card className="bg-white dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all h-full flex flex-col rounded-3xl overflow-hidden group">
-                                    <CardHeader className="p-6 pb-4 border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-white/5">
-                                        <div className="flex items-start justify-between gap-4 mb-4">
+                                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all h-full flex flex-col rounded-xl overflow-hidden">
+                                    <CardHeader className="p-5 pb-4 border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
+                                        <div className="flex items-start justify-between gap-3 mb-3">
                                             <div
-                                                className="p-2.5 rounded-xl border shadow-sm group-hover:rotate-3 transition-transform"
+                                                className="p-2 rounded-lg border"
                                                 style={{
-                                                    backgroundColor: `${turma.cor_etiqueta}20`,
-                                                    borderColor: `${turma.cor_etiqueta}40`
+                                                    backgroundColor: `${turma.cor_etiqueta}15`,
+                                                    borderColor: `${turma.cor_etiqueta}30`
                                                 }}
                                             >
                                                 <Layers className="w-4 h-4" style={{ color: turma.cor_etiqueta }} />
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <Badge
-                                                    variant="outline"
-                                                    className={`text-[9px] font-semibold uppercase tracking-wide h-6 px-2.5 rounded-full border ${
-                                                        isFull
-                                                            ? 'border-amber-200 text-amber-600 bg-amber-50 dark:bg-amber-900/10 dark:text-amber-400 dark:border-amber-800/30'
-                                                            : 'border-emerald-200 text-emerald-600 bg-emerald-50 dark:bg-emerald-900/10 dark:text-emerald-400 dark:border-emerald-800/30'
-                                                    }`}
-                                                >
+                                                <Badge className={`text-xs px-2 py-0.5 rounded-full font-medium
+                                                    ${isFull
+                                                        ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30'
+                                                        : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30'
+                                                    }`}>
                                                     {isFull ? 'Lotada' : 'Vagas'}
                                                 </Badge>
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/5 rounded-lg">
-                                                            <MoreHorizontal className="w-4 h-4 text-neutral-400" />
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg
+                                                            text-neutral-500 hover:text-neutral-700 dark:hover:text-white
+                                                            hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                                                            <MoreHorizontal className="w-4 h-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="bg-neutral-900 border-white/10 w-48">
-                                                        <DropdownMenuLabel className="text-neutral-400 text-xs">Ações</DropdownMenuLabel>
-                                                        <DropdownMenuSeparator className="bg-white/5" />
+                                                    <DropdownMenuContent align="end" className="w-48
+                                                        bg-white dark:bg-neutral-900
+                                                        border-neutral-200 dark:border-neutral-700
+                                                        shadow-lg rounded-xl">
+                                                        <DropdownMenuLabel className="text-neutral-500 dark:text-neutral-400 text-xs">
+                                                            Acoes
+                                                        </DropdownMenuLabel>
+                                                        <DropdownMenuSeparator className="bg-neutral-200 dark:bg-neutral-700" />
                                                         <DropdownMenuItem
                                                             onClick={() => handleEditTurma(turma)}
-                                                            className="text-white hover:bg-white/5 cursor-pointer"
+                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
                                                         >
                                                             <Edit className="w-4 h-4 mr-2" />
                                                             Editar Turma
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem
                                                             onClick={() => handleManageHorarios(turma)}
-                                                            className="text-white hover:bg-white/5 cursor-pointer"
+                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
                                                         >
                                                             <Clock className="w-4 h-4 mr-2" />
-                                                            Gerenciar Horários
+                                                            Gerenciar Horarios
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem
                                                             onClick={() => handleManageMatriculas(turma)}
-                                                            className="text-white hover:bg-white/5 cursor-pointer"
+                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
                                                         >
                                                             <UserPlus className="w-4 h-4 mr-2" />
                                                             Gerenciar Alunos
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem
                                                             onClick={() => handleManageRecursos(turma)}
-                                                            className="text-white hover:bg-white/5 cursor-pointer"
+                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
                                                         >
                                                             <Library className="w-4 h-4 mr-2" />
-                                                            Biblioteca de Mídia
+                                                            Biblioteca de Midia
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuSeparator className="bg-white/5" />
+                                                        <DropdownMenuSeparator className="bg-neutral-200 dark:bg-neutral-700" />
                                                         <DropdownMenuItem
                                                             onClick={() => handleDeleteTurma(turma)}
-                                                            className="text-red-400 hover:bg-red-500/10 cursor-pointer"
+                                                            className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer rounded-lg"
                                                         >
                                                             <Trash2 className="w-4 h-4 mr-2" />
                                                             Deletar Turma
@@ -377,39 +378,40 @@ export default function TurmasPage() {
                                                 </DropdownMenu>
                                             </div>
                                         </div>
-                                        <CardTitle className="text-lg font-bold leading-tight truncate mb-1 text-neutral-900 dark:text-white">
+                                        <CardTitle className="text-base font-bold text-neutral-900 dark:text-white truncate">
                                             {turma.nome}
                                         </CardTitle>
-                                        <CardDescription className="text-xs font-medium text-neutral-500">
+                                        <CardDescription className="text-sm text-neutral-600 dark:text-neutral-400">
                                             {turma.nivel}
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="p-6 pt-5 space-y-6 flex-1 flex flex-col">
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="flex flex-col gap-1.5">
-                                                <span className="text-[10px] font-medium uppercase text-neutral-400 tracking-wider">Horário</span>
-                                                <div className="flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
-                                                    <Clock className="w-3.5 h-3.5 text-neutral-400" /> {horarioDisplay}
+                                    <CardContent className="p-5 space-y-4 flex-1 flex flex-col">
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Horario</span>
+                                                <div className="flex items-center gap-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-200 mt-1">
+                                                    <Clock className="w-3.5 h-3.5 text-neutral-400" />
+                                                    {horarioDisplay}
                                                 </div>
                                             </div>
-                                            <div className="flex flex-col gap-1.5">
-                                                <span className="text-[10px] font-medium uppercase text-neutral-400 tracking-wider">Local</span>
-                                                <div className="flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
+                                            <div>
+                                                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Local</span>
+                                                <div className="flex items-center gap-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-200 mt-1">
                                                     <MapPin className="w-3.5 h-3.5 text-neutral-400" />
-                                                    {turma.agenda_aulas[0]?.sala || 'Não definido'}
+                                                    {turma.agenda_aulas[0]?.sala || 'Nao definido'}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="space-y-3 mt-auto pt-2">
-                                            <div className="flex items-center justify-between text-[11px]">
-                                                <span className="text-neutral-500 font-medium">Ocupação</span>
+                                        <div className="space-y-2 mt-auto pt-2">
+                                            <div className="flex items-center justify-between text-xs">
+                                                <span className="text-neutral-500 dark:text-neutral-400 font-medium">Ocupacao</span>
                                                 <span className="font-bold text-neutral-900 dark:text-white">{numeroAlunos} Alunos</span>
                                             </div>
-                                            <div className="h-1.5 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+                                            <div className="h-2 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
                                                 <motion.div
                                                     initial={{ width: 0 }}
                                                     animate={{ width: `${fillRate}%` }}
-                                                    className="h-full rounded-full transition-all"
+                                                    className="h-full rounded-full"
                                                     style={{ backgroundColor: turma.cor_etiqueta }}
                                                 />
                                             </div>
@@ -417,9 +419,13 @@ export default function TurmasPage() {
                                         <Button
                                             variant="outline"
                                             onClick={() => handleManageMatriculas(turma)}
-                                            className="w-full mt-2 h-9 rounded-xl border-neutral-200 dark:border-neutral-800 bg-white dark:bg-transparent text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-white/5 hover:text-neutral-900 dark:hover:text-white font-semibold text-xs transition-all flex items-center justify-center gap-2"
+                                            className="w-full mt-2 h-9 rounded-xl
+                                                border-neutral-300 dark:border-neutral-700
+                                                text-neutral-700 dark:text-neutral-200
+                                                hover:bg-neutral-100 dark:hover:bg-neutral-800
+                                                font-medium text-sm"
                                         >
-                                            Gerenciar <ChevronRight className="w-3 h-3" />
+                                            Gerenciar <ChevronRight className="w-4 h-4 ml-1" />
                                         </Button>
                                     </CardContent>
                                 </Card>

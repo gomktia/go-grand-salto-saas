@@ -68,7 +68,7 @@ export default function LoginPage() {
                 'diretora': '/diretora',
                 'professor': '/professor',
                 'estudante': '/aluno',
-                'pai': '/responsavel',
+                'responsavel': '/responsavel',
                 'super_admin': '/superadmin'
             }
 
