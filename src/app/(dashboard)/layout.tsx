@@ -37,7 +37,13 @@ import { Input } from '@/components/ui/input'
 import { TenantProvider, useTenant } from '@/hooks/use-tenant'
 import { createClient } from '@/utils/supabase/client'
 
-const roleConfig: Record<string, { items: any[], label: string }> = {
+interface NavigationItem {
+    name: string
+    icon: React.ElementType
+    href: string
+}
+
+const roleConfig: Record<string, { items: NavigationItem[], label: string }> = {
     diretora: {
         label: 'Diretora',
         items: [
@@ -45,7 +51,7 @@ const roleConfig: Record<string, { items: any[], label: string }> = {
             { name: 'CRM (Leads)', icon: Users, href: '/diretora/crm' },
             { name: 'Turmas', icon: BookOpen, href: '/diretora/turmas' },
             { name: 'Agenda', icon: Calendar, href: '/diretora/agenda' },
-            { name: 'Alunas', icon: Users, href: '/diretora/alunos' },
+            { name: 'Alunos', icon: Users, href: '/diretora/alunos' },
             { name: 'Check-in Facial', icon: ScanFace, href: '/diretora/checkin' },
             { name: 'Figurinos', icon: ShoppingBag, href: '/diretora/estoque' },
             { name: 'Momento do Palco', icon: Camera, href: '/diretora/galeria' },
@@ -65,7 +71,7 @@ const roleConfig: Record<string, { items: any[], label: string }> = {
         ]
     },
     aluno: {
-        label: 'Aluna',
+        label: 'Aluno',
         items: [
             { name: 'Meu Painel', icon: LayoutDashboard, href: '/aluno' },
             { name: 'Minhas Aulas', icon: QrCode, href: '/aluno/aulas' },

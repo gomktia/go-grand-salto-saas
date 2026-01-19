@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
     Users,
+    UserCheck,
     Search,
     Plus,
     Ruler,
@@ -18,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { getStudents } from '@/app/actions/admin'
+import { useTenant } from '@/hooks/use-tenant'
 import { StudentDialog } from '@/components/dashboard/student-dialog'
 import { DeleteStudentDialog } from '@/components/dashboard/delete-student-dialog'
 import { BodyMetricsDialog } from '@/components/dashboard/body-metrics-dialog'
@@ -59,6 +61,9 @@ export default function AlunosPage() {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [metricsDialogOpen, setMetricsDialogOpen] = useState(false)
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+
+    const tenant = useTenant()
+    const primaryColor = tenant?.primaryColor || '#db2777'
 
     useEffect(() => {
         loadStudents()
@@ -127,159 +132,140 @@ export default function AlunosPage() {
     }
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">Gestao de Alunos</h1>
-                    <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
-                        Acompanhe matriculas e metricas corporais para figurinos.
+        <div className="space-y-10 pb-12">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Núcleo de Gestão Estudantil
+                        </span>
+                    </div>
+                    <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase leading-none">
+                        Controle de <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Alunos</span>
+                    </h1>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-xl font-medium">
+                        Acompanhe matrículas, frequências e métricas corporais de elite da <strong className="text-zinc-900 dark:text-white uppercase">{tenant?.nome}</strong>.
                     </p>
                 </div>
-                <Button
-                    onClick={handleAddStudent}
-                    className="bg-pink-600 hover:bg-pink-500 text-white gap-2 h-10 px-5 rounded-xl font-semibold shadow-lg shadow-pink-500/20"
-                >
-                    <Plus className="w-4 h-4" />
-                    Novo Aluno
-                </Button>
-            </div>
 
-            {/* Search */}
-            <div className="flex flex-col sm:flex-row gap-3">
-                <div className="relative flex-1">
-                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
-                    <Input
-                        placeholder="Buscar por responsavel ou contato..."
-                        className="pl-10 h-10 rounded-xl
-                            bg-white dark:bg-neutral-800
-                            border-neutral-300 dark:border-neutral-700
-                            text-neutral-900 dark:text-white
-                            placeholder:text-neutral-500 dark:placeholder:text-neutral-400"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                <div className="flex items-center gap-3">
+                    <Button
+                        onClick={handleAddStudent}
+                        style={{ backgroundColor: primaryColor }}
+                        className="h-14 px-10 rounded-2xl font-black text-xs text-white shadow-xl shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
+                    >
+                        <Plus className="w-5 h-5 mr-2" />
+                        NOVO ALUNO
+                    </Button>
                 </div>
-                <Button variant="outline" className="gap-2 h-10 px-5 rounded-xl
-                    border-neutral-300 dark:border-neutral-700
-                    text-neutral-700 dark:text-neutral-200
-                    hover:bg-neutral-100 dark:hover:bg-neutral-800">
-                    <ArrowUpDown className="w-4 h-4" />
-                    Ordenar
-                </Button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                                Total de Alunos
-                            </p>
-                            <p className="text-3xl font-bold text-neutral-900 dark:text-white mt-1">{students.length}</p>
-                        </div>
-                        <div className="w-12 h-12 rounded-xl bg-pink-100 dark:bg-pink-500/20 flex items-center justify-center">
-                            <Users className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        </div>
-                    </div>
-                </Card>
-
-                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                                Ativos
-                            </p>
-                            <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-                                {students.filter(s => s.status_matricula === 'ativo').length}
-                            </p>
-                        </div>
-                        <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center">
-                            <Users className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+            {/* Quick Stats & Search */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <Card className="lg:col-span-1 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-[2rem] shadow-sm relative group">
+                    <div className="space-y-4">
+                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500">Busca Inteligente</div>
+                        <div className="relative">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                            <Input
+                                placeholder="Nome ou contato..."
+                                className="pl-11 h-12 rounded-2xl bg-zinc-100 dark:bg-black/40 border-none focus-visible:ring-2 focus-visible:ring-rose-500/50 transition-all"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </div>
                     </div>
                 </Card>
 
-                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                                Com Metricas
-                            </p>
-                            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">
-                                {students.filter(s => s.metricas_corpo && s.metricas_corpo.length > 0).length}
-                            </p>
+                <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-[2rem] shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                        <div className="flex flex-row items-center justify-between pb-2">
+                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Total de Alunos</div>
+                            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                                <Users className="w-4 h-4 text-blue-500" />
+                            </div>
                         </div>
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center">
-                            <Ruler className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                        <div className="text-3xl font-black tracking-tighter text-zinc-900 dark:text-white mt-2">
+                            {students.length}
                         </div>
-                    </div>
-                </Card>
+                        <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Ativos no Sistema
+                        </div>
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 blur-3xl rounded-full" />
+                    </Card>
+
+                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-[2rem] shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                        <div className="flex flex-row items-center justify-between pb-2">
+                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Matrículas Ativas</div>
+                            <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                                <UserCheck className="w-4 h-4 text-emerald-500" />
+                            </div>
+                        </div>
+                        <div className="text-3xl font-black tracking-tighter text-zinc-900 dark:text-white mt-2">
+                            {students.filter(s => s.status_matricula === 'ativa').length}
+                        </div>
+                        <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Status Regular
+                        </div>
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 blur-3xl rounded-full" />
+                    </Card>
+
+                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-[2rem] shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                        <div className="flex flex-row items-center justify-between pb-2">
+                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Com Métricas</div>
+                            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                                <Ruler className="w-4 h-4 text-amber-500" />
+                            </div>
+                        </div>
+                        <div className="text-3xl font-black tracking-tighter text-zinc-900 dark:text-white mt-2">
+                            {students.filter(s => (s.metricas_corpo?.length || 0) > 0).length}
+                        </div>
+                        <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Acompanhamento Elite
+                        </div>
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 blur-3xl rounded-full" />
+                    </Card>
+                </div>
             </div>
 
-            {/* Table */}
-            <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 overflow-hidden rounded-xl shadow-sm">
+            {/* Table Container */}
+            <Card className="bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 overflow-hidden rounded-[2.5rem] shadow-sm glass">
                 {isLoading ? (
-                    <div className="flex items-center justify-center p-12">
-                        <Loader2 className="w-8 h-8 animate-spin text-pink-500" />
+                    <div className="flex flex-col items-center justify-center p-24 space-y-4">
+                        <Loader2 className="w-10 h-10 animate-spin" style={{ color: primaryColor }} />
+                        <p className="text-xs font-black uppercase tracking-widest text-neutral-500">Sincronizando Base de Dados...</p>
                     </div>
                 ) : error ? (
-                    <div className="p-12 text-center">
-                        <p className="text-red-600 dark:text-red-400 text-sm mb-4">{error}</p>
-                        <Button onClick={loadStudents} variant="outline" className="border-neutral-300 dark:border-neutral-700">
+                    <div className="p-24 text-center">
+                        <p className="text-red-600 dark:text-red-400 font-bold mb-4">{error}</p>
+                        <Button onClick={loadStudents} variant="outline" className="rounded-2xl h-12 px-8 border-neutral-300 dark:border-neutral-700 font-bold uppercase text-[10px] tracking-widest">
                             Tentar Novamente
                         </Button>
                     </div>
                 ) : filteredStudents.length === 0 ? (
-                    <div className="p-12 text-center">
-                        {searchTerm ? (
-                            <>
-                                <Search className="w-12 h-12 mx-auto text-neutral-400 mb-4" />
-                                <p className="text-neutral-700 dark:text-neutral-300 font-medium mb-2">Nenhum resultado encontrado</p>
-                                <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-6">Tente ajustar sua busca</p>
-                                <Button onClick={() => setSearchTerm('')} variant="outline" className="border-neutral-300 dark:border-neutral-700">
-                                    Limpar Busca
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <Users className="w-12 h-12 mx-auto text-neutral-400 mb-4" />
-                                <p className="text-neutral-700 dark:text-neutral-300 font-medium mb-2">Nenhum aluno cadastrado</p>
-                                <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-6">Comece adicionando seu primeiro estudante</p>
-                                <Button onClick={handleAddStudent} className="bg-pink-600 hover:bg-pink-500 text-white">
-                                    <Plus className="w-4 h-4 mr-2" />
-                                    Adicionar Primeiro Aluno
-                                </Button>
-                            </>
-                        )}
+                    <div className="p-24 text-center">
+                        <div className="w-20 h-20 bg-neutral-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <Search className="w-8 h-8 text-neutral-400" />
+                        </div>
+                        <p className="text-neutral-900 dark:text-white font-black uppercase text-xl tracking-tighter mb-2">Sem resultados</p>
+                        <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-10 max-w-xs mx-auto">Não encontramos nenhum aluno com esta busca. Tente palavras-chave diferentes.</p>
+                        <Button onClick={() => setSearchTerm('')} variant="outline" className="rounded-2xl h-12 px-8 border-neutral-300 dark:border-neutral-700 font-bold uppercase text-[10px] tracking-widest transition-all hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                            Limpar Filtros
+                        </Button>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
-                                <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
-                                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                                        Responsavel
-                                    </th>
-                                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                                        Contato
-                                    </th>
-                                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                                        Idade
-                                    </th>
-                                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                                        Status
-                                    </th>
-                                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                                        Metricas (B/C/Q)
-                                    </th>
-                                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                                        Ultima Medicao
-                                    </th>
-                                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 text-right">
-                                        Acoes
-                                    </th>
+                                <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-white/[0.02]">
+                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Identidade</th>
+                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Contato</th>
+                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Idade</th>
+                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Status</th>
+                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Métricas (B/C/Q)</th>
+                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic text-right">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -288,97 +274,95 @@ export default function AlunosPage() {
                                     const age = calculateAge(student.data_nascimento)
 
                                     return (
-                                        <tr key={student.id} className="border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
-                                            <td className="p-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                                        <tr key={student.id} className="border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-white/[0.01] transition-all group">
+                                            <td className="p-6">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white font-black text-lg shadow-lg group-hover:scale-110 transition-transform">
                                                         {student.nome_responsavel.charAt(0).toUpperCase()}
                                                     </div>
                                                     <div>
-                                                        <p className="font-semibold text-neutral-900 dark:text-white">{student.nome_responsavel}</p>
+                                                        <p className="font-black text-neutral-900 dark:text-white uppercase tracking-tight text-sm">{student.nome_responsavel}</p>
                                                         {student.observacoes_medicas && (
-                                                            <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">Obs. medica</p>
+                                                            <div className="flex items-center gap-1.5 mt-1">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                                                <span className="text-[9px] text-amber-600 dark:text-amber-400 font-black uppercase tracking-widest">Alerta Médico</span>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="p-4 text-sm text-neutral-700 dark:text-neutral-300">{student.contato_responsavel}</td>
-                                            <td className="p-4">
-                                                <div className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
-                                                    <Calendar className="w-3.5 h-3.5 text-neutral-400" />
-                                                    {age} anos
+                                            <td className="p-6">
+                                                <div className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{student.contato_responsavel}</div>
+                                                <div className="text-[10px] text-neutral-400 mt-0.5 uppercase tracking-widest font-bold">WhatsApp</div>
+                                            </td>
+                                            <td className="p-6">
+                                                <div className="flex items-center gap-2 text-sm font-black text-neutral-700 dark:text-neutral-300 uppercase tracking-tighter italic">
+                                                    <Calendar className="w-4 h-4 text-neutral-400" />
+                                                    {age} Anos
                                                 </div>
                                             </td>
-                                            <td className="p-4">
-                                                <Badge className={`text-xs px-2.5 py-1 rounded-full font-medium
+                                            <td className="p-6">
+                                                <Badge className={`text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest border-none
                                                     ${student.status_matricula === 'ativo'
-                                                        ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30'
+                                                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                                                         : student.status_matricula === 'pendente'
-                                                        ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30'
-                                                        : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-600'
+                                                            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                                                            : 'bg-neutral-100 dark:bg-white/10 text-neutral-500 dark:text-neutral-400'
                                                     }`}>
                                                     {student.status_matricula}
                                                 </Badge>
                                             </td>
-                                            <td className="p-4">
+                                            <td className="p-6">
                                                 {latestMetric ? (
-                                                    <div className="flex items-center gap-2 text-sm font-mono text-neutral-700 dark:text-neutral-300">
-                                                        <Ruler className="w-3.5 h-3.5 text-pink-500" />
-                                                        {latestMetric.busto}/{latestMetric.cintura}/{latestMetric.quadril}
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded-lg bg-pink-50 dark:bg-pink-500/10 flex items-center justify-center">
+                                                            <Ruler className="w-4 h-4 text-pink-500" />
+                                                        </div>
+                                                        <div className="text-sm font-black font-mono tracking-tighter text-neutral-700 dark:text-neutral-300">
+                                                            {latestMetric.busto} / {latestMetric.cintura} / {latestMetric.quadril}
+                                                        </div>
                                                     </div>
                                                 ) : (
-                                                    <button
+                                                    <Button
                                                         onClick={() => handleManageMetrics(student)}
-                                                        className="text-sm text-pink-600 dark:text-pink-400 hover:text-pink-500 font-medium"
+                                                        variant="ghost"
+                                                        className="text-[10px] text-pink-600 dark:text-pink-400 hover:text-pink-500 font-black uppercase tracking-[0.2em] p-0 h-auto underline underline-offset-4"
                                                     >
-                                                        + Adicionar
-                                                    </button>
+                                                        Adicionar
+                                                    </Button>
                                                 )}
                                             </td>
-                                            <td className="p-4 text-sm text-neutral-500 dark:text-neutral-400">
-                                                {latestMetric?.data_medicao
-                                                    ? new Date(latestMetric.data_medicao).toLocaleDateString('pt-BR')
-                                                    : '-'
-                                                }
-                                            </td>
-                                            <td className="p-4 text-right">
+                                            <td className="p-6 text-right">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg
-                                                            text-neutral-500 hover:text-neutral-700 dark:hover:text-white
-                                                            hover:bg-neutral-100 dark:hover:bg-neutral-800">
-                                                            <MoreHorizontal className="w-4 h-4" />
+                                                        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-neutral-100 dark:hover:bg-white/5 transition-all transition-colors outline-none border-none">
+                                                            <MoreHorizontal className="w-5 h-5 text-neutral-400" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="w-48
-                                                        bg-white dark:bg-neutral-900
-                                                        border-neutral-200 dark:border-neutral-700
-                                                        shadow-lg rounded-xl">
-                                                        <DropdownMenuLabel className="text-neutral-500 dark:text-neutral-400 text-xs">
-                                                            Acoes
-                                                        </DropdownMenuLabel>
-                                                        <DropdownMenuSeparator className="bg-neutral-200 dark:bg-neutral-700" />
+                                                    <DropdownMenuContent align="end" className="w-56 p-2 rounded-2xl bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-2xl glass">
+                                                        <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 px-3 py-2">Comandos</DropdownMenuLabel>
+                                                        <DropdownMenuSeparator className="bg-neutral-100 dark:bg-white/5 mx-1" />
                                                         <DropdownMenuItem
                                                             onClick={() => handleEditStudent(student)}
-                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
+                                                            className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-pink-500 hover:text-white transition-all outline-none border-none"
                                                         >
-                                                            <Edit className="w-4 h-4 mr-2" />
-                                                            Editar Dados
+                                                            <Edit className="w-4 h-4" />
+                                                            Editar Perfil
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem
                                                             onClick={() => handleManageMetrics(student)}
-                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
+                                                            className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-blue-500 hover:text-white transition-all outline-none border-none"
                                                         >
-                                                            <Ruler className="w-4 h-4 mr-2" />
-                                                            Gerenciar Metricas
+                                                            <Ruler className="w-4 h-4" />
+                                                            Métricas Pro
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuSeparator className="bg-neutral-200 dark:bg-neutral-700" />
+                                                        <DropdownMenuSeparator className="bg-neutral-100 dark:bg-white/5 mx-1" />
                                                         <DropdownMenuItem
                                                             onClick={() => handleDeleteStudent(student)}
-                                                            className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer rounded-lg"
+                                                            className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-red-500 hover:text-white transition-all text-red-500 outline-none border-none"
                                                         >
-                                                            <Trash2 className="w-4 h-4 mr-2" />
-                                                            Deletar Aluno
+                                                            <Trash2 className="w-4 h-4" />
+                                                            Excluir Aluno
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>

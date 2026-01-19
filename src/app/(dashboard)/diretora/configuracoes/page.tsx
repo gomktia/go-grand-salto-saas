@@ -282,7 +282,7 @@ export default function WhiteLabelSettings() {
                                     </div>
                                     <div className="p-10 text-neutral-800 dark:text-neutral-200 space-y-6">
                                         <p className="text-sm font-black">Olá, <strong>Bailarina</strong>!</p>
-                                        <p className="text-[12px] leading-relaxed font-medium opacity-80 italic">"A dança é a linguagem escondida da alma."</p>
+                                        <p className="text-[12px] leading-relaxed font-medium opacity-80 italic">&quot;A dança é a linguagem escondida da alma.&quot;</p>
                                         <p className="text-[12px] leading-relaxed font-bold">É uma alegria imensa ter você em nossa comunidade. Sua jornada artística começa agora e estaremos ao seu lado em cada passo.</p>
                                         <div className="py-6 border-y border-border/10">
                                             <div className="h-14 w-full rounded-2xl flex items-center justify-center text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-lg" style={{ backgroundColor: primaryColor }}>

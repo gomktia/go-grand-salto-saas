@@ -168,7 +168,7 @@ export default function EspacoRevelleSite() {
                             {/* Floating Card */}
                             <div className="absolute bottom-10 -right-10 p-8 rounded-[2rem] bg-white/5 backdrop-blur-3xl border border-white/10 shadow-2xl hidden md:block max-w-[240px]">
                                 <Quote className="w-8 h-8 text-rose-500 mb-4" />
-                                <p className="text-sm font-medium italic text-zinc-300">"Aqui não ensinamos apenas passos, moldamos o caráter através da sensibilidade artística."</p>
+                                <p className="text-sm font-medium italic text-zinc-300">&quot;Aqui não ensinamos apenas passos, moldamos o caráter através da sensibilidade artística.&quot;</p>
                             </div>
                         </div>
 

@@ -23,18 +23,18 @@ export default function AdminDashboard() {
     const primaryColor = tenant?.primaryColor || '#f43f5e'
     const [realStats, setRealStats] = useState({ totalStudents: 0, totalTurmas: 0 })
 
-    useEffect(() => {
-        loadStats()
-    }, [])
-
-    async function loadStats() {
+    const loadStats = React.useCallback(async () => {
         try {
             const result = await getStats()
             setRealStats(result.data)
         } catch (err) {
             console.error('Erro ao carregar stats:', err)
         }
-    }
+    }, [])
+
+    useEffect(() => {
+        loadStats()
+    }, [loadStats])
 
     const stats = [
         {
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
         {
             title: 'Taxa de Retenção',
             value: '94%',
-            description: 'Alunas que permanecem',
+            description: 'Alunos que permanecem',
             icon: TrendingUp,
             trend: '+1.2%',
             trendUp: true,

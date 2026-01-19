@@ -45,7 +45,7 @@ const mockEvents = [
 export default function AgendaPage() {
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#ec4899'
-    const [selectedEvent, setSelectedEvent] = useState<any>(null)
+    const [selectedEvent, setSelectedEvent] = useState<typeof mockEvents[0] | null>(null)
     const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false)
 
     return (
@@ -177,7 +177,7 @@ export default function AgendaPage() {
                     <Card className="bg-muted/20 border-dashed border-border p-4 rounded-2xl mb-2">
                         <div className="flex items-center justify-between mb-3">
                             <span className="text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 text-muted-foreground">
-                                <Users size={14} /> Alunas (12/15)
+                                <Users size={14} /> Alunos (12/15)
                             </span>
                             <Badge variant="secondary" className="text-[10px] h-5">Vagas: 3</Badge>
                         </div>

@@ -155,7 +155,7 @@ export default function ProfessorDashboard() {
                                     <span className="text-[10px] font-black text-muted-foreground opacity-40">DIREÇÃO</span>
                                 </div>
                                 <p className="text-[13px] leading-relaxed font-black uppercase tracking-tight text-foreground">
-                                    "Marina, o repertório do festival de inverno precisa ser fechado até sexta."
+                                    &quot;Marina, o repertório do festival de inverno precisa ser fechado até sexta.&quot;
                                 </p>
                                 <Button variant="ghost" className="w-full h-11 rounded-2xl bg-foreground text-background font-black uppercase text-[10px] tracking-widest hover:bg-neutral-800">Responder Digitalmente</Button>
                             </div>

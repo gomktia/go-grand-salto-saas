@@ -28,7 +28,7 @@ import { toast } from 'sonner'
 type FinancialStat = {
     title: string
     value: string
-    icon: any
+    icon: React.ElementType
     trend: string
     color: string
 }
@@ -63,8 +63,11 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
     const [selectedMensalidade, setSelectedMensalidade] = useState<Mensalidade | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const [paymentData, setPaymentData] = useState({
-        metodo_pagamento: 'pix' as const,
+    const [paymentData, setPaymentData] = useState<{
+        metodo_pagamento: 'pix' | 'cartao_credito' | 'cartao_debito' | 'boleto' | 'dinheiro';
+        data_pagamento: string;
+    }>({
+        metodo_pagamento: 'pix',
         data_pagamento: new Date().toISOString().split('T')[0],
     })
 
@@ -85,8 +88,8 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
             setShowPaymentModal(false)
             setSelectedMensalidade(null)
             router.refresh()
-        } catch (error: any) {
-            toast.error(error.message || 'Erro ao registrar pagamento')
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : 'Erro ao registrar pagamento')
         } finally {
             setIsSubmitting(false)
         }
@@ -102,8 +105,8 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
             const result = await gerarMensalidadesMes(mes, ano)
             toast.success(`${result.count} mensalidades geradas com sucesso!`)
             router.refresh()
-        } catch (error: any) {
-            toast.error(error.message || 'Erro ao gerar mensalidades')
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : 'Erro ao gerar mensalidades')
         } finally {
             setIsSubmitting(false)
         }
@@ -225,7 +228,7 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                                     Fluxo de Recebimentos
                                 </CardTitle>
                                 <CardDescription className="text-sm text-zinc-500 font-medium mt-1">
-                                    Acompanhe o status de pagamento das alunas em tempo real.
+                                    Acompanhe o status de pagamento dos alunos em tempo real.
                                 </CardDescription>
                             </div>
                             <Button variant="ghost" className="text-xs font-black uppercase tracking-widest text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 h-10 px-5 rounded-xl transition-all">
@@ -262,7 +265,7 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                                             </div>
                                             <div>
                                                 <div className="font-black text-zinc-900 dark:text-zinc-100 group-hover:text-rose-500 transition-colors uppercase tracking-tight">
-                                                    {mensalidade.estudante?.perfis?.full_name || 'Aluna não identificada'}
+                                                    {mensalidade.estudante?.perfis?.full_name || 'Aluno não identificado'}
                                                 </div>
                                                 <div className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 mt-0.5 flex items-center gap-2">
                                                     <span>Ref: {mensalidade.mes_referencia}/{mensalidade.ano_referencia}</span>
@@ -377,7 +380,7 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                             <Label htmlFor="metodo">Método de Pagamento</Label>
                             <Select
                                 value={paymentData.metodo_pagamento}
-                                onValueChange={(value: any) => setPaymentData({ ...paymentData, metodo_pagamento: value })}
+                                onValueChange={(value: 'pix' | 'cartao_credito' | 'cartao_debito' | 'boleto' | 'dinheiro') => setPaymentData({ ...paymentData, metodo_pagamento: value })}
                             >
                                 <SelectTrigger>
                                     <SelectValue />

@@ -163,7 +163,7 @@ export default function LandingPage() {
 
             <footer className="py-20 border-t border-white/5 text-center">
                 <div className="container mx-auto px-6">
-                    <p className="text-neutral-500 text-sm">&copy; 2026 Grand Salto • Crafted for the world's best dance schools.</p>
+                    <p className="text-neutral-500 text-sm">&copy; 2026 Grand Salto • Crafted for the world&apos;s best dance schools.</p>
                 </div>
             </footer>
         </div>

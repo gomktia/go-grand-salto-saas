@@ -178,7 +178,7 @@ export default function ResponsavelDashboard() {
                                     <span className="text-[9px] font-black text-muted-foreground opacity-40 uppercase">Secretaria</span>
                                 </div>
                                 <p className="font-black uppercase tracking-tight text-sm mb-2 group-hover/notice:text-violet-500 transition-colors">Recital de Páscoa: Aula Aberta</p>
-                                <p className="text-muted-foreground font-bold text-[11px] leading-relaxed italic opacity-80">"Preparem as sapatilhas rosas, teremos uma aula especial inesquecível!"</p>
+                                <p className="text-muted-foreground font-bold text-[11px] leading-relaxed italic opacity-80">&quot;Preparem as sapatilhas rosas, teremos uma aula especial inesquecível!&quot;</p>
                                 <ChevronRight className="w-4 h-4 ml-auto mt-4 opacity-20 group-hover/notice:translate-x-1 group-hover/notice:opacity-100 transition-all text-violet-500" />
                             </div>
                         </div>

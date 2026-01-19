@@ -15,11 +15,14 @@ import {
     CheckCircle2,
     Calendar,
     Settings,
-    Zap
+    Zap,
+    Sparkles,
+    Loader2
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useTenant } from '@/hooks/use-tenant'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -30,9 +33,10 @@ const templates = [
     { id: 3, title: 'Aviso de Evento', channel: 'WhatsApp', text: 'Fotos do espetáculo liberadas! Acesse: [Link]' },
 ]
 
-export default function NotificationsPage() {
+export default function NotificacoesPage() {
     const [isSending, setIsSending] = useState(false)
-    const [activeTab, setActiveTab] = useState('templates')
+    const tenant = useTenant()
+    const primaryColor = tenant?.primaryColor || '#db2777'
 
     const simulateSend = () => {
         setIsSending(true)
@@ -40,138 +44,120 @@ export default function NotificationsPage() {
     }
 
     return (
-        <div className="p-8 space-y-8 max-w-7xl mx-auto">
-            <header className="flex justify-between items-center">
-                <div>
-                    <h1 className="text-4xl font-black tracking-tighter uppercase flex items-center gap-3">
-                        <MessageSquare className="text-pink-600" />
-                        Comunicação Inteligente
+        <div className="space-y-8 p-1">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-1">
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-pink-500 italic mb-2">Comunicação Unificada</h2>
+                    <h1 className="text-4xl font-black tracking-tighter uppercase text-neutral-900 dark:text-white flex items-center gap-3">
+                        <MessageSquare className="w-8 h-8 text-pink-600" />
+                        Centro de Mensagens
                     </h1>
-                    <p className="text-neutral-500">Automação de mensagens via WhatsApp e App para pais e alunos.</p>
+                    <p className="text-neutral-500 dark:text-neutral-400 font-medium">Automatize o contato com seus <strong>Alunos</strong> de forma inteligente no <strong>{tenant?.nome}</strong>.</p>
                 </div>
-                <div className="flex gap-3">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full" />
-                        <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest leading-none">API WhatsApp Online</span>
-                    </div>
+                <div className="flex gap-4">
+                    <Button variant="outline" className="h-14 px-8 rounded-2xl border-neutral-200 dark:border-neutral-800 gap-2 font-bold uppercase text-[10px] tracking-widest glass">
+                        Relatórios
+                    </Button>
+                    <Button
+                        style={{ backgroundColor: primaryColor }}
+                        className="h-14 px-8 rounded-2xl text-white gap-2 font-bold uppercase text-[10px] tracking-widest shadow-xl shadow-pink-500/20 hover:opacity-90 transition-all hover:scale-105"
+                    >
+                        <Zap className="w-4 h-4" />
+                        Nova Automação
+                    </Button>
                 </div>
-            </header>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Lado Esquerdo: Nova Mensagem */}
-                <Card className="lg:col-span-2 bg-neutral-900 border-white/5 overflow-hidden">
-                    <CardHeader className="border-b border-white/5 bg-white/[0.01]">
-                        <CardTitle className="flex items-center gap-2">
-                            <Send className="w-5 h-5 text-pink-500" />
-                            Enviar Nova Notificação
-                        </CardTitle>
-                        <CardDescription>Envie avisos rápidos ou cobranças automatizadas.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-6 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Para quem?</label>
-                                <div className="flex gap-2">
-                                    <Button variant="outline" className="flex-1 border-white/10 gap-2 h-12 text-xs uppercase font-bold">
-                                        <Users className="w-4 h-4" />
-                                        Toda a Escola
+                {/* Coluna de Envio */}
+                <Card className="lg:col-span-2 bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 p-10 rounded-[2.5rem] shadow-sm glass">
+                    <div className="space-y-10">
+                        <div className="space-y-6">
+                            <h3 className="text-xl font-black uppercase tracking-tight">Redigir Transmissão</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {['Todas as Turmas', 'Somente inadimplentes', 'Diretoria'].map((cat) => (
+                                    <Button key={cat} variant="outline" className="h-14 rounded-2xl border-neutral-100 dark:border-white/5 text-xs font-bold uppercase tracking-widest hover:bg-neutral-50 dark:hover:bg-white/5 justify-start px-6 gap-3 group">
+                                        <Users className="w-4 h-4 text-neutral-400 group-hover:text-pink-500" />
+                                        {cat}
                                     </Button>
-                                    <Button variant="outline" className="flex-1 border-white/10 gap-2 h-12 text-xs uppercase font-bold">
-                                        <Filter className="w-4 h-4" />
-                                        Filtrar
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Canal</label>
-                                <div className="flex gap-2">
-                                    <Button className="flex-1 bg-emerald-600 hover:bg-emerald-500 gap-2 h-12 text-xs uppercase font-bold">
-                                        <Smartphone className="w-4 h-4" />
-                                        WhatsApp
-                                    </Button>
-                                    <Button variant="outline" className="flex-1 border-white/10 gap-2 h-12 text-xs uppercase font-bold">
-                                        <Bell className="w-4 h-4" />
-                                        Push App
-                                    </Button>
-                                </div>
+                                ))}
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Mensagem</label>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-neutral-400 uppercase tracking-widest ml-1">Mensagem do Sistema</label>
                             <Textarea
-                                placeholder="Digite sua mensagem aqui..."
-                                className="min-h-[150px] bg-neutral-950/50 border-white/5 rounded-2xl p-4 focus:ring-pink-500/50"
+                                placeholder="Olá! Gostaríamos de lembrar que..."
+                                className="min-h-[200px] bg-neutral-50 dark:bg-black/40 border-none rounded-[2rem] p-8 text-lg font-medium focus-visible:ring-2 focus-visible:ring-pink-500/50 resize-none shadow-inner"
                             />
                         </div>
 
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-xs text-neutral-500">
-                                <AlertCircle className="w-4 h-4" />
-                                Estimativa: 145 destinatários
-                            </div>
+                        <div className="flex flex-col md:flex-row gap-4 pt-4 border-t border-neutral-100 dark:border-white/5">
+                            <Button className="flex-1 h-16 rounded-2xl bg-[#25D366] hover:bg-[#20bd5c] text-white font-black uppercase text-[10px] tracking-widest gap-3 shadow-xl shadow-green-500/20">
+                                <Send className="w-5 h-5" /> Enviar via WhatsApp
+                            </Button>
                             <Button
                                 onClick={simulateSend}
-                                className="bg-pink-600 hover:bg-pink-500 px-12 h-14 rounded-2xl font-bold text-lg uppercase tracking-tighter shadow-xl shadow-pink-600/20"
                                 disabled={isSending}
+                                className="flex-1 h-16 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-black font-black uppercase text-[10px] tracking-widest gap-3 transition-all hover:scale-105 active:scale-95"
                             >
-                                {isSending ? (
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                                        Disparando...
-                                    </div>
-                                ) : (
-                                    <>
-                                        Disparar Agora
-                                        <Zap className="ml-2 w-5 h-5 fill-white" />
-                                    </>
-                                )}
+                                {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Bell className="w-5 h-5" /> Notificar no App</>}
                             </Button>
                         </div>
-                    </CardContent>
+                    </div>
                 </Card>
 
-                {/* Lado Direito: Templates e Logs */}
-                <div className="space-y-6">
-                    <Card className="bg-neutral-900 border-white/5">
-                        <CardHeader>
-                            <CardTitle className="text-sm font-bold uppercase tracking-widest text-neutral-400">Templates IA</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-4 space-y-3">
-                            {templates.map(tmp => (
-                                <div key={tmp.id} className="p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-pink-500/30 transition-all cursor-pointer group">
-                                    <div className="flex justify-between items-start mb-2">
-                                        <span className="text-sm font-bold">{tmp.title}</span>
-                                        <Badge variant="outline" className="text-[8px] uppercase">{tmp.channel}</Badge>
-                                    </div>
-                                    <p className="text-[10px] text-neutral-500 line-clamp-2 leading-relaxed italic">"{tmp.text}"</p>
+                {/* AI Templates & Status */}
+                <div className="space-y-8">
+                    <Card className="bg-gradient-to-br from-neutral-900 to-black border-none rounded-[2.5rem] p-8 relative overflow-hidden group shadow-2xl">
+                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
+                            <Sparkles size={120} className="text-pink-500" />
+                        </div>
+                        <div className="relative z-10 space-y-6">
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 bg-pink-500/10 rounded-xl">
+                                    <Sparkles className="w-6 h-6 text-pink-500 animate-pulse" />
                                 </div>
-                            ))}
-                            <Button variant="ghost" className="w-full text-[10px] uppercase font-bold tracking-widest text-neutral-500 hover:text-white">
-                                + Novo Template
-                            </Button>
-                        </CardContent>
+                                <h3 className="text-sm font-black uppercase tracking-widest text-white">Templates IA</h3>
+                            </div>
+                            <div className="space-y-3">
+                                {[
+                                    'Cobrança Amigável',
+                                    'Convite para Matrícula',
+                                    'Aviso de Feriado',
+                                    'Parabéns Aniversário'
+                                ].map((t) => (
+                                    <div key={t} className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-pink-500/30 transition-all cursor-pointer group">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 group-hover:text-white">{t}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </Card>
 
-                    <Card className="bg-neutral-900 border-white/5">
-                        <CardHeader className="flex flex-row items-center justify-between">
-                            <CardTitle className="text-sm font-bold uppercase tracking-widest text-neutral-400">Status Recente</CardTitle>
-                            <Clock className="w-4 h-4 text-neutral-500" />
-                        </CardHeader>
-                        <CardContent className="p-4 space-y-4">
-                            {[
-                                { status: 'success', time: '10m atrás', count: 45 },
-                                { status: 'error', time: '1h atrás', count: 1 },
-                            ].map((log, i) => (
-                                <div key={i} className="flex items-center justify-between text-xs">
-                                    <div className="flex items-center gap-2">
-                                        {log.status === 'success' ? <CheckCircle2 className="text-emerald-500 w-4 h-4" /> : <AlertCircle className="text-red-500 w-4 h-4" />}
-                                        <span className="text-neutral-400">{log.count} mensagens enviadas</span>
+                    <Card className="bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 p-8 rounded-[2.5rem] shadow-sm glass">
+                        <div className="space-y-6">
+                            <h3 className="text-sm font-black uppercase tracking-widest">Status Recente</h3>
+                            <div className="space-y-6">
+                                {[
+                                    { label: 'Aviso de Gala', time: 'Há 10 min', status: 'Entregue', color: 'bg-emerald-500' },
+                                    { label: 'Mensagem de Boas-vindas', time: 'Há 2h', status: 'Entregue', color: 'bg-emerald-500' },
+                                    { label: 'Boletim Mensal', time: 'Ontem', status: 'Falha', color: 'bg-red-500' },
+                                ].map((s, i) => (
+                                    <div key={i} className="flex items-center justify-between group">
+                                        <div className="flex items-center gap-4">
+                                            <div className={`w-2 h-2 rounded-full ${s.color} group-hover:animate-ping`} />
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase tracking-tight">{s.label}</p>
+                                                <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">{s.time}</p>
+                                            </div>
+                                        </div>
+                                        <Badge variant="outline" className="h-6 text-[8px] font-black uppercase tracking-widest border-neutral-100 dark:border-white/5 px-3">{s.status}</Badge>
                                     </div>
-                                    <span className="text-[10px] text-neutral-600">{log.time}</span>
-                                </div>
-                            ))}
-                        </CardContent>
+                                ))}
+                            </div>
+                            <Button variant="ghost" className="w-full mt-4 text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-pink-500 transition-colors">Ver Histórico Completo</Button>
+                        </div>
                     </Card>
                 </div>
             </div>
