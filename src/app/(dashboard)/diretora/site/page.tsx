@@ -122,18 +122,18 @@ function BlogTab({ primaryColor }: { primaryColor: string }) {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="md:col-span-3 relative group">
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-pink-500 transition-colors" />
-                    <Input placeholder="Pesquisar por título ou palavra-chave..." className="h-16 pl-14 pr-6 rounded-[1.25rem] bg-card border-white/5 focus-visible:ring-1 focus-visible:ring-pink-500/50 text-lg font-medium transition-all shadow-inner" />
+                    <Input placeholder="Pesquisar por título ou palavra-chave..." className="h-16 pl-14 pr-6 rounded-[1.25rem] bg-card border-zinc-200 dark:border-white/5 focus-visible:ring-1 focus-visible:ring-pink-500/50 text-lg font-medium transition-all shadow-inner" />
                 </div>
-                <Button variant="outline" className="h-16 rounded-[1.25rem] border-white/10 uppercase font-black text-[10px] tracking-widest hover:bg-white/5">
+                <Button variant="outline" className="h-16 rounded-[1.25rem] border-zinc-200 dark:border-white/10 uppercase font-black text-[10px] tracking-widest hover:bg-zinc-100 dark:hover:bg-white/5">
                     Filtrar por Status
                 </Button>
             </div>
 
-            <Card className="bg-card/30 backdrop-blur-md border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+            <Card className="bg-white/50 dark:bg-card/30 backdrop-blur-md border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="border-b border-white/5 bg-white/[0.02]">
+                            <tr className="border-b border-zinc-100 dark:border-white/5 bg-zinc-50/50 dark:bg-white/[0.02]">
                                 <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Postagem</th>
                                 <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Status</th>
                                 <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Alcance</th>
@@ -142,12 +142,12 @@ function BlogTab({ primaryColor }: { primaryColor: string }) {
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {posts.map((post) => (
-                                <tr key={post.id} className="hover:bg-white/[0.01] transition-colors group">
+                                <tr key={post.id} className="hover:bg-zinc-50 dark:hover:bg-white/[0.01] transition-colors group border-b border-zinc-50 dark:border-white/5">
                                     <td className="p-8">
                                         <div className="flex items-center gap-4">
                                             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: primaryColor }} />
                                             <div>
-                                                <div className="font-black text-xl italic uppercase tracking-tighter text-white group-hover:text-pink-500 transition-colors">{post.title}</div>
+                                                <div className="font-black text-xl italic uppercase tracking-tighter text-zinc-900 dark:text-white group-hover:text-pink-500 transition-colors">{post.title}</div>
                                                 <div className="flex items-center gap-3 mt-1">
                                                     <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{post.category}</span>
                                                     <span className="text-[10px] text-muted-foreground/30">•</span>
@@ -164,12 +164,12 @@ function BlogTab({ primaryColor }: { primaryColor: string }) {
                                     <td className="p-8">
                                         <div className="flex items-center gap-2">
                                             <Eye className="w-4 h-4 text-muted-foreground" />
-                                            <span className="text-sm font-mono font-bold text-white">{post.views.toLocaleString()}</span>
+                                            <span className="text-sm font-mono font-bold text-zinc-900 dark:text-white">{post.views.toLocaleString()}</span>
                                         </div>
                                     </td>
                                     <td className="p-8 text-right">
                                         <div className="flex justify-end gap-3">
-                                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-white/5 hover:bg-white/5 hover:text-white transition-all">
+                                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all">
                                                 <Edit2 className="w-4 h-4" />
                                             </Button>
                                             <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-white/5 hover:bg-red-500/10 hover:text-red-500 transition-all">
@@ -197,7 +197,7 @@ function AlbumsTab({ primaryColor }: { primaryColor: string }) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {albums.map((album) => (
-                <Card key={album.id} className="bg-card/40 backdrop-blur-md border border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-pink-500/30 transition-all shadow-xl">
+                <Card key={album.id} className="bg-white/50 dark:bg-card/40 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-pink-500/30 transition-all shadow-xl">
                     <div className="aspect-[16/10] relative overflow-hidden">
                         <img src={album.image} alt={album.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 brightness-75 group-hover:brightness-100" />
                         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent" />
@@ -218,8 +218,8 @@ function AlbumsTab({ primaryColor }: { primaryColor: string }) {
                     <CardContent className="px-8 pb-8 pt-0">
                         {album.type.includes('Venda') && (
                             <div className="p-4 rounded-2xl bg-violet-500/5 border border-violet-500/10 flex justify-between items-center mb-6">
-                                <span className="text-[10px] font-black text-violet-400 uppercase tracking-widest">Receita Acumulada</span>
-                                <span className="font-mono text-lg font-black text-white">{album.sales}</span>
+                                <span className="text-[10px] font-black text-violet-600 dark:text-violet-400 uppercase tracking-widest">Receita Acumulada</span>
+                                <span className="font-mono text-lg font-black text-zinc-900 dark:text-white">{album.sales}</span>
                             </div>
                         )}
                         <div className="flex gap-4">
@@ -228,14 +228,14 @@ function AlbumsTab({ primaryColor }: { primaryColor: string }) {
                                     Explorar no Site
                                 </Button>
                             </Link>
-                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-2xl border border-white/5 hover:bg-red-500/10 hover:text-red-500 transition-all shrink-0">
+                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-2xl border border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all shrink-0">
                                 <Trash2 className="w-4 h-4" />
                             </Button>
                         </div>
                     </CardContent>
                 </Card>
             ))}
-            <Card className="bg-white/[0.02] border-dashed border-4 border-white/5 rounded-[2.5rem] flex flex-col items-center justify-center p-12 hover:border-pink-500/40 hover:bg-pink-500/[0.02] transition-all group cursor-pointer shadow-inner">
+            <Card className="bg-zinc-50 dark:bg-white/[0.02] border-dashed border-4 border-zinc-200 dark:border-white/5 rounded-[2.5rem] flex flex-col items-center justify-center p-12 hover:border-pink-500/40 hover:bg-pink-500/[0.02] transition-all group cursor-pointer shadow-inner">
                 <div className="w-20 h-20 rounded-[2rem] bg-card border border-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-all shadow-2xl">
                     <Plus className="w-10 h-10 text-muted-foreground group-hover:text-pink-500" />
                 </div>
@@ -255,8 +255,8 @@ function SchedulesTab({ primaryColor }: { primaryColor: string }) {
 
     return (
         <div className="space-y-8">
-            <Card className="bg-card/40 backdrop-blur-md border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                <header className="p-8 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white/[0.02]">
+            <Card className="bg-white/50 dark:bg-card/40 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <header className="p-8 border-b border-zinc-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-zinc-50 dark:bg-white/[0.02]">
                     <div className="space-y-1">
                         <h3 className="font-black uppercase text-xl tracking-tight flex items-center gap-3">
                             <CalendarIcon style={{ color: primaryColor }} />
@@ -272,35 +272,35 @@ function SchedulesTab({ primaryColor }: { primaryColor: string }) {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="border-b border-white/5 bg-white/[0.01]">
+                            <tr className="border-b border-zinc-200 dark:border-white/5 bg-zinc-50 dark:bg-white/[0.01]">
                                 <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Modalidade de Aula</th>
                                 <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Dias da Semana</th>
                                 <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Faixa Horária</th>
                                 <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] text-right">Ações</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/5">
+                        <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                             {schedules.map((item) => (
-                                <tr key={item.id} className="hover:bg-white/[0.01] transition-colors group">
+                                <tr key={item.id} className="hover:bg-zinc-50 dark:hover:bg-white/[0.01] transition-colors group">
                                     <td className="p-8">
                                         <div className="flex items-center gap-4">
                                             <div className="w-2 h-8 rounded-full" style={{ backgroundColor: item.active ? primaryColor : '#404040' }} />
-                                            <div className="font-black text-xl italic uppercase tracking-tighter text-white group-hover:text-pink-500 transition-colors">{item.class}</div>
+                                            <div className="font-black text-xl italic uppercase tracking-tighter text-zinc-900 dark:text-white group-hover:text-pink-500 transition-colors">{item.class}</div>
                                         </div>
                                     </td>
                                     <td className="p-8">
                                         <div className="flex items-center gap-2">
-                                            <div className="px-3 py-1 rounded-lg bg-card border border-white/5 text-sm font-black text-muted-foreground uppercase tracking-widest group-hover:text-white transition-colors">
+                                            <div className="px-3 py-1 rounded-lg bg-zinc-100 dark:bg-card border border-zinc-200 dark:border-white/5 text-sm font-black text-zinc-500 dark:text-muted-foreground uppercase tracking-widest group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
                                                 {item.days}
                                             </div>
                                         </div>
                                     </td>
                                     <td className="p-8">
-                                        <div className="text-lg font-mono font-black text-white">{item.time}</div>
+                                        <div className="text-lg font-mono font-black text-zinc-900 dark:text-white">{item.time}</div>
                                     </td>
                                     <td className="p-8 text-right">
                                         <div className="flex justify-end gap-3">
-                                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-white/5 hover:bg-white/5 hover:text-white transition-all">
+                                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all">
                                                 <Edit2 className="w-4 h-4" />
                                             </Button>
                                             <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-white/5 hover:bg-red-500/10 hover:text-red-500 transition-all">
