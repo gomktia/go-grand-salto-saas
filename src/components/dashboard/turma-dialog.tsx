@@ -115,13 +115,13 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[600px] bg-card border-border">
+            <DialogContent className="sm:max-w-[600px] bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-foreground flex items-center gap-2">
-                        <Users className="w-5 h-5 text-primary" />
+                    <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                        <Users className="w-5 h-5 text-pink-500" />
                         {turma ? 'Editar Turma' : 'Adicionar Nova Turma'}
                     </DialogTitle>
-                    <DialogDescription className="text-muted-foreground">
+                    <DialogDescription className="text-zinc-500 dark:text-zinc-400">
                         {turma
                             ? 'Atualize as informações da turma abaixo.'
                             : 'Crie uma nova turma para organizar seus alunos.'}
@@ -131,22 +131,22 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
                 <form onSubmit={handleSubmit} className="space-y-6 py-4">
                     {error && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                            <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-red-300 leading-relaxed">{error}</p>
+                            <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-red-600 dark:text-red-300 leading-relaxed">{error}</p>
                         </div>
                     )}
 
                     {success && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-emerald-300 leading-relaxed">
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-relaxed">
                                 {turma ? 'Turma atualizada com sucesso!' : 'Turma criada com sucesso!'}
                             </p>
                         </div>
                     )}
 
                     <div className="space-y-2">
-                        <Label htmlFor="nome" className="text-sm font-medium text-neutral-300">
+                        <Label htmlFor="nome" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                             Nome da Turma *
                         </Label>
                         <Input
@@ -154,7 +154,7 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
                             value={formData.nome}
                             onChange={(e) => handleChange('nome', e.target.value)}
                             placeholder="Ex: Iniciante A - Terça e Quinta"
-                            className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                            className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                             required
                             disabled={isLoading || success}
                         />
@@ -162,14 +162,14 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="nivel" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="nivel" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Nível *
                             </Label>
                             <select
                                 id="nivel"
                                 value={formData.nivel}
                                 onChange={(e) => handleChange('nivel', e.target.value)}
-                                className="flex h-11 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+                                className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-3 py-2 text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50"
                                 required
                                 disabled={isLoading || success}
                             >
@@ -181,7 +181,7 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="vagas_max" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="vagas_max" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Vagas Máximas *
                             </Label>
                             <Input
@@ -191,7 +191,7 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
                                 max="50"
                                 value={formData.vagas_max}
                                 onChange={(e) => handleChange('vagas_max', parseInt(e.target.value))}
-                                className="bg-black/40 border-white/10 text-white"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white"
                                 required
                                 disabled={isLoading || success}
                             />
@@ -199,7 +199,7 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
                     </div>
 
                     <div className="space-y-2">
-                        <Label className="text-sm font-medium text-neutral-300">
+                        <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                             Cor de Identificação
                         </Label>
                         <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
@@ -212,7 +212,7 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
                                     className={`
                                         h-12 rounded-xl border-2 transition-all
                                         ${formData.cor_etiqueta === cor.hex
-                                            ? 'border-white scale-110 shadow-lg'
+                                            ? 'border-zinc-900 dark:border-white scale-110 shadow-lg'
                                             : 'border-transparent hover:scale-105'
                                         }
                                     `}
@@ -223,16 +223,16 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
                         </div>
                         <div className="flex items-center gap-2 mt-2">
                             <div
-                                className="w-8 h-8 rounded-lg border border-white/20"
+                                className="w-8 h-8 rounded-lg border border-zinc-200 dark:border-zinc-700"
                                 style={{ backgroundColor: formData.cor_etiqueta }}
                             />
-                            <span className="text-xs text-neutral-400">Cor selecionada: {formData.cor_etiqueta}</span>
+                            <span className="text-xs text-zinc-500 dark:text-zinc-400">Cor selecionada: {formData.cor_etiqueta}</span>
                         </div>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
-                        <p className="text-xs text-blue-300">
-                            <strong>💡 Dica:</strong> As turmas são organizadas por nível e horário. Você poderá adicionar
+                    <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                        <p className="text-xs text-blue-600 dark:text-blue-300">
+                            <strong>Dica:</strong> As turmas são organizadas por nível e horário. Você poderá adicionar
                             horários específicos após criar a turma.
                         </p>
                     </div>
@@ -243,7 +243,7 @@ export function TurmaDialog({ open, onOpenChange, turma, onSuccess }: TurmaDialo
                             variant="outline"
                             onClick={() => onOpenChange(false)}
                             disabled={isLoading || success}
-                            className="border-white/10 hover:bg-white/5"
+                            className="border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         >
                             Cancelar
                         </Button>

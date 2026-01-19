@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { Loader2, AlertCircle, CheckCircle2, UserPlus } from 'lucide-react'
 import { createStudent, updateStudent } from '@/app/actions/admin'
 
 type Student = {
@@ -100,12 +100,13 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[600px] bg-neutral-900 border-white/10">
+            <DialogContent className="sm:max-w-[600px] bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-white">
+                    <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                        <UserPlus className="w-5 h-5 text-pink-500" />
                         {student ? 'Editar Aluno' : 'Adicionar Novo Aluno'}
                     </DialogTitle>
-                    <DialogDescription className="text-neutral-400">
+                    <DialogDescription className="text-zinc-500 dark:text-zinc-400">
                         {student
                             ? 'Atualize as informações do aluno abaixo.'
                             : 'Preencha os dados do novo aluno.'}
@@ -115,15 +116,15 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
                 <form onSubmit={handleSubmit} className="space-y-6 py-4">
                     {error && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                            <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-red-300 leading-relaxed">{error}</p>
+                            <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-red-600 dark:text-red-300 leading-relaxed">{error}</p>
                         </div>
                     )}
 
                     {success && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-emerald-300 leading-relaxed">
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-relaxed">
                                 {student ? 'Aluno atualizado com sucesso!' : 'Aluno criado com sucesso!'}
                             </p>
                         </div>
@@ -131,22 +132,22 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="nome_responsavel" className="text-sm font-medium text-neutral-300">
-                                Nome do Responsável *
+                            <Label htmlFor="nome_responsavel" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                Nome do Aluno *
                             </Label>
                             <Input
                                 id="nome_responsavel"
                                 value={formData.nome_responsavel}
                                 onChange={(e) => handleChange('nome_responsavel', e.target.value)}
                                 placeholder="Ex: Maria Silva"
-                                className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                                 required
                                 disabled={isLoading || success}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="contato_responsavel" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="contato_responsavel" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Contato (WhatsApp) *
                             </Label>
                             <Input
@@ -154,7 +155,7 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
                                 value={formData.contato_responsavel}
                                 onChange={(e) => handleChange('contato_responsavel', e.target.value)}
                                 placeholder="(55) 99999-9999"
-                                className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                                 required
                                 disabled={isLoading || success}
                             />
@@ -163,7 +164,7 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="data_nascimento" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="data_nascimento" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Data de Nascimento *
                             </Label>
                             <Input
@@ -171,21 +172,21 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
                                 type="date"
                                 value={formData.data_nascimento}
                                 onChange={(e) => handleChange('data_nascimento', e.target.value)}
-                                className="bg-black/40 border-white/10 text-white"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white"
                                 required
                                 disabled={isLoading || success}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="status_matricula" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="status_matricula" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Status *
                             </Label>
                             <select
                                 id="status_matricula"
                                 value={formData.status_matricula}
                                 onChange={(e) => handleChange('status_matricula', e.target.value)}
-                                className="flex h-11 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+                                className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-3 py-2 text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50"
                                 required
                                 disabled={isLoading || success}
                             >
@@ -197,7 +198,7 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="observacoes_medicas" className="text-sm font-medium text-neutral-300">
+                        <Label htmlFor="observacoes_medicas" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                             Observações Médicas
                         </Label>
                         <Textarea
@@ -206,7 +207,7 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
                             onChange={(e) => handleChange('observacoes_medicas', e.target.value)}
                             placeholder="Alergias, restrições médicas, etc."
                             rows={3}
-                            className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600 resize-none"
+                            className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 resize-none"
                             disabled={isLoading || success}
                         />
                     </div>
@@ -217,7 +218,7 @@ export function StudentDialog({ open, onOpenChange, student, onSuccess }: Studen
                             variant="outline"
                             onClick={() => onOpenChange(false)}
                             disabled={isLoading || success}
-                            className="border-white/10 hover:bg-white/5"
+                            className="border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         >
                             Cancelar
                         </Button>

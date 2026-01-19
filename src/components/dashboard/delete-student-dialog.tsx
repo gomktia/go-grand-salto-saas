@@ -42,13 +42,13 @@ export function DeleteStudentDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px] bg-neutral-900 border-white/10">
+            <DialogContent className="sm:max-w-[500px] bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-white flex items-center gap-2">
+                    <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                         <Trash2 className="w-5 h-5 text-red-500" />
                         Confirmar Exclusão
                     </DialogTitle>
-                    <DialogDescription className="text-neutral-400">
+                    <DialogDescription className="text-zinc-500 dark:text-zinc-400">
                         Esta ação não pode ser desfeita.
                     </DialogDescription>
                 </DialogHeader>
@@ -56,17 +56,17 @@ export function DeleteStudentDialog({
                 <div className="py-4 space-y-4">
                     {error && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                            <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-red-300 leading-relaxed">{error}</p>
+                            <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-red-600 dark:text-red-300 leading-relaxed">{error}</p>
                         </div>
                     )}
 
-                    <div className="p-4 rounded-xl bg-red-500/5 border border-red-500/20">
-                        <p className="text-sm text-neutral-300 leading-relaxed">
-                            Você está prestes a remover o aluno <strong className="text-white">{studentName}</strong>
+                    <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20">
+                        <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                            Você está prestes a remover o aluno <strong className="text-zinc-900 dark:text-white">{studentName}</strong>
                             {' '}do sistema.
                         </p>
-                        <p className="text-sm text-neutral-400 mt-2">
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
                             Todos os dados relacionados, incluindo métricas corporais e matrículas, serão permanentemente deletados.
                         </p>
                     </div>
@@ -78,7 +78,7 @@ export function DeleteStudentDialog({
                         variant="outline"
                         onClick={() => onOpenChange(false)}
                         disabled={isLoading}
-                        className="border-white/10 hover:bg-white/5"
+                        className="border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                     >
                         Cancelar
                     </Button>

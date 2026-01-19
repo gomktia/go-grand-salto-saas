@@ -104,29 +104,29 @@ export function BodyMetricsDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[600px] bg-neutral-900 border-white/10">
+            <DialogContent className="sm:max-w-[600px] bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-white flex items-center gap-2">
+                    <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                         <Ruler className="w-5 h-5 text-pink-500" />
                         Métricas Corporais
                     </DialogTitle>
-                    <DialogDescription className="text-neutral-400">
-                        Atualizar medidas de <strong className="text-white">{studentName}</strong> para ajuste de figurinos.
+                    <DialogDescription className="text-zinc-500 dark:text-zinc-400">
+                        Atualizar medidas de <strong className="text-zinc-900 dark:text-white">{studentName}</strong> para ajuste de figurinos.
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-6 py-4">
                     {error && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                            <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-red-300 leading-relaxed">{error}</p>
+                            <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-red-600 dark:text-red-300 leading-relaxed">{error}</p>
                         </div>
                     )}
 
                     {success && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-emerald-300 leading-relaxed">
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-relaxed">
                                 Métricas atualizadas com sucesso!
                             </p>
                         </div>
@@ -134,7 +134,7 @@ export function BodyMetricsDialog({
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="busto" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="busto" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Busto (cm)
                             </Label>
                             <Input
@@ -144,13 +144,13 @@ export function BodyMetricsDialog({
                                 value={formData.busto}
                                 onChange={(e) => handleChange('busto', e.target.value)}
                                 placeholder="65.5"
-                                className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                                 disabled={isLoading || success}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="cintura" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="cintura" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Cintura (cm)
                             </Label>
                             <Input
@@ -160,13 +160,13 @@ export function BodyMetricsDialog({
                                 value={formData.cintura}
                                 onChange={(e) => handleChange('cintura', e.target.value)}
                                 placeholder="58.0"
-                                className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                                 disabled={isLoading || success}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="quadril" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="quadril" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Quadril (cm)
                             </Label>
                             <Input
@@ -176,13 +176,13 @@ export function BodyMetricsDialog({
                                 value={formData.quadril}
                                 onChange={(e) => handleChange('quadril', e.target.value)}
                                 placeholder="72.0"
-                                className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                                 disabled={isLoading || success}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="altura" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="altura" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Altura (cm)
                             </Label>
                             <Input
@@ -192,13 +192,13 @@ export function BodyMetricsDialog({
                                 value={formData.altura}
                                 onChange={(e) => handleChange('altura', e.target.value)}
                                 placeholder="150.0"
-                                className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                                 disabled={isLoading || success}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="torso" className="text-sm font-medium text-neutral-300">
+                            <Label htmlFor="torso" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Torso (cm)
                             </Label>
                             <Input
@@ -208,15 +208,15 @@ export function BodyMetricsDialog({
                                 value={formData.torso}
                                 onChange={(e) => handleChange('torso', e.target.value)}
                                 placeholder="65.0"
-                                className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                                className="bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                                 disabled={isLoading || success}
                             />
                         </div>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
-                        <p className="text-xs text-blue-300">
-                            <strong>💡 Dica:</strong> Estas medidas são importantes para escolher os figurinos adequados.
+                    <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                        <p className="text-xs text-blue-600 dark:text-blue-300">
+                            <strong>Dica:</strong> Estas medidas são importantes para escolher os figurinos adequados.
                             Atualize regularmente para manter o estoque alinhado.
                         </p>
                     </div>
@@ -227,7 +227,7 @@ export function BodyMetricsDialog({
                             variant="outline"
                             onClick={() => onOpenChange(false)}
                             disabled={isLoading || success}
-                            className="border-white/10 hover:bg-white/5"
+                            className="border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         >
                             Cancelar
                         </Button>

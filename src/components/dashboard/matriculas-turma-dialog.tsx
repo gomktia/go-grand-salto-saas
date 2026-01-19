@@ -144,13 +144,13 @@ export function MatriculasTurmaDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[700px] bg-card border-border max-h-[90vh] overflow-y-auto">
+            <DialogContent className="sm:max-w-[700px] bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-foreground flex items-center gap-2">
-                        <Users className="w-5 h-5 text-primary" />
+                    <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                        <Users className="w-5 h-5 text-pink-500" />
                         Alunos Matriculados - {turmaNome}
                     </DialogTitle>
-                    <DialogDescription className="text-muted-foreground">
+                    <DialogDescription className="text-zinc-500 dark:text-zinc-400">
                         Gerencie os alunos matriculados nesta turma.
                     </DialogDescription>
                 </DialogHeader>
@@ -158,27 +158,27 @@ export function MatriculasTurmaDialog({
                 <div className="space-y-6 py-4">
                     {error && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                            <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-red-300 leading-relaxed">{error}</p>
+                            <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-red-600 dark:text-red-300 leading-relaxed">{error}</p>
                         </div>
                     )}
 
                     {success && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-emerald-300 leading-relaxed">{success}</p>
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-relaxed">{success}</p>
                         </div>
                     )}
 
                     {/* Lista de Alunos Matriculados */}
                     <div className="space-y-2">
-                        <Label className="text-sm font-medium text-neutral-300">
+                        <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                             Alunos Matriculados ({matriculas.length})
                         </Label>
                         {matriculas.length === 0 ? (
-                            <div className="p-6 text-center rounded-xl bg-neutral-800/50 border border-white/5">
-                                <Users className="w-8 h-8 mx-auto text-neutral-600 mb-2" />
-                                <p className="text-sm text-neutral-400">Nenhum aluno matriculado</p>
+                            <div className="p-6 text-center rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700">
+                                <Users className="w-8 h-8 mx-auto text-zinc-400 dark:text-zinc-600 mb-2" />
+                                <p className="text-sm text-zinc-500 dark:text-zinc-400">Nenhum aluno matriculado</p>
                             </div>
                         ) : (
                             <div className="space-y-2">
@@ -189,15 +189,15 @@ export function MatriculasTurmaDialog({
                                     return (
                                         <div
                                             key={matricula.id}
-                                            className="flex items-center justify-between p-4 rounded-xl bg-neutral-800/50 border border-white/5 hover:border-pink-500/20 transition-colors"
+                                            className="flex items-center justify-between p-4 rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 hover:border-pink-500/30 transition-colors"
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
                                                     {aluno.nome_responsavel.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <p className="font-semibold text-white">{aluno.nome_responsavel}</p>
-                                                    <p className="text-xs text-neutral-400">{idade} anos</p>
+                                                    <p className="font-semibold text-zinc-900 dark:text-white">{aluno.nome_responsavel}</p>
+                                                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{idade} anos</p>
                                                 </div>
                                             </div>
                                             <Button
@@ -206,7 +206,7 @@ export function MatriculasTurmaDialog({
                                                 size="icon"
                                                 onClick={() => handleDeleteMatricula(matricula.id, aluno.nome_responsavel)}
                                                 disabled={isLoading}
-                                                className="hover:bg-red-500/10 hover:text-red-400"
+                                                className="hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </Button>
@@ -224,7 +224,7 @@ export function MatriculasTurmaDialog({
                             variant="outline"
                             onClick={() => setIsAdding(true)}
                             disabled={alunosDisponiveis.length === 0}
-                            className="w-full border-white/10 hover:bg-white/5"
+                            className="w-full border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         >
                             <Plus className="w-4 h-4 mr-2" />
                             {alunosDisponiveis.length === 0
@@ -233,14 +233,14 @@ export function MatriculasTurmaDialog({
                             }
                         </Button>
                     ) : (
-                        <div className="space-y-4 p-4 rounded-xl bg-neutral-800/30 border border-white/10">
-                            <Label className="text-sm font-medium text-neutral-300">Selecionar Aluno</Label>
+                        <div className="space-y-4 p-4 rounded-xl bg-zinc-100 dark:bg-zinc-800/30 border border-zinc-200 dark:border-zinc-700">
+                            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Selecionar Aluno</Label>
 
                             <div className="space-y-2">
                                 <select
                                     value={selectedAlunoId}
                                     onChange={(e) => setSelectedAlunoId(e.target.value)}
-                                    className="flex h-11 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+                                    className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50"
                                     required
                                     disabled={isLoading}
                                 >
@@ -262,7 +262,7 @@ export function MatriculasTurmaDialog({
                                         setSelectedAlunoId('')
                                     }}
                                     disabled={isLoading}
-                                    className="flex-1 border-white/10 hover:bg-white/5"
+                                    className="flex-1 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                                 >
                                     Cancelar
                                 </Button>

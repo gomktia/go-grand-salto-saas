@@ -134,13 +134,13 @@ export function HorariosTurmaDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[700px] bg-card border-border max-h-[90vh] overflow-y-auto">
+            <DialogContent className="sm:max-w-[700px] bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-foreground flex items-center gap-2">
-                        <Clock className="w-5 h-5 text-primary" />
+                    <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-pink-500" />
                         Horários - {turmaNome}
                     </DialogTitle>
-                    <DialogDescription className="text-muted-foreground">
+                    <DialogDescription className="text-zinc-500 dark:text-zinc-400">
                         Gerencie os dias e horários das aulas desta turma.
                     </DialogDescription>
                 </DialogHeader>
@@ -148,46 +148,46 @@ export function HorariosTurmaDialog({
                 <div className="space-y-6 py-4">
                     {error && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                            <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-red-300 leading-relaxed">{error}</p>
+                            <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-red-600 dark:text-red-300 leading-relaxed">{error}</p>
                         </div>
                     )}
 
                     {success && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-emerald-300 leading-relaxed">{success}</p>
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-relaxed">{success}</p>
                         </div>
                     )}
 
                     {/* Lista de Horários Existentes */}
                     <div className="space-y-2">
-                        <Label className="text-sm font-medium text-neutral-300">Horários Cadastrados</Label>
+                        <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Horários Cadastrados</Label>
                         {sortedHorarios.length === 0 ? (
-                            <div className="p-6 text-center rounded-xl bg-neutral-800/50 border border-white/5">
-                                <Clock className="w-8 h-8 mx-auto text-neutral-600 mb-2" />
-                                <p className="text-sm text-neutral-400">Nenhum horário cadastrado</p>
+                            <div className="p-6 text-center rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700">
+                                <Clock className="w-8 h-8 mx-auto text-zinc-400 dark:text-zinc-600 mb-2" />
+                                <p className="text-sm text-zinc-500 dark:text-zinc-400">Nenhum horário cadastrado</p>
                             </div>
                         ) : (
                             <div className="space-y-2">
                                 {sortedHorarios.map((horario) => (
                                     <div
                                         key={horario.id}
-                                        className="flex items-center justify-between p-4 rounded-xl bg-neutral-800/50 border border-white/5 hover:border-pink-500/20 transition-colors"
+                                        className="flex items-center justify-between p-4 rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 hover:border-pink-500/30 transition-colors"
                                     >
                                         <div className="flex-1">
                                             <div className="flex items-center gap-3">
-                                                <span className="font-semibold text-white">
+                                                <span className="font-semibold text-zinc-900 dark:text-white">
                                                     {DIAS_SEMANA[horario.dia_semana]}
                                                 </span>
-                                                <span className="text-neutral-400">•</span>
-                                                <span className="font-mono text-sm text-neutral-300">
+                                                <span className="text-zinc-400">•</span>
+                                                <span className="font-mono text-sm text-zinc-600 dark:text-zinc-300">
                                                     {horario.hora_inicio} - {horario.hora_fim}
                                                 </span>
                                                 {horario.sala && (
                                                     <>
-                                                        <span className="text-neutral-400">•</span>
-                                                        <span className="text-sm text-neutral-400">{horario.sala}</span>
+                                                        <span className="text-zinc-400">•</span>
+                                                        <span className="text-sm text-zinc-500 dark:text-zinc-400">{horario.sala}</span>
                                                     </>
                                                 )}
                                             </div>
@@ -198,7 +198,7 @@ export function HorariosTurmaDialog({
                                             size="icon"
                                             onClick={() => handleDeleteHorario(horario.id)}
                                             disabled={isLoading}
-                                            className="hover:bg-red-500/10 hover:text-red-400"
+                                            className="hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400"
                                         >
                                             <Trash2 className="w-4 h-4" />
                                         </Button>
@@ -214,25 +214,25 @@ export function HorariosTurmaDialog({
                             type="button"
                             variant="outline"
                             onClick={() => setIsAdding(true)}
-                            className="w-full border-white/10 hover:bg-white/5"
+                            className="w-full border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                         >
                             <Plus className="w-4 h-4 mr-2" />
                             Adicionar Novo Horário
                         </Button>
                     ) : (
-                        <form onSubmit={handleAddHorario} className="space-y-4 p-4 rounded-xl bg-neutral-800/30 border border-white/10">
-                            <Label className="text-sm font-medium text-neutral-300">Novo Horário</Label>
+                        <form onSubmit={handleAddHorario} className="space-y-4 p-4 rounded-xl bg-zinc-100 dark:bg-zinc-800/30 border border-zinc-200 dark:border-zinc-700">
+                            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Novo Horário</Label>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="dia_semana" className="text-xs text-neutral-400">
+                                    <Label htmlFor="dia_semana" className="text-xs text-zinc-500 dark:text-zinc-400">
                                         Dia da Semana *
                                     </Label>
                                     <select
                                         id="dia_semana"
                                         value={newHorario.dia_semana}
                                         onChange={(e) => setNewHorario(prev => ({ ...prev, dia_semana: parseInt(e.target.value) }))}
-                                        className="flex h-11 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+                                        className="flex h-11 w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50"
                                         required
                                         disabled={isLoading}
                                     >
@@ -243,7 +243,7 @@ export function HorariosTurmaDialog({
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="sala" className="text-xs text-neutral-400">
+                                    <Label htmlFor="sala" className="text-xs text-zinc-500 dark:text-zinc-400">
                                         Sala (opcional)
                                     </Label>
                                     <Input
@@ -251,7 +251,7 @@ export function HorariosTurmaDialog({
                                         value={newHorario.sala}
                                         onChange={(e) => setNewHorario(prev => ({ ...prev, sala: e.target.value }))}
                                         placeholder="Ex: Sala Principal"
-                                        className="bg-black/40 border-white/10 text-white placeholder:text-neutral-600"
+                                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                                         disabled={isLoading}
                                     />
                                 </div>
@@ -259,7 +259,7 @@ export function HorariosTurmaDialog({
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="hora_inicio" className="text-xs text-neutral-400">
+                                    <Label htmlFor="hora_inicio" className="text-xs text-zinc-500 dark:text-zinc-400">
                                         Início *
                                     </Label>
                                     <Input
@@ -267,14 +267,14 @@ export function HorariosTurmaDialog({
                                         type="time"
                                         value={newHorario.hora_inicio}
                                         onChange={(e) => setNewHorario(prev => ({ ...prev, hora_inicio: e.target.value }))}
-                                        className="bg-black/40 border-white/10 text-white"
+                                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white"
                                         required
                                         disabled={isLoading}
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="hora_fim" className="text-xs text-neutral-400">
+                                    <Label htmlFor="hora_fim" className="text-xs text-zinc-500 dark:text-zinc-400">
                                         Fim *
                                     </Label>
                                     <Input
@@ -282,7 +282,7 @@ export function HorariosTurmaDialog({
                                         type="time"
                                         value={newHorario.hora_fim}
                                         onChange={(e) => setNewHorario(prev => ({ ...prev, hora_fim: e.target.value }))}
-                                        className="bg-black/40 border-white/10 text-white"
+                                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white"
                                         required
                                         disabled={isLoading}
                                     />
@@ -295,7 +295,7 @@ export function HorariosTurmaDialog({
                                     variant="outline"
                                     onClick={() => setIsAdding(false)}
                                     disabled={isLoading}
-                                    className="flex-1 border-white/10 hover:bg-white/5"
+                                    className="flex-1 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                                 >
                                     Cancelar
                                 </Button>

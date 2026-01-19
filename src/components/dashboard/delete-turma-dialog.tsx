@@ -42,13 +42,13 @@ export function DeleteTurmaDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px] bg-card border-border">
+            <DialogContent className="sm:max-w-[500px] bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-foreground flex items-center gap-2">
-                        <Trash2 className="w-5 h-5 text-destructive" />
+                    <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                        <Trash2 className="w-5 h-5 text-red-500" />
                         Confirmar Exclusão
                     </DialogTitle>
-                    <DialogDescription className="text-muted-foreground">
+                    <DialogDescription className="text-zinc-500 dark:text-zinc-400">
                         Esta ação não pode ser desfeita.
                     </DialogDescription>
                 </DialogHeader>
@@ -56,20 +56,20 @@ export function DeleteTurmaDialog({
                 <div className="py-4 space-y-4">
                     {error && (
                         <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                            <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                            <p className="text-sm text-red-300 leading-relaxed">{error}</p>
+                            <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-red-600 dark:text-red-300 leading-relaxed">{error}</p>
                         </div>
                     )}
 
-                    <div className="p-4 rounded-xl bg-destructive/5 border border-destructive/20">
-                        <p className="text-sm text-foreground leading-relaxed">
-                            Você está prestes a remover a turma <strong className="font-bold">{turmaNome}</strong>
+                    <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20">
+                        <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                            Você está prestes a remover a turma <strong className="text-zinc-900 dark:text-white font-bold">{turmaNome}</strong>
                             {' '}do sistema.
                         </p>
-                        <p className="text-sm text-muted-foreground mt-2">
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
                             Todos os dados relacionados serão permanentemente deletados:
                         </p>
-                        <ul className="list-disc list-inside text-sm text-muted-foreground mt-2 space-y-1">
+                        <ul className="list-disc list-inside text-sm text-zinc-500 dark:text-zinc-400 mt-2 space-y-1">
                             <li>Horários e agenda de aulas</li>
                             <li>Matrículas de alunos</li>
                             <li>Check-ins registrados</li>
@@ -83,7 +83,7 @@ export function DeleteTurmaDialog({
                         variant="outline"
                         onClick={() => onOpenChange(false)}
                         disabled={isLoading}
-                        className="border-white/10 hover:bg-white/5"
+                        className="border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                     >
                         Cancelar
                     </Button>
