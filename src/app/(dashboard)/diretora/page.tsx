@@ -4,87 +4,82 @@ import React from 'react'
 import AdminStats from '@/components/dashboard/admin-stats'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { PlayCircle, Sparkles, ChevronRight, Zap, Shirt, Camera, FileText, Globe } from 'lucide-react'
+import { PlayCircle, Sparkles, ChevronRight, Zap, Shirt, Camera, FileText, Globe, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTenant } from '@/hooks/use-tenant'
 import Link from 'next/link'
 
 export default function DiretoraDashboard() {
     const tenant = useTenant()
-    const primaryColor = tenant?.primaryColor || '#e11d48'
+    const primaryColor = tenant?.primaryColor || '#f43f5e'
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-10 lg:space-y-12">
             {/* Header with Stats */}
             <AdminStats />
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 {/* Gestao de Figurinos */}
-                <Card className="lg:col-span-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm rounded-2xl overflow-hidden">
-                    <CardHeader className="p-6 border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <Card className="xl:col-span-2 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-[2.5rem] overflow-hidden flex flex-col">
+                    <CardHeader className="p-8 border-b border-zinc-50 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-800/20 shrink-0">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                             <div className="space-y-1">
-                                <CardTitle className="text-lg font-bold flex items-center gap-2 text-neutral-900 dark:text-white">
-                                    <Shirt className="w-5 h-5" style={{ color: primaryColor }} />
-                                    Atelie de Figurinos
+                                <CardTitle className="text-xl font-black flex items-center gap-3 text-zinc-900 dark:text-white uppercase tracking-tight">
+                                    <div className="p-2.5 rounded-2xl bg-rose-500/10 border border-rose-500/20">
+                                        <Shirt className="w-6 h-6 text-rose-500" />
+                                    </div>
+                                    Ateliê de Figurinos
                                 </CardTitle>
-                                <CardDescription className="text-sm text-neutral-600 dark:text-neutral-400">
-                                    Monitoramento de Acervo e Medidas
+                                <CardDescription className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">
+                                    Monitoramento estratégico de acervo e medidas artísticas.
                                 </CardDescription>
                             </div>
                             <Link href="/diretora/estoque">
-                                <Button variant="outline" className="h-9 px-4 rounded-lg
-                                    border-neutral-300 dark:border-neutral-600
-                                    text-neutral-700 dark:text-neutral-200
-                                    hover:bg-neutral-100 dark:hover:bg-neutral-700
-                                    font-medium text-sm">
-                                    Inventario <ChevronRight className="ml-2 w-4 h-4" />
+                                <Button variant="outline" className="h-11 px-6 rounded-xl border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800 font-bold text-xs uppercase tracking-widest transition-all">
+                                    Ver Inventário <ChevronRight className="ml-2 w-4 h-4" />
                                 </Button>
                             </Link>
                         </div>
                     </CardHeader>
-                    <CardContent className="p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <CardContent className="p-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {[
-                                { name: 'Tutu Profissional Cisne Negro', stock: 12, status: 'Processando', last: 'Ha 2 horas' },
-                                { name: 'Collant Floral Prime Baby I', stock: 45, status: 'Disponivel', last: 'Ha 1 dia' },
+                                { name: 'Tutu Profissional Cisne Negro', stock: 12, status: 'Processando', last: 'Há 2 horas', type: 'Premium' },
+                                { name: 'Collant Floral Prime Baby I', stock: 45, status: 'Disponível', last: 'Há 1 dia', type: 'Estoque' },
                             ].map((item, i) => (
-                                <div key={i} className="p-5 rounded-xl
-                                    bg-neutral-50 dark:bg-neutral-800/50
-                                    border border-neutral-200 dark:border-neutral-700
-                                    hover:border-pink-300 dark:hover:border-pink-500/30
-                                    transition-all cursor-pointer group">
-                                    <div className="flex justify-between items-start mb-3">
+                                <div key={i} className="p-6 rounded-[2rem] bg-zinc-50 dark:bg-zinc-800/30 border border-zinc-100 dark:border-zinc-800 hover:border-rose-500/30 transition-all cursor-pointer group relative overflow-hidden">
+                                    <div className="flex justify-between items-start mb-4 relative z-10">
                                         <div className="space-y-1">
-                                            <span className="font-semibold text-sm text-neutral-900 dark:text-white block">
+                                            <Badge variant="outline" className="text-[9px] font-black uppercase tracking-[0.2em] border-zinc-200 dark:border-zinc-700 text-zinc-400 dark:text-zinc-500 mb-2">
+                                                {item.type}
+                                            </Badge>
+                                            <span className="font-black text-base text-zinc-900 dark:text-zinc-100 block group-hover:text-rose-500 transition-colors">
                                                 {item.name}
                                             </span>
-                                            <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                                                {item.last}
+                                            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
+                                                <Clock className="w-3 h-3" /> Atualizado {item.last}
                                             </span>
                                         </div>
-                                        <Badge className={`text-xs px-2.5 py-1 rounded-full font-medium
+                                        <Badge className={`text-[10px] px-3 py-1 rounded-lg font-black uppercase tracking-widest border
                                             ${item.status === 'Processando'
-                                                ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30'
-                                                : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30'
+                                                ? 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                                                : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
                                             }`}>
                                             {item.status}
                                         </Badge>
                                     </div>
-                                    <div className="flex items-center justify-between pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: primaryColor }} />
-                                            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                                                {item.stock} unidades
+                                    <div className="flex items-center justify-between pt-5 border-t border-zinc-200/50 dark:border-zinc-700/50 relative z-10">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-2.5 h-2.5 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.4)]" style={{ backgroundColor: primaryColor }} />
+                                            <span className="text-sm font-black text-zinc-900 dark:text-zinc-100">
+                                                {item.stock} <span className="text-zinc-400 dark:text-zinc-600 font-medium lowercase">unidades</span>
                                             </span>
                                         </div>
-                                        <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg
-                                            text-neutral-500 dark:text-neutral-400
-                                            hover:bg-neutral-200 dark:hover:bg-neutral-700
-                                            group-hover:text-pink-500">
-                                            <ChevronRight className="w-4 h-4" />
-                                        </Button>
+                                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 flex items-center justify-center text-zinc-400 group-hover:bg-rose-500 group-hover:text-white group-hover:border-rose-500 transition-all shadow-sm">
+                                            <ChevronRight className="w-5 h-5" />
+                                        </div>
                                     </div>
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 blur-3xl rounded-full" />
                                 </div>
                             ))}
                         </div>
@@ -92,47 +87,59 @@ export default function DiretoraDashboard() {
                 </Card>
 
                 {/* IA Content Hub */}
-                <Card className="bg-neutral-900 dark:bg-neutral-900 border border-neutral-800 shadow-xl rounded-2xl overflow-hidden relative flex flex-col">
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-pink-500/20 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2" />
-                    <CardHeader className="p-6 relative z-10">
-                        <div className="flex items-center gap-2 mb-1">
-                            <Sparkles className="w-5 h-5" style={{ color: primaryColor }} />
-                            <CardTitle className="text-lg font-bold text-white">AI Content Hub</CardTitle>
+                <Card className="bg-zinc-950 text-white border-none shadow-2xl rounded-[2.5rem] overflow-hidden relative flex flex-col group transition-all hover:scale-[1.01]">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/20 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/10 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
+                    <CardHeader className="p-10 relative z-10 shrink-0">
+                        <div className="flex items-center gap-4 mb-2">
+                            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center shadow-2xl group-hover:rotate-6 transition-transform">
+                                <Sparkles className="w-6 h-6 text-rose-400" />
+                            </div>
+                            <div>
+                                <CardTitle className="text-2xl font-black tracking-tight uppercase leading-none">Content Hub</CardTitle>
+                                <CardDescription className="text-rose-400/80 text-xs font-black uppercase tracking-[0.2em] mt-1">
+                                    Inteligência Criativa
+                                </CardDescription>
+                            </div>
                         </div>
-                        <CardDescription className="text-neutral-400 text-sm">
-                            Automacao de Marketing Digital
-                        </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-6 pt-0 space-y-5 relative z-10 flex-1 flex flex-col">
-                        <div className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 p-5 space-y-4 flex-1 hover:bg-white/15 transition-all">
+
+                    <CardContent className="p-10 pt-0 space-y-6 relative z-10 flex-1 flex flex-col">
+                        <div className="bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/10 p-8 space-y-6 flex-1 flex flex-col justify-center hover:bg-white/10 transition-all group/inner border-dashed">
                             <div className="flex items-center justify-between">
-                                <Badge className="bg-violet-500/20 text-violet-300 border border-violet-500/30 px-2 py-0.5 text-xs font-medium">
-                                    Novo Evento
+                                <Badge className="bg-rose-500 text-white border-none px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-rose-500/20">
+                                    LIVE EVENT
                                 </Badge>
-                                <span className="text-xs text-neutral-400 font-medium">Recentemente</span>
+                                <span className="text-[10px] text-zinc-500 font-black uppercase tracking-widest italic animate-pulse">Detecting content...</span>
                             </div>
-                            <div className="space-y-3 text-center py-2">
-                                <div className="w-14 h-14 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mx-auto">
-                                    <Camera className="w-6 h-6 text-white" />
+
+                            <div className="space-y-4 text-center py-4">
+                                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-rose-500 to-violet-600 p-0.5 mx-auto group-hover/inner:scale-110 transition-transform">
+                                    <div className="w-full h-full bg-zinc-900 rounded-[1.4rem] flex items-center justify-center">
+                                        <Camera className="w-8 h-8 text-white" />
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-white font-bold text-base">Espetaculo de Inverno</p>
-                                    <p className="text-neutral-400 text-sm mt-1">42 novos registros</p>
+                                <div className="space-y-1">
+                                    <p className="text-white font-black text-lg tracking-tight uppercase">Espetáculo de Inverno</p>
+                                    <p className="text-rose-400/80 text-[10px] font-black uppercase tracking-[0.2em]">42 novos registros detectados</p>
                                 </div>
                             </div>
-                            <div className="flex gap-2">
-                                <Button variant="ghost" className="flex-1 h-9 rounded-lg bg-white/10 text-white font-medium text-sm border border-white/10 hover:bg-white/20">
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <Button variant="ghost" className="h-11 rounded-2xl bg-white/5 text-white font-black text-[10px] uppercase tracking-widest border border-white/10 hover:bg-white/20 transition-all">
                                     Revisar
                                 </Button>
-                                <Button variant="ghost" className="flex-1 h-9 rounded-lg bg-white/10 text-white font-medium text-sm border border-white/10 hover:bg-white/20">
-                                    Editar
+                                <Button variant="ghost" className="h-11 rounded-2xl bg-white/5 text-white font-black text-[10px] uppercase tracking-widest border border-white/10 hover:bg-white/20 transition-all">
+                                    Aprovar
                                 </Button>
                             </div>
                         </div>
-                        <Link href="/diretora/galeria">
-                            <Button className="w-full h-12 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+
+                        <Link href="/diretora/galeria" className="shrink-0">
+                            <Button className="w-full h-14 rounded-2xl font-black text-xs uppercase tracking-widest text-white flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-rose-500/20 border-none group/btn"
                                 style={{ backgroundColor: primaryColor }}>
-                                <Zap className="w-5 h-5" />
+                                <Zap className="w-5 h-5 fill-current group-hover:animate-pulse" />
                                 Gerar Posts SEO
                             </Button>
                         </Link>
