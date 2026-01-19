@@ -156,7 +156,7 @@ export default function EspacoRevelleSite() {
                         <div className="relative">
                             <div className="aspect-[4/5] rounded-[3rem] overflow-hidden border border-white/10 group shadow-2xl shadow-rose-900/10">
                                 <Image
-                                    src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=2069&auto=format&fit=crop"
+                                    src="https://images.unsplash.com/photo-1518834107812-67b0b7c58434?q=80&w=2070&auto=format&fit=crop"
                                     alt="Premiere Dance Studio"
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-1000 grayscale-[0.5] group-hover:grayscale-0"
@@ -225,7 +225,7 @@ export default function EspacoRevelleSite() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
                             { title: "Ballet Clássico", sub: "Foundation of Grace", age: "3 a 80 anos", img: "https://images.unsplash.com/photo-1547153760-18fc21fca24b?q=80&w=1974&auto=format&fit=crop" },
-                            { title: "Jazz Premium", sub: "Dynamic Energy", age: "Infantil & Adulto", img: "https://images.unsplash.com/photo-1508700915892-45ecd05ae2ad?q=80&w=2069&auto=format&fit=crop" },
+                            { title: "Jazz Premium", sub: "Dynamic Energy", age: "Infantil & Adulto", img: "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?q=80&w=2070&auto=format&fit=crop" },
                             { title: "Neo Urban", sub: "Street Culture", age: "Exploração Criativa", img: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?q=80&w=2070&auto=format&fit=crop" }
                         ].map((aula, i) => (
                             <motion.div
