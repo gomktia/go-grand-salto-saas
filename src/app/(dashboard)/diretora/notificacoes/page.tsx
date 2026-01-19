@@ -44,7 +44,7 @@ export default function NotificacoesPage() {
     }
 
     return (
-        <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+        <div className="space-y-6 pb-12">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">
                     <div className="flex items-center gap-2">

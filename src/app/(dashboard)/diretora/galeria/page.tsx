@@ -67,7 +67,7 @@ export default function GaleriaPage() {
     }
 
     return (
-        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-12">
+        <div className="space-y-6 pb-12">
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">

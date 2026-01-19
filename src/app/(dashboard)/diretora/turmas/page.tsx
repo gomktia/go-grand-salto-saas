@@ -158,7 +158,7 @@ export default function TurmasPage() {
     }
 
     return (
-        <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+        <div className="space-y-6 pb-12">
             {/* Header */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">
@@ -179,8 +179,8 @@ export default function TurmasPage() {
                             variant="ghost"
                             size="sm"
                             className={`h-8 px-3 rounded-lg transition-all text-[10px] font-bold uppercase tracking-widest ${viewMode === 'grid'
-                                    ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
-                                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
+                                ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
+                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
                                 }`}
                         >
                             <LayoutGrid className="w-3.5 h-3.5 mr-1.5" />
@@ -191,8 +191,8 @@ export default function TurmasPage() {
                             variant="ghost"
                             size="sm"
                             className={`h-8 px-3 rounded-lg transition-all text-[10px] font-bold uppercase tracking-widest ${viewMode === 'calendar'
-                                    ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
-                                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
+                                ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
+                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
                                 }`}
                         >
                             <CalendarIcon className="w-3.5 h-3.5 mr-1.5" />

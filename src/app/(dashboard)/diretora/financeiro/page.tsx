@@ -77,7 +77,7 @@ export default async function FinanceiroPage() {
     const recentMensalidades = mensalidades.slice(0, 4)
 
     return (
-        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-24">
+        <div className="space-y-6 pb-24">
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">

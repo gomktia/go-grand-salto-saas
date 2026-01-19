@@ -29,7 +29,7 @@ export default function ProprietariaPerfilPage() {
     const primaryColor = tenant?.primaryColor || '#db2777'
 
     return (
-        <div className="space-y-8 p-1 pb-24">
+        <div className="space-y-8 pb-24">
             {/* Header Perfil */}
             <div className="relative h-64 lg:h-80 rounded-[3rem] overflow-hidden shadow-2xl group">
                 <div
