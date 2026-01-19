@@ -41,9 +41,8 @@ type Mensalidade = {
     status: string
     estudante?: {
         id: string
-        perfis?: {
-            full_name: string
-        }
+        nome_responsavel: string
+        perfil_id?: string
     }
     mes_referencia: number
     ano_referencia: number
@@ -235,7 +234,7 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                                                     className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-md overflow-hidden shrink-0"
                                                     style={{ backgroundColor: primaryColor }}
                                                 >
-                                                    {mensalidade.estudante?.perfis?.full_name?.charAt(0) || '?'}
+                                                    {mensalidade.estudante?.nome_responsavel?.charAt(0) || '?'}
                                                 </div>
                                                 <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-zinc-950 flex items-center justify-center ${getStatusIcon(mensalidade.status).split(' ')[1]}`}>
                                                     <div className="w-1 h-1 rounded-full bg-current" />
@@ -243,7 +242,7 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                                             </div>
                                             <div>
                                                 <div className="font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-rose-600 transition-colors uppercase tracking-tight text-xs">
-                                                    {mensalidade.estudante?.perfis?.full_name || 'Aluno não identificado'}
+                                                    {mensalidade.estudante?.nome_responsavel || 'Aluno não identificado'}
                                                 </div>
                                                 <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-500 mt-0.5 flex items-center gap-2">
                                                     <span>Ref: {mensalidade.mes_referencia}/{mensalidade.ano_referencia}</span>
@@ -331,7 +330,7 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                         <DialogTitle>Registrar Pagamento</DialogTitle>
                         <DialogDescription>
                             {selectedMensalidade
-                                ? `Registrar pagamento de ${selectedMensalidade.estudante?.perfis?.full_name}`
+                                ? `Registrar pagamento de ${selectedMensalidade.estudante?.nome_responsavel}`
                                 : 'Registrar novo pagamento avulso'}
                         </DialogDescription>
                     </DialogHeader>

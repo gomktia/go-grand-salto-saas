@@ -14,7 +14,8 @@ import {
     Loader2,
     Edit,
     Trash2,
-    Calendar
+    Calendar,
+    UserPlus
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -24,6 +25,7 @@ import { useTenant } from '@/hooks/use-tenant'
 import { StudentDialog } from '@/components/dashboard/student-dialog'
 import { DeleteStudentDialog } from '@/components/dashboard/delete-student-dialog'
 import { BodyMetricsDialog } from '@/components/dashboard/body-metrics-dialog'
+import { ResponsavelDialog } from '@/components/dashboard/responsavel-dialog'
 import {
     Phone,
     Pencil
@@ -65,6 +67,7 @@ export default function AlunosPage() {
     const [studentDialogOpen, setStudentDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [metricsDialogOpen, setMetricsDialogOpen] = useState(false)
+    const [responsavelDialogOpen, setResponsavelDialogOpen] = useState(false)
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
 
     const tenant = useTenant()
@@ -118,6 +121,11 @@ export default function AlunosPage() {
     const handleManageMetrics = (student: Student) => {
         setSelectedStudent(student)
         setMetricsDialogOpen(true)
+    }
+
+    const handleManageResponsaveis = (student: Student) => {
+        setSelectedStudent(student)
+        setResponsavelDialogOpen(true)
     }
 
     const handleSuccess = () => {
@@ -205,7 +213,7 @@ export default function AlunosPage() {
                             </div>
                         </div>
                         <div className="text-2xl font-black text-zinc-900 dark:text-white">
-                            {students.filter(s => s.status_matricula === 'ativa').length}
+                            {students.filter(s => s.status_matricula === 'ativo').length}
                         </div>
                         <div className="text-[9px] text-zinc-500 dark:text-zinc-500 font-bold uppercase tracking-widest mt-1 flex items-center gap-1.5">
                             Status Regular
@@ -309,7 +317,7 @@ export default function AlunosPage() {
                                             </td>
                                             <td className="p-6">
                                                 <Badge className={`text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest border-none
-                                                    ${student.status_matricula === 'ativa'
+                                                    ${student.status_matricula === 'ativo'
                                                         ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                                                         : student.status_matricula === 'pendente'
                                                             ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
@@ -362,6 +370,13 @@ export default function AlunosPage() {
                                                             <Ruler className="w-4 h-4" />
                                                             Métricas Pro
                                                         </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            onClick={() => handleManageResponsaveis(student)}
+                                                            className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-violet-500 hover:text-white transition-all outline-none border-none"
+                                                        >
+                                                            <UserPlus className="w-4 h-4" />
+                                                            Responsáveis
+                                                        </DropdownMenuItem>
                                                         <DropdownMenuSeparator className="bg-zinc-100 dark:bg-zinc-800 mx-1" />
                                                         <DropdownMenuItem
                                                             onClick={() => handleDeleteStudent(student)}
@@ -406,6 +421,14 @@ export default function AlunosPage() {
                         studentId={selectedStudent.id}
                         studentName={selectedStudent.nome_responsavel}
                         currentMetrics={selectedStudent.metricas_corpo?.[0]}
+                        onSuccess={handleSuccess}
+                    />
+
+                    <ResponsavelDialog
+                        open={responsavelDialogOpen}
+                        onOpenChange={setResponsavelDialogOpen}
+                        estudanteId={selectedStudent.id}
+                        estudanteNome={selectedStudent.nome_responsavel}
                         onSuccess={handleSuccess}
                     />
                 </>

@@ -124,7 +124,7 @@ export async function getMensalidades(filters?: {
         .from('mensalidades')
         .select(`
             *,
-            estudante:estudantes(id, perfil_id, perfis(full_name)),
+            estudante:estudantes(id, nome_responsavel, perfil_id),
             plano:planos_mensalidade(nome, valor)
         `)
         .eq('escola_id', perfil.escola_id)
@@ -267,7 +267,7 @@ export async function getPagamentos(filters?: {
         .from('pagamentos')
         .select(`
             *,
-            estudante:estudantes(id, perfis(full_name)),
+            estudante:estudantes(id, nome_responsavel),
             mensalidade:mensalidades(mes_referencia, ano_referencia, valor)
         `)
         .eq('escola_id', perfil.escola_id)
