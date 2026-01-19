@@ -153,7 +153,7 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
                 </Button>
 
                 {/* Logo Area */}
-                <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'px-6'} h-20 border-b border-zinc-100 dark:border-zinc-800 shrink-0`}>
+                <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'px-6'} h-16 border-b border-zinc-100 dark:border-zinc-800 shrink-0`}>
                     <div
                         className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shrink-0 shadow-lg shadow-rose-500/20"
                         style={{ backgroundColor: primaryColor }}
@@ -190,7 +190,7 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
                                     flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative
                                     ${isActive
                                         ? 'text-white shadow-lg shadow-rose-500/20'
-                                        : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-rose-500 dark:hover:text-rose-400'}
+                                        : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-rose-600 dark:hover:text-rose-400'}
                                     ${isCollapsed ? 'justify-center' : ''}
                                 `}
                                     style={isActive ? { backgroundColor: primaryColor } : {}}
@@ -223,19 +223,15 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
                 <div className="p-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2 shrink-0">
                     {!isCollapsed ? (
                         <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800">
-                            <div className="flex items-center gap-3 mb-3">
+                            <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white dark:bg-zinc-800 border border-border">
                                     <Globe className="w-4 h-4" style={{ color: primaryColor }} />
                                 </div>
                                 <div className="overflow-hidden">
-                                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-tight">Loja Ativa</p>
+                                    <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-tight">Loja Ativa</p>
                                     <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">{tenant?.slug}.com.br</p>
                                 </div>
                             </div>
-                            <Button variant="outline" size="sm" className="w-full text-[11px] font-bold h-8 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
-                                <Settings className="w-3 h-3 mr-2" />
-                                Configurar
-                            </Button>
                         </div>
                     ) : (
                         <div className="flex justify-center">
@@ -266,7 +262,7 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
             {/* Content Area */}
             <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${isCollapsed ? 'lg:pl-20' : 'lg:pl-[280px]'}`}>
                 {/* Header Desktop */}
-                <header className="hidden lg:flex h-20 items-center justify-between px-8 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl sticky top-0 z-40 border-b border-zinc-100 dark:border-zinc-800">
+                <header className="hidden lg:flex h-16 items-center justify-between px-8 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl sticky top-0 z-40 border-b border-zinc-100 dark:border-zinc-800">
                     <div className="flex items-center flex-1 max-w-xl">
                         <div className="relative w-full">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />

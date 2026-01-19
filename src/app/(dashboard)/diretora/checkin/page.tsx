@@ -70,26 +70,31 @@ export default function CheckinFacialPage() {
     }
 
     return (
-        <div className="space-y-8 p-1">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-12">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-pink-500 italic mb-2">Segurança Biométrica</h2>
-                    <h1 className="text-4xl font-black tracking-tighter uppercase text-neutral-900 dark:text-white flex items-center gap-3">
-                        <UserCheck className="w-8 h-8 text-pink-600" />
-                        Check-in Facial
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Segurança & Reconhecimento Biométrico
+                        </span>
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Check-in <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Facial</span>
                     </h1>
-                    <p className="text-neutral-500 dark:text-neutral-400 font-medium">Reconhecimento inteligente de <strong>Alunos</strong> em tempo real para o <strong>{tenant?.nome}</strong>.</p>
                 </div>
-                <div className="flex gap-4">
-                    <Button variant="outline" className="h-14 px-8 rounded-2xl border-neutral-200 dark:border-neutral-800 gap-2 font-bold uppercase text-[10px] tracking-widest glass">
-                        Configurar Câmera
+
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all">
+                        CONFIGURAR CÂMERA
                     </Button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Viewport da Câmera */}
-                <div className="relative aspect-[4/3] rounded-[3rem] overflow-hidden bg-neutral-900 shadow-2xl border-8 border-white dark:border-neutral-900 ring-1 ring-neutral-200 dark:ring-white/5">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-zinc-950 shadow-2xl border-4 border-white dark:border-zinc-900">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
 
                     {/* Placeholder Camera Content */}

@@ -42,38 +42,6 @@ export default async function FinanceiroPage() {
         console.error('Erro ao carregar dados financeiros:', e)
     }
 
-    // If error (schema not executed yet), show placeholder
-    if (error) {
-        return (
-            <div className="p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto pb-24">
-                <Card className="bg-amber-50 border-amber-200 rounded-3xl">
-                    <CardHeader className="p-6">
-                        <div className="flex items-center gap-3">
-                            <AlertCircle className="w-5 h-5 text-amber-600" />
-                            <CardTitle className="text-amber-900">Configuração Necessária</CardTitle>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="p-6 pt-0 space-y-4">
-                        <p className="text-sm text-amber-800">
-                            O sistema financeiro ainda não está configurado no banco de dados.
-                        </p>
-                        <div className="bg-white rounded-xl p-4 border border-amber-200 space-y-2">
-                            <p className="font-bold text-xs text-amber-900">Passos necessários:</p>
-                            <ol className="text-xs text-amber-800 space-y-1 list-decimal list-inside">
-                                <li>Execute o arquivo <code className="bg-amber-100 px-2 py-0.5 rounded">schema-financeiro-e-fotos-FIXED.sql</code> no Supabase</li>
-                                <li>Crie o bucket <code className="bg-amber-100 px-2 py-0.5 rounded">fotos-venda</code> no Storage</li>
-                                <li>Recarregue esta página</li>
-                            </ol>
-                        </div>
-                        <p className="text-xs text-amber-700">
-                            Consulte o arquivo <code>PROXIMOS-PASSOS-FINANCEIRO-FOTOS.md</code> para instruções detalhadas.
-                        </p>
-                    </CardContent>
-                </Card>
-            </div>
-        )
-    }
-
     const financialStats = [
         {
             title: 'Faturamento Mensal',
@@ -109,9 +77,42 @@ export default async function FinanceiroPage() {
     const recentMensalidades = mensalidades.slice(0, 4)
 
     return (
-        <ClientFinanceiroContent
-            financialStats={financialStats}
-            recentMensalidades={recentMensalidades}
-        />
+        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-24">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Gestão de Receitas e Fluxo
+                        </span>
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Painel <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600">Financeiro</span>
+                    </h1>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        className="h-10 px-4 rounded-xl font-bold text-[10px] border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
+                    >
+                        <Filter className="w-3.5 h-3.5 mr-2" />
+                        Filtros
+                    </Button>
+                </div>
+            </div>
+
+            {error && (
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-widest">
+                    Erro ao carregar dados: {error}
+                </div>
+            )}
+
+            <ClientFinanceiroContent
+                financialStats={financialStats}
+                recentMensalidades={recentMensalidades}
+            />
+        </div>
     )
 }

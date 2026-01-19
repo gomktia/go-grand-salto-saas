@@ -14,19 +14,19 @@ export default function DiretoraDashboard() {
     const primaryColor = tenant?.primaryColor || '#f43f5e'
 
     return (
-        <div className="space-y-10 lg:space-y-12">
+        <div className="space-y-6 lg:space-y-8 max-w-[1600px] mx-auto pb-12">
             {/* Header with Stats */}
             <AdminStats />
 
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 {/* Gestao de Figurinos */}
-                <Card className="xl:col-span-2 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-[2.5rem] overflow-hidden flex flex-col">
-                    <CardHeader className="p-8 border-b border-zinc-50 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-800/20 shrink-0">
+                <Card className="xl:col-span-2 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden flex flex-col">
+                    <CardHeader className="p-6 border-b border-zinc-50 dark:border-zinc-800 bg-zinc-50/10 dark:bg-zinc-800/20 shrink-0">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                             <div className="space-y-1">
-                                <CardTitle className="text-xl font-black flex items-center gap-3 text-zinc-900 dark:text-white uppercase tracking-tight">
-                                    <div className="p-2.5 rounded-2xl bg-rose-500/10 border border-rose-500/20">
-                                        <Shirt className="w-6 h-6 text-rose-500" />
+                                <CardTitle className="text-lg font-bold flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
+                                    <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20">
+                                        <Shirt className="w-5 h-5 text-rose-500" />
                                     </div>
                                     Ateliê de Figurinos
                                 </CardTitle>
@@ -41,8 +41,8 @@ export default function DiretoraDashboard() {
                             </Link>
                         </div>
                     </CardHeader>
-                    <CardContent className="p-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <CardContent className="p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {[
                                 { name: 'Tutu Profissional Cisne Negro', stock: 12, status: 'Processando', last: 'Há 2 horas', type: 'Premium' },
                                 { name: 'Collant Floral Prime Baby I', stock: 45, status: 'Disponível', last: 'Há 1 dia', type: 'Estoque' },
@@ -87,7 +87,7 @@ export default function DiretoraDashboard() {
                 </Card>
 
                 {/* IA Content Hub */}
-                <Card className="bg-zinc-950 text-white border-none shadow-2xl rounded-[2.5rem] overflow-hidden relative flex flex-col group transition-all hover:scale-[1.01]">
+                <Card className="bg-zinc-950 text-white border-none shadow-2xl rounded-2xl overflow-hidden relative flex flex-col group transition-all">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/20 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/10 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 

@@ -49,30 +49,39 @@ export default function AgendaPage() {
     const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false)
 
     return (
-        <div className="p-4 lg:p-8 space-y-8 max-w-[1600px] mx-auto pb-24">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-12">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">
-                    <Badge variant="outline" className="border-[var(--primary)]/30 text-[var(--primary)] bg-[var(--primary)]/5 px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full mb-2">
-                        Planejamento Semanal
-                    </Badge>
-                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
-                        Agenda <span style={{ color: primaryColor }}>Escolar</span>
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Planejamento Semanal de Aulas
+                        </span>
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Agenda <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Escolar</span>
                     </h1>
-                    <p className="text-muted-foreground text-sm">Otimização de salas e horários na <strong className="text-foreground">{tenant?.nome}</strong>.</p>
                 </div>
-                <div className="flex gap-3">
-                    <Button variant="outline" className="h-10 px-4 rounded-xl border-border font-bold text-xs bg-card hover:bg-muted transition-all">
-                        <Filter className="w-3.5 h-3.5 mr-2" /> Filtrar Prof.
+
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all">
+                        <Filter className="w-3.5 h-3.5 mr-2" />
+                        PROFESSORES
                     </Button>
-                    <Button className="h-10 px-6 rounded-xl font-bold text-xs shadow-lg shadow-[var(--primary)]/20 border-none transition-all hover:scale-105 active:scale-95 text-white" style={{ backgroundColor: primaryColor }}>
-                        <Plus className="w-4 h-4 mr-2" /> Novo Horário
+                    <Button
+                        onClick={() => { }}
+                        className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
+                        style={{ backgroundColor: primaryColor }}
+                    >
+                        <Plus className="w-4 h-4 mr-2" />
+                        NOVO HORÁRIO
                     </Button>
                 </div>
             </div>
 
             {/* Calendar Grid */}
-            <Card className="bg-card border-border shadow-sm rounded-3xl overflow-hidden relative border hover:border-border/80 transition-all">
+            <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden relative">
                 <div className="overflow-x-auto custom-scrollbar">
                     <div className="min-w-[800px]">
                         {/* Calendar Header */}

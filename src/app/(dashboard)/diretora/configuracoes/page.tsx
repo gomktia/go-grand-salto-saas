@@ -36,32 +36,44 @@ export default function WhiteLabelSettings() {
     }
 
     return (
-        <div className="p-4 lg:p-10 space-y-10 max-w-7xl mx-auto pb-32">
-            <header className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-                <div className="space-y-2">
-                    <Badge variant="outline" className="border-[var(--primary)]/30 text-[var(--primary)] bg-[var(--primary)]/5 px-4 py-1.5 text-[10px] uppercase font-black tracking-[0.2em] rounded-full">
-                        Enterprise Console
-                    </Badge>
-                    <h1 className="text-3xl lg:text-5xl font-black tracking-tighter uppercase leading-none">
-                        Universo <span style={{ color: primaryColor }}>Branding</span>
+        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-24">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Enterprise Control Panel
+                        </span>
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Universo <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-emerald-600">Configurações</span>
                     </h1>
-                    <p className="text-muted-foreground font-medium text-sm lg:text-lg">Controle total sobre a identidade visual da <strong className="text-foreground">{tenant?.nome}</strong>.</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-muted/50 border border-border flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground">
-                        <Cpu className="w-6 h-6" />
-                    </div>
-                    <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-50">Status do Tenant</p>
-                        <p className="text-sm font-black text-emerald-500 uppercase tracking-tighter">Premium Active</p>
-                    </div>
-                </div>
-            </header>
 
-            <Tabs defaultValue="branding" className="space-y-10">
-                <TabsList className="bg-card border-2 border-border p-2 h-16 rounded-[1.5rem] w-full lg:w-fit flex shadow-sm">
+                <div className="flex items-center gap-3">
+                    <div className="hidden md:flex items-center gap-3 px-4 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800">
+                        <Cpu className="w-4 h-4 text-zinc-400" />
+                        <div>
+                            <p className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 opacity-60">Tenant Status</p>
+                            <p className="text-[10px] font-extrabold text-emerald-600 uppercase tracking-tight">Active Premium</p>
+                        </div>
+                    </div>
+                    <Button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-zinc-500/10 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none bg-zinc-900 dark:bg-white dark:text-zinc-900"
+                    >
+                        <Save className="w-4 h-4 mr-2" />
+                        {isSaving ? 'SALVANDO...' : 'SALVAR'}
+                    </Button>
+                </div>
+            </div>
+
+            <Tabs defaultValue="branding" className="space-y-6">
+                <TabsList className="bg-zinc-100 dark:bg-zinc-800/50 p-1 h-11 rounded-xl w-full lg:w-fit flex shadow-inner">
                     {[
-                        { value: 'branding', label: 'Identidade', icon: Palette },
+                        { value: 'branding', label: 'Marca', icon: Palette },
                         { value: 'dominio', label: 'Domínios', icon: Globe },
                         { value: 'email', label: 'E-mails', icon: Mail },
                         { value: 'seguranca', label: 'Segurança', icon: Lock },
@@ -69,74 +81,69 @@ export default function WhiteLabelSettings() {
                         <TabsTrigger
                             key={tab.value}
                             value={tab.value}
-                            className="flex-1 lg:flex-none rounded-2xl px-8 gap-3 h-full uppercase text-[10px] font-black tracking-widest data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                            className="flex-1 lg:flex-none rounded-lg px-6 gap-2 h-full uppercase text-[9px] font-bold tracking-widest data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-900 data-[state=active]:text-zinc-900 dark:data-[state=active]:text-white data-[state=active]:shadow-sm transition-all text-zinc-500"
                         >
-                            <tab.icon className="w-4 h-4" /> {tab.label}
+                            <tab.icon className="w-3 h-3" /> {tab.label}
                         </TabsTrigger>
                     ))}
                 </TabsList>
 
                 {/* Branding Tab */}
-                <TabsContent value="branding" className="space-y-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                        <Card className="bg-card border-border rounded-[2.5rem] shadow-sm">
-                            <CardHeader className="p-10 pb-6">
-                                <CardTitle className="text-xl font-black uppercase tracking-tight">Arquitetura Visual</CardTitle>
-                                <CardDescription className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Logotipo e Símbolos Oficiais</CardDescription>
+                <TabsContent value="branding" className="space-y-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 rounded-xl shadow-sm">
+                            <CardHeader className="p-6 pb-4">
+                                <CardTitle className="text-base font-bold uppercase tracking-tight text-zinc-900 dark:text-white">Assinatura Visual</CardTitle>
                             </CardHeader>
-                            <CardContent className="p-10 pt-0 space-y-8">
-                                <div className="flex flex-col md:flex-row items-center gap-10 p-8 rounded-[2rem] bg-muted/20 border-2 border-dashed border-border group hover:border-[var(--primary)]/50 transition-all cursor-pointer">
-                                    <div className="w-32 h-32 rounded-3xl bg-card border border-border flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-105 transition-transform">
+                            <CardContent className="p-6 pt-0 space-y-6">
+                                <div className="flex flex-col md:flex-row items-center gap-6 p-6 rounded-xl bg-zinc-50 dark:bg-black/20 border-2 border-dashed border-zinc-200 dark:border-zinc-800 group hover:border-emerald-500/30 transition-all cursor-pointer">
+                                    <div className="w-24 h-24 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 flex items-center justify-center overflow-hidden shadow-sm group-hover:scale-105 transition-transform">
                                         {tenant?.logo_url ? (
                                             <img src={tenant.logo_url} alt="Logo" className="w-20 h-20 object-contain p-2" />
                                         ) : (
-                                            <Upload className="w-10 h-10 text-muted-foreground group-hover:text-[var(--primary)] transition-colors" />
+                                            <Upload className="w-10 h-10 text-muted-foreground transition-colors" />
                                         )}
                                     </div>
-                                    <div className="text-center md:text-left space-y-2">
-                                        <p className="text-sm font-black uppercase tracking-tight">Mudar Assinatura Visual</p>
-                                        <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.15em] leading-relaxed">Formatos: PNG ou SVG transparente<br />Mínimo: 512x512px</p>
-                                        <Button variant="outline" className="h-10 mt-2 px-6 rounded-xl border-border uppercase font-black text-[10px] tracking-widest hover:bg-muted">Procurar Arquivo</Button>
+                                    <div className="text-center md:text-left space-y-1">
+                                        <p className="text-xs font-bold uppercase tracking-tight text-zinc-900 dark:text-zinc-100">Logotipo Oficial</p>
+                                        <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest leading-relaxed">Formatos: PNG ou SVG transparente</p>
+                                        <Button variant="outline" className="h-8 mt-2 px-4 rounded-lg border-zinc-200 dark:border-zinc-800 uppercase font-bold text-[9px] tracking-widest hover:bg-zinc-100 dark:hover:bg-zinc-800">Alterar</Button>
                                     </div>
                                 </div>
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-card border-border rounded-[2.5rem] shadow-sm">
-                            <CardHeader className="p-10 pb-6">
-                                <CardTitle className="text-xl font-black uppercase tracking-tight">Paleta de Atuação</CardTitle>
-                                <CardDescription className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Cores Primárias e Secundárias</CardDescription>
+                        <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 rounded-xl shadow-sm">
+                            <CardHeader className="p-6 pb-4">
+                                <CardTitle className="text-base font-bold uppercase tracking-tight text-zinc-900 dark:text-white">Cores da Instituição</CardTitle>
                             </CardHeader>
-                            <CardContent className="p-10 pt-0 space-y-8">
-                                <div className="space-y-6">
-                                    <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Cor de Destaque (Principal)</label>
-                                        <div className="flex gap-4">
-                                            <div className="flex-1 h-14 rounded-2xl border-2 border-border flex items-center px-6 gap-4 bg-muted/20 focus-within:border-[var(--primary)]/50 transition-all">
-                                                <div className="w-8 h-8 rounded-xl shadow-lg border-2 border-white/20" style={{ backgroundColor: primaryColor }} />
-                                                <Input
-                                                    value={primaryColor}
-                                                    onChange={(e) => setPrimaryColor(e.target.value)}
-                                                    className="border-none bg-transparent h-full font-mono text-sm font-black focus-visible:ring-0 px-0 uppercase"
-                                                />
-                                            </div>
-                                            <div className="w-14 h-14 rounded-2xl relative overflow-hidden border-2 border-border cursor-pointer shadow-lg hover:scale-105 transition-transform active:scale-95">
-                                                <input
-                                                    type="color"
-                                                    value={primaryColor}
-                                                    onChange={(e) => setPrimaryColor(e.target.value)}
-                                                    className="absolute inset-0 w-[150%] h-[150%] -translate-x-1/4 -translate-y-1/4 cursor-pointer"
-                                                />
+                            <CardContent className="p-6 pt-0 space-y-6">
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between p-4 rounded-xl bg-zinc-50 dark:bg-black/20 border border-zinc-100 dark:border-zinc-800">
+                                        <div className="flex items-center gap-3">
+                                            <div
+                                                className="w-10 h-10 rounded-lg shadow-sm"
+                                                style={{ backgroundColor: primaryColor }}
+                                            />
+                                            <div>
+                                                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-900 dark:text-white">Cor Primária</p>
+                                                <p className="text-[9px] text-zinc-500 font-bold uppercase">{primaryColor}</p>
                                             </div>
                                         </div>
+                                        <Input
+                                            type="color"
+                                            value={primaryColor}
+                                            onChange={(e) => setPrimaryColor(e.target.value)}
+                                            className="w-10 h-10 p-1 bg-white dark:bg-zinc-900 border-none rounded-lg cursor-pointer"
+                                        />
                                     </div>
-                                    <div className="grid grid-cols-6 gap-4">
+                                    <div className="grid grid-cols-6 gap-2">
                                         {['#c72d1c', '#c29493', '#7d3e37', '#0c0b0b', '#f5eae6', '#ec4899'].map(c => (
                                             <div
                                                 key={c}
                                                 onClick={() => setPrimaryColor(c)}
-                                                className="aspect-square rounded-2xl cursor-pointer border-4 transition-all hover:scale-110 shadow-lg active:scale-90"
-                                                style={{ backgroundColor: c, borderColor: primaryColor === c ? 'white' : 'transparent' }}
+                                                className="aspect-square rounded-lg cursor-pointer border-2 transition-all hover:scale-105 active:scale-95"
+                                                style={{ backgroundColor: c, borderColor: primaryColor === c ? (primaryColor === '#ffffff' ? '#000000' : 'white') : 'transparent' }}
                                             />
                                         ))}
                                     </div>
@@ -145,18 +152,18 @@ export default function WhiteLabelSettings() {
                         </Card>
                     </div>
 
-                    <Card className="bg-card border-border rounded-[2.5rem] shadow-sm overflow-hidden relative group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--primary)]/5 to-transparent h-full w-full opacity-50" style={{ '--primary': primaryColor } as React.CSSProperties} />
-                        <CardHeader className="p-10 pb-6 relative z-10">
-                            <CardTitle className="text-xl font-black uppercase tracking-tight">Simulação de Ambiente</CardTitle>
+                    <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden relative group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/5 to-transparent h-full w-full opacity-50" />
+                        <CardHeader className="p-6 pb-4 relative z-10">
+                            <CardTitle className="text-base font-bold uppercase tracking-tight text-zinc-900 dark:text-white">Simulação de Ambiente</CardTitle>
                         </CardHeader>
-                        <CardContent className="p-10 pt-0 relative z-10">
-                            <div className="p-10 rounded-[2rem] border-2 border-border bg-background grid grid-cols-1 md:grid-cols-3 gap-8 shadow-2xl items-center">
-                                <Button className="h-14 font-black uppercase tracking-widest text-[10px] rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all outline-none border-none" style={{ backgroundColor: primaryColor }}>Botão Interativo</Button>
-                                <Badge className="h-10 justify-center uppercase text-[10px] font-black tracking-widest rounded-full border-none shadow-md" style={{ backgroundColor: primaryColor }}>Tag de Status</Badge>
+                        <CardContent className="p-6 pt-0 relative z-10">
+                            <div className="p-6 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 grid grid-cols-1 md:grid-cols-3 gap-6 shadow-sm items-center">
+                                <Button className="h-10 font-bold uppercase tracking-widest text-[10px] rounded-lg shadow-md hover:scale-[1.02] active:scale-95 transition-all border-none text-white" style={{ backgroundColor: primaryColor }}>Botão Interativo</Button>
+                                <Badge className="h-10 justify-center uppercase text-[10px] font-bold tracking-widest rounded-lg border-none shadow-sm text-white" style={{ backgroundColor: primaryColor }}>Tag de Status</Badge>
                                 <div className="flex items-center justify-center gap-3">
-                                    <div className="w-4 h-4 rounded-full animate-ping" style={{ backgroundColor: primaryColor }} />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Sistema em Live</span>
+                                    <div className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: primaryColor }} />
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Sistema em Live</span>
                                 </div>
                             </div>
                         </CardContent>
@@ -164,47 +171,46 @@ export default function WhiteLabelSettings() {
                 </TabsContent>
 
                 {/* Domínio Tab */}
-                <TabsContent value="dominio" className="space-y-10">
-                    <Card className="bg-card border-border rounded-[2.5rem] shadow-sm overflow-hidden">
-                        <CardHeader className="p-10 border-b border-border/50 bg-muted/20">
-                            <CardTitle className="text-2xl font-black uppercase tracking-tighter">Endpoints DNS</CardTitle>
-                            <CardDescription className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Hospedagem profissional sob seu próprio domínio</CardDescription>
+                <TabsContent value="dominio" className="space-y-6">
+                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden">
+                        <CardHeader className="p-6 border-b border-zinc-50 dark:border-zinc-800">
+                            <CardTitle className="text-lg font-bold uppercase tracking-tight text-zinc-900 dark:text-white">Domínios Personalizados</CardTitle>
                         </CardHeader>
-                        <CardContent className="p-10 space-y-10">
+                        <CardContent className="p-6 space-y-6">
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Seu Domínio de Autoridade</label>
-                                <div className="flex flex-col md:flex-row gap-4">
-                                    <Input placeholder="exemplo.com.br" className="h-16 rounded-2xl bg-muted/20 border-2 border-border text-lg font-bold px-6 focus:border-[var(--primary)]/50 transition-all" />
-                                    <Button className="h-16 px-12 font-black uppercase text-xs tracking-widest rounded-2xl shadow-xl hover:scale-105 transition-all" style={{ backgroundColor: primaryColor }}>Validar Configuração</Button>
+                                <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Seu Domínio de Autoridade</label>
+                                <div className="flex flex-col md:flex-row gap-2">
+                                    <Input placeholder="exemplo.com.br" className="h-10 rounded-lg bg-zinc-50 dark:bg-black/20 border-zinc-200 dark:border-zinc-800 text-sm font-bold px-4 focus:ring-1 focus:ring-emerald-500/50 transition-all shadow-none" />
+                                    <Button className="h-10 px-6 font-bold uppercase text-[10px] tracking-widest rounded-lg shadow-sm hover:opacity-90 transition-all border-none bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">Validar DNS</Button>
                                 </div>
                             </div>
 
-                            <div className="p-8 rounded-[2rem] bg-muted/10 border-2 border-border border-dashed space-y-6">
-                                <h4 className="text-xs font-black uppercase tracking-widest flex items-center gap-3">
-                                    <Server className="w-5 h-5 opacity-40" /> Registros de Apontamento
+                            <div className="p-5 rounded-xl bg-zinc-50 dark:bg-black/20 border border-zinc-100 dark:border-zinc-800 space-y-4">
+                                <h4 className="text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 text-zinc-500">
+                                    <Server className="w-4 h-4 opacity-40" /> Registros de Apontamento
                                 </h4>
                                 <div className="overflow-x-auto">
-                                    <table className="w-full text-left text-xs font-mono">
+                                    <table className="w-full text-left text-[10px] font-mono">
                                         <thead>
-                                            <tr className="border-b-2 border-border text-muted-foreground font-black uppercase tracking-widest">
-                                                <th className="pb-4 px-4">Tipo</th>
-                                                <th className="pb-4 px-4">Host</th>
-                                                <th className="pb-4 px-4">Valor de Destino</th>
-                                                <th className="pb-4 px-4">Propagação</th>
+                                            <tr className="border-b border-zinc-200 dark:border-zinc-800 text-zinc-400 font-bold uppercase tracking-widest">
+                                                <th className="pb-2 px-2">Tipo</th>
+                                                <th className="pb-2 px-2">Host</th>
+                                                <th className="pb-2 px-2">Valor</th>
+                                                <th className="pb-2 px-2">Status</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="text-foreground/80">
-                                            <tr className="border-b border-border/50 group hover:bg-muted/30 transition-all">
-                                                <td className="py-5 px-4"><Badge className="bg-blue-500 font-bold">A</Badge></td>
-                                                <td className="py-5 px-4 font-black">@</td>
-                                                <td className="py-5 px-4 font-black">76.76.21.21</td>
-                                                <td className="py-5 px-4 opacity-50 font-black">Automático</td>
+                                        <tbody className="text-zinc-600 dark:text-zinc-400">
+                                            <tr className="border-b border-zinc-100 dark:border-zinc-800/50 group">
+                                                <td className="py-3 px-2 font-bold text-blue-500">A</td>
+                                                <td className="py-3 px-2 font-bold">@</td>
+                                                <td className="py-3 px-2 font-bold opacity-80">76.76.21.21</td>
+                                                <td className="py-3 px-2"><Badge variant="outline" className="border-emerald-500/30 text-emerald-600 bg-emerald-500/5 text-[8px] font-bold uppercase">OK</Badge></td>
                                             </tr>
-                                            <tr className="group hover:bg-muted/30 transition-all">
-                                                <td className="py-5 px-4"><Badge className="bg-violet-500 font-bold">CNAME</Badge></td>
-                                                <td className="py-5 px-4 font-black">www</td>
-                                                <td className="py-5 px-4 font-black">cname.grandsalto.cloud</td>
-                                                <td className="py-5 px-4 opacity-50 font-black">Automático</td>
+                                            <tr className="group">
+                                                <td className="py-3 px-2 font-bold text-violet-500">CNAME</td>
+                                                <td className="py-3 px-2 font-bold">www</td>
+                                                <td className="py-3 px-2 font-bold opacity-80">cname.grandsalto.cloud</td>
+                                                <td className="py-3 px-2"><Badge variant="outline" className="border-emerald-500/30 text-emerald-600 bg-emerald-500/5 text-[8px] font-bold uppercase">OK</Badge></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -215,44 +221,40 @@ export default function WhiteLabelSettings() {
                 </TabsContent>
 
                 {/* E-mail Tab */}
-                <TabsContent value="email" className="space-y-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                        <Card className="bg-card border-border rounded-[2.5rem] shadow-sm">
-                            <CardHeader className="p-10">
-                                <CardTitle className="text-xl font-black uppercase tracking-tight">Comunicação Transacional</CardTitle>
-                                <CardDescription className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Configurações de Remetente</CardDescription>
+                <TabsContent value="email" className="space-y-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 rounded-xl shadow-sm">
+                            <CardHeader className="p-6">
+                                <CardTitle className="text-lg font-bold uppercase tracking-tight text-zinc-900 dark:text-white">Comunicação Transacional</CardTitle>
                             </CardHeader>
-                            <CardContent className="px-10 pb-10 space-y-8">
-                                <div className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Assinatura do Remetente</label>
-                                        <Input defaultValue={tenant?.nome} className="h-14 bg-muted/20 border-2 border-border rounded-xl font-black px-6" />
+                            <CardContent className="px-6 pb-6 space-y-6">
+                                <div className="space-y-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Nome do Remetente</label>
+                                        <Input defaultValue={tenant?.nome} className="h-10 bg-zinc-50 dark:bg-black/20 border-zinc-200 dark:border-zinc-800 rounded-lg font-bold px-4 text-sm shadow-none" />
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Canal de Atendimento</label>
-                                        <Input placeholder="contato@seuespaco.com.br" className="h-14 bg-muted/20 border-2 border-border rounded-xl font-black px-6" />
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">E-mail de Resposta</label>
+                                        <Input placeholder="contato@seuespaco.com.br" className="h-10 bg-zinc-50 dark:bg-black/20 border-zinc-200 dark:border-zinc-800 rounded-lg font-bold px-4 text-sm shadow-none" />
                                     </div>
                                 </div>
 
-                                <div className="pt-8 border-t border-border space-y-6">
-                                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Régua de Automação</h4>
-                                    <div className="space-y-4">
+                                <div className="pt-6 border-t border-zinc-100 dark:border-zinc-800 space-y-4">
+                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Automações Ativas</h4>
+                                    <div className="space-y-3">
                                         {[
-                                            { label: 'Manual de Boas-Vindas', sub: 'Disparado na confirmação de vaga', status: 'Ativo', icon: Check, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-                                            { label: 'Relatórios de Evolução', sub: 'Mensal (Todo dia 10)', status: 'Ativo', icon: Sparkles, color: 'text-violet-500', bg: 'bg-violet-500/10' },
-                                            { label: 'Link de Galeria Nova', sub: 'Após cada ensaio/evento', status: 'Inativo', icon: Layout, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+                                            { label: 'Boas-Vindas', status: 'Ativo', icon: Check, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+                                            { label: 'Relatórios Mensais', status: 'Ativo', icon: Sparkles, color: 'text-violet-500', bg: 'bg-violet-500/10' },
+                                            { label: 'Avisos Financeiros', status: 'Ativo', icon: Lock, color: 'text-rose-500', bg: 'bg-rose-500/10' },
                                         ].map((item, i) => (
-                                            <div key={i} className="flex items-center justify-between p-6 rounded-2xl bg-muted/20 border-2 border-border hover:bg-muted/40 transition-all">
-                                                <div className="flex items-center gap-5">
-                                                    <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center`}>
-                                                        <item.icon className={`w-5 h-5 ${item.color}`} />
+                                            <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-zinc-50 dark:bg-black/20 border border-zinc-100 dark:border-zinc-800">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-8 h-8 rounded-lg ${item.bg} flex items-center justify-center`}>
+                                                        <item.icon className={`w-4 h-4 ${item.color}`} />
                                                     </div>
-                                                    <div>
-                                                        <p className="text-xs font-black uppercase tracking-tight">{item.label}</p>
-                                                        <p className="text-[10px] text-muted-foreground font-bold uppercase opacity-60">{item.sub}</p>
-                                                    </div>
+                                                    <p className="text-[11px] font-bold uppercase tracking-tight text-zinc-700 dark:text-zinc-300">{item.label}</p>
                                                 </div>
-                                                <Badge className={`${item.status === 'Ativo' ? 'bg-emerald-500' : 'bg-muted-foreground/30'} font-black text-[9px] uppercase`}>{item.status}</Badge>
+                                                <Badge className="bg-emerald-500/10 text-emerald-600 border-none font-bold text-[8px] uppercase">Ativo</Badge>
                                             </div>
                                         ))}
                                     </div>
@@ -260,38 +262,24 @@ export default function WhiteLabelSettings() {
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-card border-border rounded-[2.5rem] shadow-sm overflow-hidden flex flex-col">
-                            <CardHeader className="p-8 bg-muted/30 border-b border-border">
+                        <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden flex flex-col">
+                            <CardHeader className="p-4 bg-zinc-50 dark:bg-black/20 border-b border-zinc-100 dark:border-zinc-800">
                                 <div className="flex items-center justify-between">
-                                    <div>
-                                        <CardTitle className="text-sm font-black uppercase tracking-widest">Mockup Mobile: Boas-Vindas</CardTitle>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg outline-none border-none"><Smartphone className="w-4 h-4" /></Button>
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg outline-none border-none opacity-50"><Mail className="w-4 h-4" /></Button>
-                                    </div>
+                                    <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Preview Mobile</CardTitle>
+                                    <Smartphone className="w-3.5 h-3.5 text-zinc-400" />
                                 </div>
                             </CardHeader>
-                            <CardContent className="p-0 flex-1 bg-neutral-100 dark:bg-neutral-950/50 flex items-center justify-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-grid-white/5 opacity-20" />
-                                <div className="w-[85%] bg-white dark:bg-card my-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] rounded-[2.5rem] overflow-hidden border border-border/50 scale-95 lg:scale-100 origin-center transition-all">
-                                    <div className="h-40 flex flex-col items-center justify-center text-center p-8 text-white relative" style={{ backgroundColor: primaryColor }}>
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl" />
-                                        {tenant?.logo_url && <img src={tenant.logo_url} className="w-20 mb-3 relative z-10" alt="Logo" />}
-                                        <h1 className="font-black text-xl uppercase tracking-tighter relative z-10 leading-none">Bem-vinda à {tenant?.nome}!</h1>
+                            <CardContent className="p-8 bg-neutral-100 dark:bg-neutral-950 flex items-center justify-center">
+                                <div className="w-[240px] bg-white dark:bg-neutral-900 shadow-2xl rounded-[2rem] overflow-hidden border border-zinc-200 dark:border-zinc-800">
+                                    <div className="h-24 flex flex-col items-center justify-center text-center p-4 text-white" style={{ backgroundColor: primaryColor }}>
+                                        {tenant?.logo_url && <img src={tenant.logo_url} className="w-12 mb-2" alt="Logo" />}
+                                        <h1 className="font-bold text-xs uppercase tracking-tighter">Bem-vinda!</h1>
                                     </div>
-                                    <div className="p-10 text-neutral-800 dark:text-neutral-200 space-y-6">
-                                        <p className="text-sm font-black">Olá, <strong>Bailarina</strong>!</p>
-                                        <p className="text-[12px] leading-relaxed font-medium opacity-80 italic">&quot;A dança é a linguagem escondida da alma.&quot;</p>
-                                        <p className="text-[12px] leading-relaxed font-bold">É uma alegria imensa ter você em nossa comunidade. Sua jornada artística começa agora e estaremos ao seu lado em cada passo.</p>
-                                        <div className="py-6 border-y border-border/10">
-                                            <div className="h-14 w-full rounded-2xl flex items-center justify-center text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-lg" style={{ backgroundColor: primaryColor }}>
-                                                Descobrir Meu Painel
-                                            </div>
-                                        </div>
-                                        <div className="pt-2 text-[10px] text-muted-foreground text-center font-black uppercase tracking-widest">
-                                            <p className="mb-1">{tenant?.nome}</p>
-                                            <p className="opacity-40">School of Arts & Movement</p>
+                                    <div className="p-5 text-neutral-800 dark:text-neutral-200 space-y-4">
+                                        <p className="text-[10px] font-bold uppercase opacity-60 italic">&quot;A dança é a alma em movimento.&quot;</p>
+                                        <p className="text-[10px] leading-relaxed font-bold">Olá! É um prazer ter você em nossa comunidade artística.</p>
+                                        <div className="h-10 w-full rounded-lg flex items-center justify-center text-white text-[9px] font-bold uppercase tracking-widest shadow-md" style={{ backgroundColor: primaryColor }}>
+                                            Acessar Painel
                                         </div>
                                     </div>
                                 </div>
@@ -299,40 +287,19 @@ export default function WhiteLabelSettings() {
                         </Card>
                     </div>
 
-                    <Card className="bg-emerald-500/5 border-2 border-emerald-500/20 rounded-[2rem] p-8 flex items-start gap-6 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:scale-110 transition-transform">
-                            <Shield size={100} className="text-emerald-500" />
+                    <Card className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-6 flex items-start gap-4">
+                        <div className="p-2 rounded-lg bg-emerald-500/20 border border-emerald-500/30">
+                            <Shield className="w-5 h-5 text-emerald-500" />
                         </div>
-                        <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/30">
-                            <Shield className="w-8 h-8 text-emerald-500" />
-                        </div>
-                        <div className="relative z-10">
-                            <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 mb-1 leading-none uppercase tracking-tighter">Criptografia e Entrega Verificada</p>
-                            <p className="text-xs text-emerald-600/70 dark:text-emerald-400/60 font-medium max-w-2xl">
-                                Seu domínio está 100% autorizado via <strong>DKIM/SPF</strong>. Suas comunicações são assinadas digitalmente, garantindo que cheguem na caixa de entrada principal dos alunos com total segurança.
+                        <div>
+                            <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1 uppercase tracking-tight uppercase tracking-tight">Criptografia e Entrega Verificada</p>
+                            <p className="text-[10px] text-emerald-600/70 dark:text-emerald-400/60 font-medium">
+                                Seu domínio está autorizado via <strong>DKIM/SPF</strong>. Garantimos que seus e-mails cheguem na caixa de entrada com segurança.
                             </p>
                         </div>
                     </Card>
                 </TabsContent>
             </Tabs>
-
-            <footer className="fixed bottom-10 right-10 z-[100]">
-                <Button
-                    onClick={handleSave}
-                    disabled={isSaving}
-                    className="h-20 px-12 rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] font-black uppercase tracking-[0.2em] text-sm gap-4 transition-all hover:scale-105 active:scale-95 border-none outline-none"
-                    style={{ backgroundColor: primaryColor }}
-                >
-                    {isSaving ? (
-                        <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                    ) : (
-                        <div className="flex items-center gap-4">
-                            Consolidar Identity <Save className="w-6 h-6" />
-                        </div>
-                    )}
-                </Button>
-            </footer>
         </div>
     )
 }
-

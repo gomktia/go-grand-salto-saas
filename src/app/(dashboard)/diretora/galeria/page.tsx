@@ -67,39 +67,43 @@ export default function GaleriaPage() {
     }
 
     return (
-        <div className="space-y-8 p-1">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-12">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-pink-500 italic mb-2">Acervo Digital de Elite</h2>
-                    <h1 className="text-4xl font-black tracking-tighter uppercase text-neutral-900 dark:text-white flex items-center gap-3">
-                        <Sparkles className="w-8 h-8 text-pink-600" />
-                        Momento do Palco
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Acervo Digital e Memória Institucional
+                        </span>
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Galeria de <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Mídia</span>
                     </h1>
-                    <p className="text-neutral-500 dark:text-neutral-400 font-medium">Capture e eternize a evolução artística de seus <strong>Alunos</strong>.</p>
                 </div>
-                <div className="flex gap-4">
-                    <Button variant="outline" className="h-14 px-8 rounded-2xl border-neutral-200 dark:border-neutral-800 gap-2 font-bold uppercase text-[10px] tracking-widest glass">
-                        Criar Álbum
+
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all">
+                        CRIAR ÁLBUM
                     </Button>
                     <Button
                         style={{ backgroundColor: primaryColor }}
-                        className="h-14 px-8 rounded-2xl text-white gap-2 font-bold uppercase text-[10px] tracking-widest shadow-xl shadow-pink-500/20 hover:opacity-90 transition-all hover:scale-105 active:scale-95"
+                        className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                     >
-                        <Plus className="w-4 h-4" />
-                        Upload de Fotos
+                        <Plus className="w-3.5 h-3.5 mr-1" />
+                        UPLOAD
                     </Button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card className="md:col-span-1 lg:col-span-1 bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 p-8 rounded-[2rem] shadow-sm glass">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <Card className="md:col-span-1 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-xl shadow-sm">
                     <div className="space-y-6">
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">Diretório Central</div>
-                        <div className="space-y-2">
+                        <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Pastas</div>
+                        <div className="space-y-1">
                             {['Espetáculo 2025', 'Ensaios Abertos', 'Bastidores', 'Gala de Inverno'].map((folder) => (
-                                <Button key={folder} variant="ghost" className="w-full justify-start gap-3 h-12 rounded-xl text-xs font-bold uppercase tracking-widest transition-all hover:bg-neutral-100 dark:hover:bg-white/5 group">
-                                    <FolderOpen className="w-4 h-4 text-neutral-400 group-hover:text-pink-500 transition-colors" />
-                                    {folder}
+                                <Button key={folder} variant="ghost" className="w-full justify-start gap-2 h-10 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                                    <FolderOpen className="w-3.5 h-3.5 opacity-40" /> {folder}
                                 </Button>
                             ))}
                         </div>
@@ -115,39 +119,24 @@ export default function GaleriaPage() {
                     </div>
                 </Card>
 
-                <div className="md:col-span-1 lg:col-span-3 space-y-10">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="md:col-span-3 space-y-10">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         {mockPhotos.map((photo) => (
-                            <motion.div
-                                key={photo.id}
-                                whileHover={{ scale: 1.02, y: -5 }}
-                                className="aspect-[3/4] rounded-[2rem] overflow-hidden relative group cursor-pointer shadow-xl border border-neutral-200 dark:border-white/5 bg-neutral-100 dark:bg-neutral-800"
-                            >
-                                <img
-                                    src={photo.url}
-                                    alt="Palco Performance"
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                    <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center">
-                                        <Badge className="bg-white/20 backdrop-blur-md text-white border-none uppercase text-[9px] font-black tracking-widest px-3 py-1 scale-90 origin-left">{photo.category}</Badge>
+                            <Card key={photo.id} className="group relative aspect-square overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 border-none">
+                                <img src={photo.url} alt="Gallery" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex flex-col justify-end">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className="flex gap-1.5 font-bold uppercase text-[9px] tracking-widest text-white items-center">
+                                            <Heart className="w-3 h-3 fill-rose-500 text-rose-500" /> {photo.favorites}
+                                        </div>
                                         <div className="flex gap-2">
-                                            <Button size="icon" variant="ghost" className="w-10 h-10 rounded-full bg-white/10 text-white hover:bg-pink-500 transition-all pointer-events-auto">
-                                                <Heart className="w-4 h-4" />
-                                            </Button>
-                                            <Button size="icon" variant="ghost" className="w-10 h-10 rounded-full bg-white/10 text-white hover:bg-blue-500 transition-all pointer-events-auto">
+                                            <Button size="icon" variant="secondary" className="h-8 w-8 rounded-lg bg-white/20 backdrop-blur-md border-none text-white hover:bg-white/40">
                                                 <Download className="w-4 h-4" />
                                             </Button>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="absolute top-6 left-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <div className="flex items-center gap-1.5 p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
-                                        <Heart className="w-3 h-3 text-pink-500 fill-pink-500" />
-                                        <span className="text-[10px] font-black text-white">{photo.favorites}</span>
-                                    </div>
-                                </div>
-                            </motion.div>
+                            </Card>
                         ))}
                     </div>
 

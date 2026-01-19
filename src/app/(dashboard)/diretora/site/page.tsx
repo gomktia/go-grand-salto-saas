@@ -34,44 +34,51 @@ export default function SiteManagementPage() {
     const primaryColor = tenant?.primaryColor || '#ec4899'
 
     return (
-        <div className="space-y-10 p-1 pb-32">
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-                <div className="space-y-3">
-                    <Badge variant="outline" className="border-pink-500/30 text-pink-500 bg-pink-500/5 px-4 py-1.5 text-[10px] uppercase font-black tracking-[0.2em] rounded-full">
-                        Content Management System
-                    </Badge>
-                    <h1 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase flex items-center gap-4 leading-none">
-                        Universo <span style={{ color: primaryColor }}>Digital</span>
+        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-12">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Website Content Management System (CMS)
+                        </span>
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Vitrine <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">Digital</span>
                     </h1>
-                    <p className="text-muted-foreground font-medium text-lg">Gerencie a vitrine pública da <strong className="text-foreground">{tenant?.nome}</strong> para seus alunos.</p>
                 </div>
-                <div className="flex gap-4">
-                    <Link href="/espaco-revelle" target="_blank">
-                        <Button variant="outline" className="h-14 px-8 rounded-2xl border-white/10 gap-3 uppercase font-black text-[10px] tracking-widest hover:bg-white/5 transition-all">
-                            <Eye className="w-4 h-4" />
-                            Visualizar Site
+
+                <div className="flex items-center gap-2">
+                    <Link href={`/${tenant?.slug || 'home'}`} target="_blank">
+                        <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all">
+                            <Eye className="w-3.5 h-3.5 mr-2" />
+                            VER SITE
                         </Button>
                     </Link>
-                    <Button className="h-14 px-8 rounded-2xl gap-3 uppercase font-black text-[10px] tracking-widest shadow-xl shadow-pink-500/20 hover:scale-105 active:scale-95 transition-all border-none outline-none" style={{ backgroundColor: primaryColor }}>
-                        <Plus className="w-5 h-5" />
-                        Novo Conteúdo
+                    <Button
+                        className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
+                        style={{ backgroundColor: primaryColor }}
+                    >
+                        <Plus className="w-4 h-4 mr-1" />
+                        NOVO POST
                     </Button>
                 </div>
-            </header>
+            </div>
 
-            <Tabs defaultValue="blog" className="space-y-10" onValueChange={setActiveTab}>
-                <TabsList className="bg-card/50 backdrop-blur-xl border border-white/10 p-1.5 h-16 rounded-[1.5rem] w-full lg:w-fit flex shadow-2xl">
+            <Tabs defaultValue="blog" className="space-y-6" onValueChange={setActiveTab}>
+                <TabsList className="bg-zinc-100 dark:bg-zinc-800/50 p-1 h-11 rounded-xl w-full lg:w-fit flex shadow-inner">
                     {[
-                        { value: 'blog', label: 'Blog de Notícias', icon: FileText },
-                        { value: 'albuns', label: 'Álbuns & Galeria', icon: ImageIcon },
-                        { value: 'horarios', label: 'Grade de Horários', icon: CalendarIcon },
+                        { value: 'blog', label: 'Blog', icon: FileText },
+                        { value: 'albuns', label: 'Álbuns', icon: ImageIcon },
+                        { value: 'horarios', label: 'Grade', icon: CalendarIcon },
                     ].map((tab) => (
                         <TabsTrigger
                             key={tab.value}
                             value={tab.value}
-                            className="flex-1 lg:flex-none rounded-2xl px-10 gap-3 h-full uppercase text-[10px] font-black tracking-widest data-[state=active]:bg-foreground data-[state=active]:text-background transition-all"
+                            className="flex-1 lg:flex-none rounded-lg px-8 gap-2 h-full uppercase text-[9px] font-bold tracking-widest data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-900 data-[state=active]:text-zinc-900 dark:data-[state=active]:text-white data-[state=active]:shadow-sm transition-all text-zinc-500"
                         >
-                            <tab.icon className="w-4 h-4" />
+                            <tab.icon className="w-3.5 h-3.5" />
                             {tab.label}
                         </TabsTrigger>
                     ))}

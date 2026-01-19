@@ -151,67 +151,48 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
     }
 
     return (
-        <div className="space-y-8 pb-12">
-            {/* Header Section */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: primaryColor }} />
-                        <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
-                            Núcleo de Inteligência Financeira
-                        </span>
-                    </div>
-                    <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase leading-none">
-                        Gestão <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Econômica</span>
-                    </h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-xl font-medium">
-                        Controle total do fluxo de caixa e automação de cobranças para {tenant?.nome}.
-                    </p>
-                </div>
+        <div className="space-y-6 pb-12">
+            {/* Header Section removed from here since it's already in page.tsx */}
 
-                <div className="flex flex-wrap gap-3">
-                    <Button
-                        variant="outline"
-                        onClick={handleGenerateMonthlyFees}
-                        disabled={isSubmitting}
-                        className="h-12 px-6 rounded-2xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 font-bold text-xs hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all uppercase tracking-widest"
-                    >
-                        <Calendar className="w-4 h-4 mr-2" />
-                        GERAR MENSALIDADES
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            setShowPaymentModal(true)
-                            setSelectedMensalidade(null)
-                        }}
-                        className="h-12 px-8 rounded-2xl font-black text-xs text-white shadow-xl shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest"
-                        style={{ backgroundColor: primaryColor }}
-                    >
-                        <Plus className="w-5 h-5 mr-1" />
-                        NOVA COBRANÇA
-                    </Button>
-                </div>
+            {/* Action Bar */}
+            <div className="flex flex-wrap gap-2 mb-6">
+                <Button
+                    variant="outline"
+                    onClick={handleGenerateMonthlyFees}
+                    disabled={isSubmitting}
+                    className="h-10 px-5 rounded-xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 font-bold text-[10px] hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all uppercase tracking-widest text-zinc-600 dark:text-zinc-400"
+                >
+                    <Calendar className="w-4 h-4 mr-2" />
+                    GERAR MENSALIDADES
+                </Button>
+                <Button
+                    onClick={() => {
+                        setShowPaymentModal(true)
+                        setSelectedMensalidade(null)
+                    }}
+                    className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
+                    style={{ backgroundColor: primaryColor }}
+                >
+                    <Plus className="w-4 h-4 mr-1" />
+                    NOVA COBRANÇA
+                </Button>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {financialStats.map((stat, i) => (
-                    <Card key={i} className="bg-white dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-[2rem] overflow-hidden relative group hover:border-rose-500/30 transition-all">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2 p-6">
-                            <CardTitle className="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                    <Card key={i} className="bg-white dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl overflow-hidden relative group hover:border-emerald-500/30 transition-all">
+                        <CardHeader className="flex flex-row items-center justify-between pb-1 p-4">
+                            <CardTitle className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
                                 {stat.title}
                             </CardTitle>
-                            <div className={`p-2.5 rounded-2xl ${stat.color} bg-current/10 border border-current/20`}>
-                                <stat.icon className="w-4 h-4" />
+                            <div className={`p-1.5 rounded-lg ${stat.color} bg-current/10 border border-current/20`}>
+                                <stat.icon className="w-3.5 h-3.5" />
                             </div>
                         </CardHeader>
-                        <CardContent className="p-6 pt-0">
-                            <div className="text-3xl font-black tracking-tighter text-zinc-900 dark:text-white">
+                        <CardContent className="p-4 pt-0">
+                            <div className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
                                 {stat.value}
-                            </div>
-                            <div className={`text-[11px] flex items-center gap-1.5 mt-2 font-black uppercase ${stat.color}`}>
-                                <Zap className="w-3 h-3 fill-current" />
-                                {stat.trend} <span className="text-zinc-400 dark:text-zinc-600 lowercase font-medium">vs mês anterior</span>
                             </div>
                         </CardContent>
                     </Card>
@@ -220,19 +201,16 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 {/* Recent Transactions List */}
-                <Card className="xl:col-span-2 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 rounded-[2.5rem] shadow-sm overflow-hidden">
-                    <CardHeader className="p-8 border-b border-zinc-50 dark:border-zinc-800 shrink-0">
+                <Card className="xl:col-span-2 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
+                    <CardHeader className="p-5 border-b border-zinc-50 dark:border-zinc-800 shrink-0">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
-                                <CardTitle className="text-xl font-black tracking-tight uppercase text-zinc-900 dark:text-zinc-100">
+                                <CardTitle className="text-lg font-bold tracking-tight uppercase text-zinc-900 dark:text-zinc-100">
                                     Fluxo de Recebimentos
                                 </CardTitle>
-                                <CardDescription className="text-sm text-zinc-500 font-medium mt-1">
-                                    Acompanhe o status de pagamento dos alunos em tempo real.
-                                </CardDescription>
                             </div>
-                            <Button variant="ghost" className="text-xs font-black uppercase tracking-widest text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 h-10 px-5 rounded-xl transition-all">
-                                Ver Relatório <ChevronRight className="ml-1 w-4 h-4" />
+                            <Button variant="ghost" className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-600/10 h-8 px-4 rounded-xl transition-all">
+                                Ver Relatório <ChevronRight className="ml-1 w-3 h-3" />
                             </Button>
                         </div>
                     </CardHeader>
@@ -250,36 +228,36 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                         ) : (
                             <div className="space-y-1">
                                 {recentMensalidades.map((mensalidade, i) => (
-                                    <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 px-6 rounded-[1.5rem] hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all group border border-transparent hover:border-zinc-100 dark:hover:border-zinc-800">
-                                        <div className="flex items-center gap-4 mb-3 sm:mb-0">
+                                    <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 px-5 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all group border border-transparent hover:border-zinc-100 dark:hover:border-zinc-800/50">
+                                        <div className="flex items-center gap-3 mb-3 sm:mb-0">
                                             <div className="relative">
                                                 <div
-                                                    className="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xs text-white shadow-lg overflow-hidden shrink-0"
+                                                    className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-md overflow-hidden shrink-0"
                                                     style={{ backgroundColor: primaryColor }}
                                                 >
                                                     {mensalidade.estudante?.perfis?.full_name?.charAt(0) || '?'}
                                                 </div>
-                                                <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white dark:border-zinc-950 flex items-center justify-center ${getStatusIcon(mensalidade.status).split(' ')[1]}`}>
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-current" />
+                                                <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-zinc-950 flex items-center justify-center ${getStatusIcon(mensalidade.status).split(' ')[1]}`}>
+                                                    <div className="w-1 h-1 rounded-full bg-current" />
                                                 </div>
                                             </div>
                                             <div>
-                                                <div className="font-black text-zinc-900 dark:text-zinc-100 group-hover:text-rose-500 transition-colors uppercase tracking-tight">
+                                                <div className="font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-rose-600 transition-colors uppercase tracking-tight text-xs">
                                                     {mensalidade.estudante?.perfis?.full_name || 'Aluno não identificado'}
                                                 </div>
-                                                <div className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 mt-0.5 flex items-center gap-2">
+                                                <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-500 mt-0.5 flex items-center gap-2">
                                                     <span>Ref: {mensalidade.mes_referencia}/{mensalidade.ano_referencia}</span>
                                                     <span className="w-1 h-1 rounded-full bg-zinc-200 dark:bg-zinc-700" />
                                                     <span>Vencimento: {formatDate(mensalidade.data_vencimento)}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center justify-between sm:justify-end gap-6 pl-16 sm:pl-0">
+                                        <div className="flex items-center justify-between sm:justify-end gap-4 pl-12 sm:pl-0">
                                             <div className="text-right">
-                                                <div className="font-black text-lg tracking-tighter text-zinc-900 dark:text-zinc-100">
+                                                <div className="font-bold text-sm tracking-tight text-zinc-900 dark:text-zinc-100">
                                                     {formatCurrency(mensalidade.valor)}
                                                 </div>
-                                                <Badge variant="outline" className={`text-[9px] font-black uppercase tracking-widest h-5 px-2.5 rounded-full border ${getStatusColor(mensalidade.status)} mt-1`}>
+                                                <Badge variant="outline" className={`text-[8px] font-bold uppercase tracking-widest h-4 px-2 rounded-full border ${getStatusColor(mensalidade.status)} mt-0.5`}>
                                                     {mensalidade.status}
                                                 </Badge>
                                             </div>
@@ -291,13 +269,13 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
                                                         setSelectedMensalidade(mensalidade)
                                                         setShowPaymentModal(true)
                                                     }}
-                                                    className="h-10 px-5 rounded-xl font-black text-[10px] uppercase tracking-widest bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-500 transition-all border-none"
+                                                    className="h-8 px-4 rounded-lg font-bold text-[9px] uppercase tracking-widest bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 transition-all border-none"
                                                 >
                                                     REGISTRAR
                                                 </Button>
                                             ) : (
-                                                <div className="w-[110px] flex justify-center">
-                                                    <CheckCircle2 className="w-7 h-7 text-emerald-500" />
+                                                <div className="w-[80px] flex justify-center">
+                                                    <CheckCircle2 className="w-6 h-6 text-emerald-500" />
                                                 </div>
                                             )}
                                         </div>

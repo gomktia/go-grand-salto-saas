@@ -132,31 +132,28 @@ export default function AlunosPage() {
     }
 
     return (
-        <div className="space-y-10 pb-12">
+        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto">
             {/* Header Section */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div className="space-y-2">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: primaryColor }} />
-                        <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
                             Núcleo de Gestão Estudantil
                         </span>
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase leading-none">
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
                         Controle de <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Alunos</span>
                     </h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-xl font-medium">
-                        Acompanhe matrículas, frequências e métricas corporais de elite da <strong className="text-zinc-900 dark:text-white uppercase">{tenant?.nome}</strong>.
-                    </p>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <Button
                         onClick={handleAddStudent}
                         style={{ backgroundColor: primaryColor }}
-                        className="h-14 px-10 rounded-2xl font-black text-xs text-white shadow-xl shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
+                        className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                     >
-                        <Plus className="w-5 h-5 mr-2" />
+                        <Plus className="w-4 h-4 mr-2" />
                         NOVO ALUNO
                     </Button>
                 </div>
@@ -164,14 +161,14 @@ export default function AlunosPage() {
 
             {/* Quick Stats & Search */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                <Card className="lg:col-span-1 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-[2rem] shadow-sm relative group">
-                    <div className="space-y-4">
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500">Busca Inteligente</div>
+                <Card className="lg:col-span-1 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-2xl shadow-sm relative group">
+                    <div className="space-y-3">
+                        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Busca Inteligente</div>
                         <div className="relative">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
                             <Input
                                 placeholder="Nome ou contato..."
-                                className="pl-11 h-12 rounded-2xl bg-zinc-100 dark:bg-black/40 border-none focus-visible:ring-2 focus-visible:ring-rose-500/50 transition-all"
+                                className="pl-9 h-10 rounded-xl bg-zinc-100 dark:bg-black/40 border-none focus-visible:ring-1 focus-visible:ring-rose-500/50 transition-all text-xs"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -180,58 +177,55 @@ export default function AlunosPage() {
                 </Card>
 
                 <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-[2rem] shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
-                        <div className="flex flex-row items-center justify-between pb-2">
-                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Total de Alunos</div>
-                            <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                                <Users className="w-4 h-4 text-blue-500" />
+                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                        <div className="flex flex-row items-center justify-between pb-1">
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Total</div>
+                            <div className="p-1.5 rounded-lg bg-blue-500/10">
+                                <Users className="w-3.5 h-3.5 text-blue-500" />
                             </div>
                         </div>
-                        <div className="text-3xl font-black tracking-tighter text-zinc-900 dark:text-white mt-2">
+                        <div className="text-2xl font-black text-zinc-900 dark:text-white">
                             {students.length}
                         </div>
-                        <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-1.5">
-                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Ativos no Sistema
+                        <div className="text-[9px] text-zinc-500 dark:text-zinc-500 font-bold uppercase tracking-widest mt-1 flex items-center gap-1.5">
+                            Ativos no Sistema
                         </div>
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 blur-3xl rounded-full" />
                     </Card>
 
-                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-[2rem] shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
-                        <div className="flex flex-row items-center justify-between pb-2">
-                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Matrículas Ativas</div>
-                            <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                                <UserCheck className="w-4 h-4 text-emerald-500" />
+                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                        <div className="flex flex-row items-center justify-between pb-1">
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Matrículas</div>
+                            <div className="p-1.5 rounded-lg bg-emerald-500/10">
+                                <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
                             </div>
                         </div>
-                        <div className="text-3xl font-black tracking-tighter text-zinc-900 dark:text-white mt-2">
+                        <div className="text-2xl font-black text-zinc-900 dark:text-white">
                             {students.filter(s => s.status_matricula === 'ativa').length}
                         </div>
-                        <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-1.5">
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Status Regular
+                        <div className="text-[9px] text-zinc-500 dark:text-zinc-500 font-bold uppercase tracking-widest mt-1 flex items-center gap-1.5">
+                            Status Regular
                         </div>
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 blur-3xl rounded-full" />
                     </Card>
 
-                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-6 rounded-[2rem] shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
-                        <div className="flex flex-row items-center justify-between pb-2">
-                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Com Métricas</div>
-                            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                                <Ruler className="w-4 h-4 text-amber-500" />
+                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                        <div className="flex flex-row items-center justify-between pb-1">
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Métricas</div>
+                            <div className="p-1.5 rounded-lg bg-amber-500/10">
+                                <Ruler className="w-3.5 h-3.5 text-amber-500" />
                             </div>
                         </div>
-                        <div className="text-3xl font-black tracking-tighter text-zinc-900 dark:text-white mt-2">
+                        <div className="text-2xl font-black text-zinc-900 dark:text-white">
                             {students.filter(s => (s.metricas_corpo?.length || 0) > 0).length}
                         </div>
-                        <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-1.5">
-                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Acompanhamento Elite
+                        <div className="text-[9px] text-zinc-500 dark:text-zinc-500 font-bold uppercase tracking-widest mt-1 flex items-center gap-1.5">
+                            Acompanhamento
                         </div>
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 blur-3xl rounded-full" />
                     </Card>
                 </div>
             </div>
 
             {/* Table Container */}
-            <Card className="bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 overflow-hidden rounded-[2.5rem] shadow-sm glass">
+            <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 overflow-hidden rounded-2xl shadow-sm">
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center p-24 space-y-4">
                         <Loader2 className="w-10 h-10 animate-spin" style={{ color: primaryColor }} />
@@ -259,13 +253,13 @@ export default function AlunosPage() {
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
-                                <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-white/[0.02]">
-                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Identidade</th>
-                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Contato</th>
-                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Idade</th>
-                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Status</th>
-                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic">Métricas (B/C/Q)</th>
-                                    <th className="p-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 italic text-right">Ações</th>
+                                <tr className="border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-white/[0.02]">
+                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Identidade</th>
+                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Contato</th>
+                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Idade</th>
+                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Status</th>
+                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Métricas</th>
+                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400 text-right">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -274,14 +268,14 @@ export default function AlunosPage() {
                                     const age = calculateAge(student.data_nascimento)
 
                                     return (
-                                        <tr key={student.id} className="border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-white/[0.01] transition-all group">
-                                            <td className="p-6">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white font-black text-lg shadow-lg group-hover:scale-110 transition-transform">
+                                        <tr key={student.id} className="border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-white/[0.01] transition-all group">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-900 dark:text-white font-bold text-sm border border-zinc-200 dark:border-zinc-700">
                                                         {student.nome_responsavel.charAt(0).toUpperCase()}
                                                     </div>
                                                     <div>
-                                                        <p className="font-black text-neutral-900 dark:text-white uppercase tracking-tight text-sm">{student.nome_responsavel}</p>
+                                                        <p className="font-bold text-zinc-900 dark:text-white text-xs uppercase tracking-tight">{student.nome_responsavel}</p>
                                                         {student.observacoes_medicas && (
                                                             <div className="flex items-center gap-1.5 mt-1">
                                                                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
