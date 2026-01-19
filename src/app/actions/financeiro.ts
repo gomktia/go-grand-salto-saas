@@ -9,17 +9,26 @@ import { z } from 'zod'
 
 async function getAuthenticatedUser() {
     const supabase = await createClient()
+
     const { data: { user }, error } = await supabase.auth.getUser()
 
-    if (error || !user) {
-        throw new Error('Não autenticado')
+    if (error) {
+        throw new Error(`Erro de autenticação: ${error.message}`)
     }
 
-    const { data: perfil } = await supabase
+    if (!user) {
+        throw new Error('Não autenticado - faça login novamente')
+    }
+
+    const { data: perfil, error: perfilError } = await supabase
         .from('perfis')
         .select('*')
         .eq('id', user.id)
         .single()
+
+    if (perfilError) {
+        throw new Error(`Erro ao buscar perfil: ${perfilError.message}`)
+    }
 
     if (!perfil) {
         throw new Error('Perfil não encontrado')

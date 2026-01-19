@@ -38,8 +38,7 @@ export default async function FinanceiroPage() {
         stats = statsResult.data
         mensalidades = mensalidadesResult.data
     } catch (e: any) {
-        error = e.message
-        console.error('Erro ao carregar dados financeiros:', e)
+        error = e.message || 'Erro desconhecido'
     }
 
     const financialStats = [
