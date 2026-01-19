@@ -1,20 +1,6 @@
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import {
-    DollarSign,
-    ArrowDownRight,
-    TrendingUp,
-    AlertCircle,
-    Clock,
-    CheckCircle2,
-    Plus,
-    ChevronRight,
-    Wallet,
-    Calendar,
-    Filter
-} from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import { Filter } from 'lucide-react'
 import { getEstatisticasFinanceiras, getMensalidades } from '@/app/actions/financeiro'
 import { ClientFinanceiroContent } from './client-content'
 
@@ -45,28 +31,28 @@ export default async function FinanceiroPage() {
         {
             title: 'Faturamento Mensal',
             value: `R$ ${stats?.faturamentoMensal?.toFixed(2).replace('.', ',') || '0,00'}`,
-            icon: DollarSign,
+            iconName: 'DollarSign' as const,
             trend: '+12%',
             color: 'text-emerald-500'
         },
         {
             title: 'Inadimplência',
             value: `${stats?.taxaInadimplencia || '0'}%`,
-            icon: AlertCircle,
+            iconName: 'AlertCircle' as const,
             trend: (stats?.totalAtrasadas || 0) > 0 ? `${stats?.totalAtrasadas} atrasadas` : 'Nenhuma',
             color: 'text-red-500'
         },
         {
             title: 'Pendentes',
             value: `${stats?.totalPendentes || 0}`,
-            icon: Clock,
+            iconName: 'Clock' as const,
             trend: 'Aguardando',
             color: 'text-amber-500'
         },
         {
             title: 'Alunos Ativos',
             value: `${stats?.totalAlunos || 0}`,
-            icon: TrendingUp,
+            iconName: 'TrendingUp' as const,
             trend: 'Ativos',
             color: 'text-violet-500'
         },

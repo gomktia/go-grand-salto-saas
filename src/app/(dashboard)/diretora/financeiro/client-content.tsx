@@ -13,8 +13,17 @@ import {
     DollarSign,
     Calendar,
     Zap,
-    X
+    X,
+    TrendingUp
 } from 'lucide-react'
+
+// Map icon names to actual icon components
+const iconMap = {
+    DollarSign,
+    AlertCircle,
+    Clock,
+    TrendingUp,
+} as const
 import { Badge } from '@/components/ui/badge'
 import { useTenant } from '@/hooks/use-tenant'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -28,7 +37,7 @@ import { toast } from 'sonner'
 type FinancialStat = {
     title: string
     value: string
-    icon: React.ElementType
+    iconName: keyof typeof iconMap
     trend: string
     color: string
 }
@@ -179,23 +188,26 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades }: 
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {financialStats.map((stat, i) => (
-                    <Card key={i} className="bg-white dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl overflow-hidden relative group hover:border-emerald-500/30 transition-all">
-                        <CardHeader className="flex flex-row items-center justify-between pb-1 p-4">
-                            <CardTitle className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-                                {stat.title}
-                            </CardTitle>
-                            <div className={`p-1.5 rounded-lg ${stat.color} bg-current/10 border border-current/20`}>
-                                <stat.icon className="w-3.5 h-3.5" />
-                            </div>
-                        </CardHeader>
-                        <CardContent className="p-4 pt-0">
-                            <div className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
-                                {stat.value}
-                            </div>
-                        </CardContent>
-                    </Card>
-                ))}
+                {financialStats.map((stat, i) => {
+                    const IconComponent = iconMap[stat.iconName]
+                    return (
+                        <Card key={i} className="bg-white dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl overflow-hidden relative group hover:border-emerald-500/30 transition-all">
+                            <CardHeader className="flex flex-row items-center justify-between pb-1 p-4">
+                                <CardTitle className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                                    {stat.title}
+                                </CardTitle>
+                                <div className={`p-1.5 rounded-lg ${stat.color} bg-current/10 border border-current/20`}>
+                                    <IconComponent className="w-3.5 h-3.5" />
+                                </div>
+                            </CardHeader>
+                            <CardContent className="p-4 pt-0">
+                                <div className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                                    {stat.value}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )
+                })}
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
