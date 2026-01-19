@@ -18,11 +18,16 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getStudents } from '@/app/actions/admin'
 import { useTenant } from '@/hooks/use-tenant'
 import { StudentDialog } from '@/components/dashboard/student-dialog'
 import { DeleteStudentDialog } from '@/components/dashboard/delete-student-dialog'
 import { BodyMetricsDialog } from '@/components/dashboard/body-metrics-dialog'
+import {
+    Phone,
+    Pencil
+} from 'lucide-react'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -132,7 +137,7 @@ export default function AlunosPage() {
     }
 
     return (
-        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto">
+        <div className="space-y-6 p-4 lg:p-8 max-w-[1600px] mx-auto pb-12">
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">
@@ -254,26 +259,29 @@ export default function AlunosPage() {
                         <table className="w-full text-left">
                             <thead>
                                 <tr className="border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-white/[0.02]">
-                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Identidade</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Contato</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Idade</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Status</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Métricas</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400 text-right">Ações</th>
+                                    <th className="p-6 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Identidade</th>
+                                    <th className="p-6 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Contato</th>
+                                    <th className="p-6 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Idade</th>
+                                    <th className="p-6 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Status</th>
+                                    <th className="p-6 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Métricas</th>
+                                    <th className="p-6 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400 text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="divide-y divide-zinc-50 dark:divide-zinc-800/50">
                                 {filteredStudents.map((student) => {
                                     const latestMetric = student.metricas_corpo?.[0]
                                     const age = calculateAge(student.data_nascimento)
 
                                     return (
-                                        <tr key={student.id} className="border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-white/[0.01] transition-all group">
-                                            <td className="px-6 py-4">
+                                        <tr key={student.id} className="hover:bg-zinc-50 dark:hover:bg-white/[0.01] transition-all group">
+                                            <td className="p-6">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-900 dark:text-white font-bold text-sm border border-zinc-200 dark:border-zinc-700">
-                                                        {student.nome_responsavel.charAt(0).toUpperCase()}
-                                                    </div>
+                                                    <Avatar className="h-10 w-10 border-2 border-zinc-100 dark:border-zinc-800">
+                                                        <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${student.nome_responsavel}`} />
+                                                        <AvatarFallback className="bg-zinc-100 dark:bg-zinc-800 text-[10px] font-bold">
+                                                            {student.nome_responsavel.charAt(0).toUpperCase()}
+                                                        </AvatarFallback>
+                                                    </Avatar>
                                                     <div>
                                                         <p className="font-bold text-zinc-900 dark:text-white text-xs uppercase tracking-tight">{student.nome_responsavel}</p>
                                                         {student.observacoes_medicas && (
@@ -286,22 +294,26 @@ export default function AlunosPage() {
                                                 </div>
                                             </td>
                                             <td className="p-6">
-                                                <div className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{student.contato_responsavel}</div>
-                                                <div className="text-[10px] text-neutral-400 mt-0.5 uppercase tracking-widest font-bold">WhatsApp</div>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500">
+                                                        <Phone className="w-3 h-3" />
+                                                    </div>
+                                                    <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{student.contato_responsavel}</span>
+                                                </div>
                                             </td>
                                             <td className="p-6">
-                                                <div className="flex items-center gap-2 text-sm font-black text-neutral-700 dark:text-neutral-300 uppercase tracking-tighter italic">
-                                                    <Calendar className="w-4 h-4 text-neutral-400" />
+                                                <div className="flex items-center gap-2 text-xs font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-tighter italic">
+                                                    <Calendar className="w-3.5 h-3.5 text-zinc-400" />
                                                     {age} Anos
                                                 </div>
                                             </td>
                                             <td className="p-6">
                                                 <Badge className={`text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest border-none
-                                                    ${student.status_matricula === 'ativo'
+                                                    ${student.status_matricula === 'ativa'
                                                         ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                                                         : student.status_matricula === 'pendente'
                                                             ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
-                                                            : 'bg-neutral-100 dark:bg-white/10 text-neutral-500 dark:text-neutral-400'
+                                                            : 'bg-zinc-100 dark:bg-white/10 text-zinc-500 dark:text-zinc-400'
                                                     }`}>
                                                     {student.status_matricula}
                                                 </Badge>
@@ -312,7 +324,7 @@ export default function AlunosPage() {
                                                         <div className="w-8 h-8 rounded-lg bg-pink-50 dark:bg-pink-500/10 flex items-center justify-center">
                                                             <Ruler className="w-4 h-4 text-pink-500" />
                                                         </div>
-                                                        <div className="text-sm font-black font-mono tracking-tighter text-neutral-700 dark:text-neutral-300">
+                                                        <div className="text-xs font-black font-mono tracking-tighter text-zinc-700 dark:text-zinc-300">
                                                             {latestMetric.busto} / {latestMetric.cintura} / {latestMetric.quadril}
                                                         </div>
                                                     </div>
@@ -329,18 +341,18 @@ export default function AlunosPage() {
                                             <td className="p-6 text-right">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-neutral-100 dark:hover:bg-white/5 transition-all transition-colors outline-none border-none">
-                                                            <MoreHorizontal className="w-5 h-5 text-neutral-400" />
+                                                        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-zinc-100 dark:hover:bg-white/5 transition-all outline-none border-none">
+                                                            <MoreHorizontal className="w-5 h-5 text-zinc-400" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="w-56 p-2 rounded-2xl bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-2xl glass">
-                                                        <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 px-3 py-2">Comandos</DropdownMenuLabel>
-                                                        <DropdownMenuSeparator className="bg-neutral-100 dark:bg-white/5 mx-1" />
+                                                    <DropdownMenuContent align="end" className="w-56 p-2 rounded-2xl bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-2xl">
+                                                        <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 px-3 py-2">Comandos</DropdownMenuLabel>
+                                                        <DropdownMenuSeparator className="bg-zinc-100 dark:bg-zinc-800 mx-1" />
                                                         <DropdownMenuItem
                                                             onClick={() => handleEditStudent(student)}
                                                             className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-pink-500 hover:text-white transition-all outline-none border-none"
                                                         >
-                                                            <Edit className="w-4 h-4" />
+                                                            <Pencil className="w-4 h-4" />
                                                             Editar Perfil
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem
@@ -350,7 +362,7 @@ export default function AlunosPage() {
                                                             <Ruler className="w-4 h-4" />
                                                             Métricas Pro
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuSeparator className="bg-neutral-100 dark:bg-white/5 mx-1" />
+                                                        <DropdownMenuSeparator className="bg-zinc-100 dark:bg-zinc-800 mx-1" />
                                                         <DropdownMenuItem
                                                             onClick={() => handleDeleteStudent(student)}
                                                             className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-widest cursor-pointer hover:bg-red-500 hover:text-white transition-all text-red-500 outline-none border-none"

@@ -80,61 +80,55 @@ export default function AdminDashboard() {
     ]
 
     return (
-        <div className="space-y-8 lg:space-y-12">
+        <div className="space-y-6 lg:space-y-8">
             {/* Executive Welcome */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                        <Badge variant="secondary" className="px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-none">
-                            CENTRO DE COMANDO
-                        </Badge>
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Real-time Data</span>
+                        <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.2em]">SISTEMA DE GESTÃO E INTELIGÊNCIA ARTÍSTICA</span>
                     </div>
-                    <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-zinc-900 dark:text-white uppercase leading-none">
-                        Dashboard <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Diretoria</span>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Painel <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Estratégico</span>
                     </h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-2xl font-medium leading-relaxed">
-                        Bem-vinda, <span className="text-zinc-900 dark:text-zinc-100 font-bold">{tenant?.nome || 'Gestora'}</span>. Visualize os indicadores estratégicos e a saúde financeira da sua escola de artes hoje.
-                    </p>
                 </div>
-                <div className="flex flex-wrap gap-3">
-                    <Button variant="outline" className="h-12 px-6 rounded-2xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 font-bold text-xs hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all uppercase tracking-widest">
-                        Extrair PDF
+                <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 font-bold text-[10px] hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all uppercase tracking-widest text-zinc-600 dark:text-zinc-400">
+                        RELATÓRIO PDF
                     </Button>
                     <Link href="/diretora/turmas">
-                        <Button className="h-12 px-8 rounded-2xl font-black text-xs text-white shadow-xl shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest" style={{ backgroundColor: primaryColor }}>
-                            <Plus className="w-4 h-4 mr-1" />
-                            Nova Turma
+                        <Button className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none" style={{ backgroundColor: primaryColor }}>
+                            <Plus className="w-3.5 h-3.5 mr-1" />
+                            NOVA TURMA
                         </Button>
                     </Link>
                 </div>
             </div>
 
             {/* Smart Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {stats.map((stat, i) => (
                     <motion.div
                         key={stat.title}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
+                        transition={{ delay: i * 0.05 }}
                     >
-                        <Card className="bg-white dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 shadow-sm hover:border-rose-500/30 transition-all duration-300 group rounded-[2rem] overflow-hidden relative">
-                            <CardHeader className="p-6 pb-2 flex flex-row items-center justify-between space-y-0">
-                                <div className={`p-3 rounded-2xl ${stat.bg} ${stat.color} bg-opacity-10 border border-current/10`}>
-                                    <stat.icon size={20} strokeWidth={2.5} />
+                        <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 shadow-sm hover:border-rose-500/30 transition-all duration-300 group rounded-xl overflow-hidden relative">
+                            <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between space-y-0">
+                                <div className={`p-2 rounded-lg ${stat.bg} ${stat.color} bg-opacity-10 border border-current/10`}>
+                                    <stat.icon size={16} strokeWidth={2.5} />
                                 </div>
-                                <div className={`flex items-center text-[10px] font-black uppercase tracking-widest ${stat.trendUp ? 'text-emerald-500 bg-emerald-500/10' : 'text-rose-500 bg-rose-500/10'} px-2.5 py-1.5 rounded-xl border border-current/10`}>
-                                    {stat.trend} <ArrowUpRight size={12} className="ml-1" />
+                                <div className={`flex items-center text-[9px] font-black uppercase tracking-widest ${stat.trendUp ? 'text-emerald-500 bg-emerald-500/5' : 'text-rose-500 bg-rose-500/5'} px-2 py-1 rounded-lg border border-current/10`}>
+                                    {stat.trend} <ArrowUpRight size={10} className="ml-1" />
                                 </div>
                             </CardHeader>
-                            <CardContent className="p-6 pt-3">
-                                <p className="text-[10px] font-black text-zinc-400 dark:text-zinc-500 uppercase tracking-[0.2em] mb-2">
+                            <CardContent className="p-4 pt-2">
+                                <p className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-[0.15em] mb-1">
                                     {stat.title}
                                 </p>
-                                <div className="text-4xl font-black tracking-tighter text-zinc-900 dark:text-white">{stat.value}</div>
-                                <p className="text-[10px] text-zinc-400 dark:text-zinc-600 mt-2 font-bold uppercase tracking-wide">{stat.description}</p>
+                                <div className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white leading-none mb-1">{stat.value}</div>
+                                <p className="text-[9px] text-zinc-400 dark:text-zinc-600 font-medium uppercase tracking-wide truncate">{stat.description}</p>
                             </CardContent>
                         </Card>
                     </motion.div>

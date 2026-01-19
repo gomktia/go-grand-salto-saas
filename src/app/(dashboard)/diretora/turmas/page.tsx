@@ -158,133 +158,106 @@ export default function TurmasPage() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
-                        Gestao de Turmas
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Gestão de Classes e Cronogramas
+                        </span>
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Organização de <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600">Turmas</span>
                     </h1>
-                    <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
-                        Organize salas, horarios e ocupacao da {tenant?.nome}.
-                    </p>
                 </div>
-                <div className="flex items-center gap-3">
-                    {/* View Toggle */}
-                    <div className="flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800">
                         <Button
                             onClick={() => setViewMode('grid')}
                             variant="ghost"
                             size="sm"
-                            className={`h-8 px-3 rounded-lg transition-all ${
-                                viewMode === 'grid'
-                                    ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm'
-                                    : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
-                            }`}
+                            className={`h-8 px-3 rounded-lg transition-all text-[10px] font-bold uppercase tracking-widest ${viewMode === 'grid'
+                                    ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
+                                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
+                                }`}
                         >
-                            <LayoutGrid className="w-4 h-4 mr-1.5" />
+                            <LayoutGrid className="w-3.5 h-3.5 mr-1.5" />
                             Grade
                         </Button>
                         <Button
                             onClick={() => setViewMode('calendar')}
                             variant="ghost"
                             size="sm"
-                            className={`h-8 px-3 rounded-lg transition-all ${
-                                viewMode === 'calendar'
-                                    ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm'
-                                    : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
-                            }`}
+                            className={`h-8 px-3 rounded-lg transition-all text-[10px] font-bold uppercase tracking-widest ${viewMode === 'calendar'
+                                    ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
+                                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
+                                }`}
                         >
-                            <CalendarIcon className="w-4 h-4 mr-1.5" />
-                            Calendario
+                            <CalendarIcon className="w-3.5 h-3.5 mr-1.5" />
+                            Calendário
                         </Button>
                     </div>
                     <Button
                         onClick={handleAddTurma}
-                        className="h-10 px-5 rounded-xl font-semibold text-white shadow-lg shadow-pink-500/20"
+                        className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                         style={{ backgroundColor: primaryColor }}
                     >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Nova Turma
+                        <Plus className="w-4 h-4 mr-1" />
+                        NOVA TURMA
                     </Button>
                 </div>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                                Total de Turmas
-                            </p>
-                            <p className="text-3xl font-bold text-neutral-900 dark:text-white mt-1">{turmas.length}</p>
+                {[
+                    { label: 'Total de Turmas', value: turmas.length, icon: Layers, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                    { label: 'Total de Alunos', value: turmas.reduce((acc, t) => acc + t.matriculas_turmas.filter(m => m.status === 'ativo').length, 0), icon: Users, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+                    { label: 'Ocupação Média', value: `${turmas.length > 0 ? Math.round(turmas.reduce((acc, t) => acc + calculateFillRate(t), 0) / turmas.length) : 0}%`, icon: CalendarIcon, color: 'text-amber-500', bg: 'bg-amber-500/10' }
+                ].map((stat, i) => (
+                    <Card key={i} className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm overflow-hidden relative group">
+                        <div className="flex items-center justify-between relative z-10">
+                            <div>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+                                    {stat.label}
+                                </p>
+                                <p className="text-2xl font-black text-zinc-900 dark:text-white mt-1">{stat.value}</p>
+                            </div>
+                            <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center`}>
+                                <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                            </div>
                         </div>
-                        <div className="w-12 h-12 rounded-xl bg-pink-100 dark:bg-pink-500/20 flex items-center justify-center">
-                            <Layers className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        </div>
-                    </div>
-                </Card>
-
-                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                                Total de Alunos
-                            </p>
-                            <p className="text-3xl font-bold text-pink-600 dark:text-pink-400 mt-1">
-                                {turmas.reduce((acc, t) => acc + t.matriculas_turmas.filter(m => m.status === 'ativo').length, 0)}
-                            </p>
-                        </div>
-                        <div className="w-12 h-12 rounded-xl bg-pink-100 dark:bg-pink-500/20 flex items-center justify-center">
-                            <Users className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        </div>
-                    </div>
-                </Card>
-
-                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-xl shadow-sm">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                                Ocupacao Media
-                            </p>
-                            <p className="text-3xl font-bold text-pink-600 dark:text-pink-400 mt-1">
-                                {turmas.length > 0
-                                    ? Math.round(turmas.reduce((acc, t) => acc + calculateFillRate(t), 0) / turmas.length)
-                                    : 0}%
-                            </p>
-                        </div>
-                        <div className="w-12 h-12 rounded-xl bg-pink-100 dark:bg-pink-500/20 flex items-center justify-center">
-                            <CalendarIcon className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                        </div>
-                    </div>
-                </Card>
+                    </Card>
+                ))}
             </div>
 
             {/* Content */}
             {isLoading ? (
-                <div className="flex items-center justify-center p-12">
-                    <Loader2 className="w-8 h-8 animate-spin text-pink-500" />
+                <div className="flex flex-col items-center justify-center p-24 space-y-4">
+                    <Loader2 className="w-10 h-10 animate-spin" style={{ color: primaryColor }} />
+                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Sincronizando Grade Horária...</p>
                 </div>
             ) : error ? (
-                <div className="p-12 text-center">
-                    <p className="text-red-600 dark:text-red-400 text-sm mb-4">{error}</p>
-                    <Button onClick={loadTurmas} variant="outline" className="border-neutral-300 dark:border-neutral-700">
+                <div className="p-24 text-center">
+                    <p className="text-red-600 dark:text-red-400 font-bold mb-4">{error}</p>
+                    <Button onClick={loadTurmas} variant="outline" className="h-10 px-8 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold uppercase text-[10px] tracking-widest">
                         Tentar Novamente
                     </Button>
                 </div>
             ) : turmas.length === 0 ? (
-                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-12 text-center rounded-xl">
-                    <Layers className="w-12 h-12 mx-auto text-neutral-400 mb-4" />
-                    <p className="text-neutral-700 dark:text-neutral-300 font-medium mb-2">Nenhuma turma cadastrada</p>
-                    <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-6">Comece criando sua primeira turma</p>
+                <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-24 text-center rounded-xl">
+                    <Layers className="w-12 h-12 mx-auto text-zinc-200 dark:text-zinc-800 mb-4" />
+                    <p className="text-zinc-900 dark:text-white font-black uppercase text-lg tracking-tighter mb-1">Nenhuma turma cadastrada</p>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-xs mb-8 uppercase tracking-widest">Comece criando sua primeira turma estratégica</p>
                     <Button
                         onClick={handleAddTurma}
-                        className="text-white"
+                        className="h-10 px-8 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-emerald-500/20 border-none"
                         style={{ backgroundColor: primaryColor }}
                     >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Criar Primeira Turma
+                        <Plus className="w-4 h-4 mr-1" />
+                        CRIAR PRIMEIRA TURMA
                     </Button>
                 </Card>
             ) : viewMode === 'calendar' ? (
@@ -293,7 +266,7 @@ export default function TurmasPage() {
                     onTurmaClick={handleManageMatriculas}
                 />
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {turmas.map((turma) => {
                         const fillRate = calculateFillRate(turma)
                         const numeroAlunos = getNumeroAlunos(turma)
@@ -302,9 +275,9 @@ export default function TurmasPage() {
 
                         return (
                             <motion.div key={turma.id} whileHover={{ y: -2 }} className="h-full">
-                                <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all h-full flex flex-col rounded-xl overflow-hidden">
-                                    <CardHeader className="p-5 pb-4 border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
-                                        <div className="flex items-start justify-between gap-3 mb-3">
+                                <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all h-full flex flex-col rounded-xl overflow-hidden group">
+                                    <div className="p-5 pb-4 border-b border-zinc-50 dark:border-zinc-800 bg-zinc-50/10 dark:bg-zinc-800/20">
+                                        <div className="flex items-start justify-between gap-3 mb-4">
                                             <div
                                                 className="p-2 rounded-lg border"
                                                 style={{
@@ -315,99 +288,72 @@ export default function TurmasPage() {
                                                 <Layers className="w-4 h-4" style={{ color: turma.cor_etiqueta }} />
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <Badge className={`text-xs px-2 py-0.5 rounded-full font-medium
+                                                <Badge className={`text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest border-none
                                                     ${isFull
-                                                        ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30'
-                                                        : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30'
+                                                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                                                        : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                                                     }`}>
-                                                    {isFull ? 'Lotada' : 'Vagas'}
+                                                    {isFull ? 'LOTADA' : 'VAGAS'}
                                                 </Badge>
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg
-                                                            text-neutral-500 hover:text-neutral-700 dark:hover:text-white
-                                                            hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all">
                                                             <MoreHorizontal className="w-4 h-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="w-48
-                                                        bg-white dark:bg-neutral-900
-                                                        border-neutral-200 dark:border-neutral-700
-                                                        shadow-lg rounded-xl">
-                                                        <DropdownMenuLabel className="text-neutral-500 dark:text-neutral-400 text-xs">
-                                                            Acoes
-                                                        </DropdownMenuLabel>
-                                                        <DropdownMenuSeparator className="bg-neutral-200 dark:bg-neutral-700" />
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleEditTurma(turma)}
-                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
-                                                        >
-                                                            <Edit className="w-4 h-4 mr-2" />
-                                                            Editar Turma
+                                                    <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-xl rounded-xl p-1">
+                                                        <DropdownMenuLabel className="text-[9px] font-black uppercase tracking-widest text-zinc-400 px-3 py-2">Comandos</DropdownMenuLabel>
+                                                        <DropdownMenuSeparator className="bg-zinc-100 dark:bg-zinc-800" />
+                                                        <DropdownMenuItem onClick={() => handleEditTurma(turma)} className="text-[10px] font-bold uppercase tracking-widest px-3 py-2 cursor-pointer rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 !outline-none">
+                                                            <Edit className="w-3.5 h-3.5 mr-2" /> Editar Turma
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleManageHorarios(turma)}
-                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
-                                                        >
-                                                            <Clock className="w-4 h-4 mr-2" />
-                                                            Gerenciar Horarios
+                                                        <DropdownMenuItem onClick={() => handleManageHorarios(turma)} className="text-[10px] font-bold uppercase tracking-widest px-3 py-2 cursor-pointer rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 !outline-none">
+                                                            <Clock className="w-3.5 h-3.5 mr-2" /> Gerenciar Horários
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleManageMatriculas(turma)}
-                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
-                                                        >
-                                                            <UserPlus className="w-4 h-4 mr-2" />
-                                                            Gerenciar Alunos
+                                                        <DropdownMenuItem onClick={() => handleManageMatriculas(turma)} className="text-[10px] font-bold uppercase tracking-widest px-3 py-2 cursor-pointer rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 !outline-none">
+                                                            <UserPlus className="w-3.5 h-3.5 mr-2" /> Gerenciar Alunos
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleManageRecursos(turma)}
-                                                            className="text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer rounded-lg"
-                                                        >
-                                                            <Library className="w-4 h-4 mr-2" />
-                                                            Biblioteca de Midia
+                                                        <DropdownMenuItem onClick={() => handleManageRecursos(turma)} className="text-[10px] font-bold uppercase tracking-widest px-3 py-2 cursor-pointer rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 !outline-none">
+                                                            <Library className="w-3.5 h-3.5 mr-2" /> Biblioteca de Mídia
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuSeparator className="bg-neutral-200 dark:bg-neutral-700" />
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleDeleteTurma(turma)}
-                                                            className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer rounded-lg"
-                                                        >
-                                                            <Trash2 className="w-4 h-4 mr-2" />
-                                                            Deletar Turma
+                                                        <DropdownMenuSeparator className="bg-zinc-100 dark:bg-zinc-800" />
+                                                        <DropdownMenuItem onClick={() => handleDeleteTurma(turma)} className="text-[10px] font-bold uppercase tracking-widest px-3 py-2 cursor-pointer rounded-lg text-red-500 hover:bg-red-500/10 !outline-none">
+                                                            <Trash2 className="w-3.5 h-3.5 mr-2" /> Deletar Turma
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
                                             </div>
                                         </div>
-                                        <CardTitle className="text-base font-bold text-neutral-900 dark:text-white truncate">
+                                        <CardTitle className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-tight truncate">
                                             {turma.nome}
                                         </CardTitle>
-                                        <CardDescription className="text-sm text-neutral-600 dark:text-neutral-400">
+                                        <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mt-1">
                                             {turma.nivel}
                                         </CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="p-5 space-y-4 flex-1 flex flex-col">
-                                        <div className="grid grid-cols-2 gap-3">
+                                    </div>
+                                    <CardContent className="p-5 space-y-5 flex-1 flex flex-col">
+                                        <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Horario</span>
-                                                <div className="flex items-center gap-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-200 mt-1">
-                                                    <Clock className="w-3.5 h-3.5 text-neutral-400" />
+                                                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Horário</span>
+                                                <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-700 dark:text-zinc-300 mt-1">
+                                                    <Clock className="w-3.5 h-3.5 text-zinc-400" />
                                                     {horarioDisplay}
                                                 </div>
                                             </div>
                                             <div>
-                                                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Local</span>
-                                                <div className="flex items-center gap-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-200 mt-1">
-                                                    <MapPin className="w-3.5 h-3.5 text-neutral-400" />
-                                                    {turma.agenda_aulas[0]?.sala || 'Nao definido'}
+                                                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Local</span>
+                                                <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-700 dark:text-zinc-300 mt-1 uppercase truncate">
+                                                    <MapPin className="w-3.5 h-3.5 text-zinc-400" />
+                                                    {turma.agenda_aulas[0]?.sala || 'NÃO DEFINIDO'}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="space-y-2 mt-auto pt-2">
-                                            <div className="flex items-center justify-between text-xs">
-                                                <span className="text-neutral-500 dark:text-neutral-400 font-medium">Ocupacao</span>
-                                                <span className="font-bold text-neutral-900 dark:text-white">{numeroAlunos} Alunos</span>
+                                        <div className="space-y-2 mt-auto">
+                                            <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest">
+                                                <span className="text-zinc-400">Ocupação</span>
+                                                <span className="text-zinc-900 dark:text-white">{numeroAlunos} ALUNOS</span>
                                             </div>
-                                            <div className="h-2 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+                                            <div className="h-1.5 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
                                                 <motion.div
                                                     initial={{ width: 0 }}
                                                     animate={{ width: `${fillRate}%` }}
@@ -419,13 +365,9 @@ export default function TurmasPage() {
                                         <Button
                                             variant="outline"
                                             onClick={() => handleManageMatriculas(turma)}
-                                            className="w-full mt-2 h-9 rounded-xl
-                                                border-neutral-300 dark:border-neutral-700
-                                                text-neutral-700 dark:text-neutral-200
-                                                hover:bg-neutral-100 dark:hover:bg-neutral-800
-                                                font-medium text-sm"
+                                            className="w-full h-10 rounded-xl border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 font-bold text-[10px] uppercase tracking-widest transition-all"
                                         >
-                                            Gerenciar <ChevronRight className="w-4 h-4 ml-1" />
+                                            GERENCIAR <ChevronRight className="w-3.5 h-3.5 ml-1" />
                                         </Button>
                                     </CardContent>
                                 </Card>

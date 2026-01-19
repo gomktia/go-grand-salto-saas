@@ -104,6 +104,18 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter()
     const tenant = useTenant()
 
+    // Handle theme persistence
+    React.useEffect(() => {
+        const savedTheme = localStorage.getItem('theme')
+        const isDark = savedTheme === null ? true : savedTheme === 'dark'
+        setIsDarkMode(isDark)
+        if (isDark) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    }, [])
+
     const currentRole = pathname.split('/')[1] || 'diretora'
     const config = roleConfig[currentRole] || roleConfig.diretora
 
@@ -118,6 +130,7 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
 
     const toggleTheme = (dark: boolean) => {
         setIsDarkMode(dark)
+        localStorage.setItem('theme', dark ? 'dark' : 'light')
         if (dark) {
             document.documentElement.classList.add('dark')
         } else {
@@ -126,7 +139,7 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <div className={`${isDarkMode ? 'dark' : ''} min-h-screen bg-background text-foreground flex overflow-x-hidden`}>
+        <div className={`${isDarkMode ? 'dark' : ''} min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex overflow-x-hidden`}>
             {/* Desktop Sidebar */}
             <motion.aside
                 initial={false}

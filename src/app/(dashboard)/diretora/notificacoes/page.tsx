@@ -44,119 +44,121 @@ export default function NotificacoesPage() {
     }
 
     return (
-        <div className="space-y-8 p-1">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-pink-500 italic mb-2">Comunicação Unificada</h2>
-                    <h1 className="text-4xl font-black tracking-tighter uppercase text-neutral-900 dark:text-white flex items-center gap-3">
-                        <MessageSquare className="w-8 h-8 text-pink-600" />
-                        Centro de Mensagens
+                    <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                            Central de Comunicação e Transmissão
+                        </span>
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
+                        Mensagens & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">Automações</span>
                     </h1>
-                    <p className="text-neutral-500 dark:text-neutral-400 font-medium">Automatize o contato com seus <strong>Alunos</strong> de forma inteligente no <strong>{tenant?.nome}</strong>.</p>
                 </div>
-                <div className="flex gap-4">
-                    <Button variant="outline" className="h-14 px-8 rounded-2xl border-neutral-200 dark:border-neutral-800 gap-2 font-bold uppercase text-[10px] tracking-widest glass">
-                        Relatórios
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all">
+                        HISTÓRICO
                     </Button>
                     <Button
                         style={{ backgroundColor: primaryColor }}
-                        className="h-14 px-8 rounded-2xl text-white gap-2 font-bold uppercase text-[10px] tracking-widest shadow-xl shadow-pink-500/20 hover:opacity-90 transition-all hover:scale-105"
+                        className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                     >
-                        <Zap className="w-4 h-4" />
-                        Nova Automação
+                        <Zap className="w-4 h-4 mr-1" />
+                        NOVA AUTOMAÇÃO
                     </Button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Coluna de Envio */}
-                <Card className="lg:col-span-2 bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 p-10 rounded-[2.5rem] shadow-sm glass">
-                    <div className="space-y-10">
-                        <div className="space-y-6">
-                            <h3 className="text-xl font-black uppercase tracking-tight">Redigir Transmissão</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {['Todas as Turmas', 'Somente inadimplentes', 'Diretoria'].map((cat) => (
-                                    <Button key={cat} variant="outline" className="h-14 rounded-2xl border-neutral-100 dark:border-white/5 text-xs font-bold uppercase tracking-widest hover:bg-neutral-50 dark:hover:bg-white/5 justify-start px-6 gap-3 group">
-                                        <Users className="w-4 h-4 text-neutral-400 group-hover:text-pink-500" />
+                <Card className="lg:col-span-2 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden">
+                    <div className="p-6 space-y-6">
+                        <div className="space-y-4">
+                            <h3 className="text-sm font-black uppercase tracking-tight text-zinc-900 dark:text-white mb-4">Nova Transmissão</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {['Todas as Turmas', 'Para Inadimplentes', 'Diretoria'].map((cat) => (
+                                    <Button key={cat} variant="outline" className="h-9 rounded-lg border-zinc-100 dark:border-zinc-800 text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-800 px-4 gap-2 text-zinc-500 group">
+                                        <Users className="w-3.5 h-3.5 text-zinc-400 group-hover:text-blue-500" />
                                         {cat}
                                     </Button>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <label className="text-[10px] font-black text-neutral-400 uppercase tracking-widest ml-1">Mensagem do Sistema</label>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest ml-1">Mensagem do Sistema</label>
                             <Textarea
                                 placeholder="Olá! Gostaríamos de lembrar que..."
-                                className="min-h-[200px] bg-neutral-50 dark:bg-black/40 border-none rounded-[2rem] p-8 text-lg font-medium focus-visible:ring-2 focus-visible:ring-pink-500/50 resize-none shadow-inner"
+                                className="min-h-[160px] bg-zinc-50 dark:bg-black/40 border-none rounded-xl p-6 text-sm font-medium focus-visible:ring-1 focus-visible:ring-blue-500/50 resize-none shadow-inner"
                             />
                         </div>
 
-                        <div className="flex flex-col md:flex-row gap-4 pt-4 border-t border-neutral-100 dark:border-white/5">
-                            <Button className="flex-1 h-16 rounded-2xl bg-[#25D366] hover:bg-[#20bd5c] text-white font-black uppercase text-[10px] tracking-widest gap-3 shadow-xl shadow-green-500/20">
-                                <Send className="w-5 h-5" /> Enviar via WhatsApp
+                        <div className="flex flex-col md:flex-row gap-3 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                            <Button className="flex-1 h-12 rounded-xl bg-[#25D366] hover:bg-[#20bd5c] text-white font-black uppercase text-[10px] tracking-widest gap-2 shadow-lg shadow-green-500/10 border-none">
+                                <Send className="w-4 h-4" /> ENVIAR WHATSAPP
                             </Button>
                             <Button
                                 onClick={simulateSend}
                                 disabled={isSending}
-                                className="flex-1 h-16 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-black font-black uppercase text-[10px] tracking-widest gap-3 transition-all hover:scale-105 active:scale-95"
+                                className="flex-1 h-12 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-black uppercase text-[10px] tracking-widest gap-2 transition-all hover:scale-[1.02] active:scale-95 border-none"
                             >
-                                {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Bell className="w-5 h-5" /> Notificar no App</>}
+                                {isSending ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Bell className="w-4 h-4" /> NOTIFICAR NO APP</>}
                             </Button>
                         </div>
                     </div>
                 </Card>
 
-                {/* AI Templates & Status */}
-                <div className="space-y-8">
-                    <Card className="bg-gradient-to-br from-neutral-900 to-black border-none rounded-[2.5rem] p-8 relative overflow-hidden group shadow-2xl">
-                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
-                            <Sparkles size={120} className="text-pink-500" />
+                {/* AI Templates & Status Sidebar */}
+                <div className="space-y-6">
+                    <Card className="bg-zinc-950 text-white border-none rounded-xl p-5 relative overflow-hidden group shadow-2xl">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-110 transition-transform">
+                            <Sparkles size={100} className="text-blue-500" />
                         </div>
-                        <div className="relative z-10 space-y-6">
-                            <div className="flex items-center gap-3">
-                                <div className="p-3 bg-pink-500/10 rounded-xl">
-                                    <Sparkles className="w-6 h-6 text-pink-500 animate-pulse" />
+                        <div className="relative z-10 space-y-4">
+                            <div className="flex items-center gap-2">
+                                <div className="p-2 bg-blue-500/20 rounded-lg">
+                                    <Sparkles className="w-4 h-4 text-blue-400 animate-pulse" />
                                 </div>
-                                <h3 className="text-sm font-black uppercase tracking-widest text-white">Templates IA</h3>
+                                <h3 className="text-[10px] font-black uppercase tracking-widest text-white">Sugestões IA</h3>
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-2">
                                 {[
                                     'Cobrança Amigável',
-                                    'Convite para Matrícula',
+                                    'Convite Matrícula',
                                     'Aviso de Feriado',
-                                    'Parabéns Aniversário'
+                                    'Parabéns Aluno'
                                 ].map((t) => (
-                                    <div key={t} className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-pink-500/30 transition-all cursor-pointer group">
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 group-hover:text-white">{t}</p>
+                                    <div key={t} className="p-3 rounded-xl bg-white/[0.05] border border-white/[0.05] hover:border-blue-500/30 transition-all cursor-pointer group">
+                                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 group-hover:text-white">{t}</p>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </Card>
 
-                    <Card className="bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 p-8 rounded-[2.5rem] shadow-sm glass">
-                        <div className="space-y-6">
-                            <h3 className="text-sm font-black uppercase tracking-widest">Status Recente</h3>
-                            <div className="space-y-6">
+                    <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 p-5 rounded-xl shadow-sm">
+                        <div className="space-y-4">
+                            <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Envios Recentes</h3>
+                            <div className="space-y-4">
                                 {[
-                                    { label: 'Aviso de Gala', time: 'Há 10 min', status: 'Entregue', color: 'bg-emerald-500' },
-                                    { label: 'Mensagem de Boas-vindas', time: 'Há 2h', status: 'Entregue', color: 'bg-emerald-500' },
+                                    { label: 'Aviso de Gala', time: 'Há 10 min', status: 'OK', color: 'bg-emerald-500' },
+                                    { label: 'Boas-vindas', time: 'Há 2h', status: 'OK', color: 'bg-emerald-500' },
                                     { label: 'Boletim Mensal', time: 'Ontem', status: 'Falha', color: 'bg-red-500' },
                                 ].map((s, i) => (
                                     <div key={i} className="flex items-center justify-between group">
-                                        <div className="flex items-center gap-4">
-                                            <div className={`w-2 h-2 rounded-full ${s.color} group-hover:animate-ping`} />
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-1.5 h-1.5 rounded-full ${s.color}`} />
                                             <div>
-                                                <p className="text-[10px] font-black uppercase tracking-tight">{s.label}</p>
-                                                <p className="text-[9px] text-neutral-400 font-bold uppercase tracking-widest">{s.time}</p>
+                                                <p className="text-[10px] font-bold uppercase tracking-tight text-zinc-700 dark:text-zinc-300">{s.label}</p>
+                                                <p className="text-[8px] text-zinc-400 font-medium uppercase tracking-widest">{s.time}</p>
                                             </div>
                                         </div>
-                                        <Badge variant="outline" className="h-6 text-[8px] font-black uppercase tracking-widest border-neutral-100 dark:border-white/5 px-3">{s.status}</Badge>
+                                        <Badge variant="outline" className="h-5 text-[8px] font-black uppercase tracking-widest border-zinc-100 dark:border-zinc-800 px-2 text-zinc-400">{s.status}</Badge>
                                     </div>
                                 ))}
                             </div>
-                            <Button variant="ghost" className="w-full mt-4 text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-pink-500 transition-colors">Ver Histórico Completo</Button>
                         </div>
                     </Card>
                 </div>
