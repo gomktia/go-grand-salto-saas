@@ -114,14 +114,14 @@ export default function SuperAdminDashboard() {
                 </div>
                 <div className="flex gap-3 relative z-10">
                     <Button
-                        onClick={() => toast.info('A visualizacao de logs esta disponivel apenas no ambiente de producao.')}
+                        onClick={() => router.push('/superadmin/logs')}
                         variant="outline"
                         className="h-14 border-white/10 bg-white/5 text-white hover:bg-white/10 px-8 rounded-2xl font-bold uppercase tracking-widest text-[10px]"
                     >
                         Logs do Sistema
                     </Button>
                     <Button
-                        onClick={() => toast.info('Configuracoes globais bloqueadas para o seu nivel de acesso.')}
+                        onClick={() => router.push('/superadmin/config')}
                         className="h-14 bg-violet-600 hover:bg-violet-500 text-white px-8 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-2xl shadow-violet-600/20"
                     >
                         Configuracoes Globais
@@ -170,7 +170,7 @@ export default function SuperAdminDashboard() {
                                 />
                             </div>
                             <Button
-                                onClick={() => toast.info('Criar nova escola sera liberado na proxima atualizacao.')}
+                                onClick={() => router.push('/superadmin/escolas')}
                                 className="bg-violet-600 hover:bg-violet-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest h-10"
                             >
                                 Nova Escola
