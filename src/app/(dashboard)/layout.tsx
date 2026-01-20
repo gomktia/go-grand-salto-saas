@@ -91,6 +91,11 @@ const roleConfig: Record<string, { items: NavigationItem[], label: string }> = {
         items: [
             { name: 'Visao Global', icon: Globe, href: '/superadmin' },
             { name: 'Escolas', icon: Building, href: '/superadmin/escolas' },
+            { name: 'Financeiro', icon: CreditCard, href: '/superadmin/financeiro' },
+            { name: 'Integracoes', icon: Zap, href: '/superadmin/integracoes' },
+            { name: 'Suporte', icon: MessageSquare, href: '/superadmin/suporte' },
+            { name: 'Admins', icon: Users, href: '/superadmin/admins' },
+            { name: 'Logs', icon: Settings, href: '/superadmin/logs' },
             { name: 'Configuracoes', icon: Settings, href: '/superadmin/config' },
         ]
     }
