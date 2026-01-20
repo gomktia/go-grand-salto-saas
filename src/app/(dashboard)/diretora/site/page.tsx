@@ -13,12 +13,8 @@ import {
     Trash2,
     Eye,
     Globe,
-    Lock,
     ShoppingBag,
-    Sparkles,
-    FolderOpen,
-    ArrowUpRight,
-    Loader2
+    ArrowUpRight
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -28,15 +24,44 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTenant } from '@/hooks/use-tenant'
 import Link from 'next/link'
 import { getPostsBlog, deletePostBlog, updatePostBlog } from '@/app/actions/blog'
+import { getVideosSite, getEventosCalendario, getAlbunsVenda } from '@/app/actions/fotos-venda'
 import { toast } from 'sonner'
+import { BlogDialog } from '@/components/dashboard/blog-dialog'
+import { VideoDialog } from '@/components/dashboard/video-dialog'
+import { EventoDialog } from '@/components/dashboard/evento-dialog'
 
 export default function SiteManagementPage() {
     const [activeTab, setActiveTab] = useState('blog')
+    const [blogDialogOpen, setBlogDialogOpen] = useState(false)
+    const [videoDialogOpen, setVideoDialogOpen] = useState(false)
+    const [eventoDialogOpen, setEventoDialogOpen] = useState(false)
+    const [refreshKey, setRefreshKey] = useState(0)
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#ec4899'
 
+    const handleRefresh = () => {
+        setRefreshKey(prev => prev + 1)
+    }
+
     return (
         <div className="space-y-6 pb-12">
+            {/* Dialogs */}
+            <BlogDialog
+                open={blogDialogOpen}
+                onOpenChange={setBlogDialogOpen}
+                onSuccess={handleRefresh}
+            />
+            <VideoDialog
+                open={videoDialogOpen}
+                onOpenChange={setVideoDialogOpen}
+                onSuccess={handleRefresh}
+            />
+            <EventoDialog
+                open={eventoDialogOpen}
+                onOpenChange={setEventoDialogOpen}
+                onSuccess={handleRefresh}
+            />
+
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="space-y-1">
@@ -59,7 +84,7 @@ export default function SiteManagementPage() {
                         </Button>
                     </Link>
                     <Button
-                        onClick={() => toast.info('O editor de postagens será liberado na próxima atualização.')}
+                        onClick={() => setBlogDialogOpen(true)}
                         className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
                         style={{ backgroundColor: primaryColor }}
                     >
@@ -73,8 +98,9 @@ export default function SiteManagementPage() {
                 <TabsList className="bg-zinc-100 dark:bg-zinc-800/50 p-1 h-11 rounded-xl w-full lg:w-fit flex shadow-inner">
                     {[
                         { value: 'blog', label: 'Blog', icon: FileText },
-                        { value: 'albuns', label: 'Álbuns', icon: ImageIcon },
-                        { value: 'horarios', label: 'Grade', icon: CalendarIcon },
+                        { value: 'videos', label: 'Vídeos', icon: ShoppingBag },
+                        { value: 'calendario', label: 'Eventos', icon: CalendarIcon },
+                        { value: 'horarios', label: 'Grade', icon: Layout },
                     ].map((tab) => (
                         <TabsTrigger
                             key={tab.value}
@@ -96,11 +122,15 @@ export default function SiteManagementPage() {
                         transition={{ duration: 0.3 }}
                     >
                         <TabsContent value="blog" className="mt-0 outline-none">
-                            <BlogTab primaryColor={primaryColor} />
+                            <BlogTab primaryColor={primaryColor} refreshKey={refreshKey} onNewPost={() => setBlogDialogOpen(true)} />
                         </TabsContent>
 
-                        <TabsContent value="albuns" className="mt-0 outline-none">
-                            <AlbumsTab primaryColor={primaryColor} />
+                        <TabsContent value="videos" className="mt-0 outline-none">
+                            <VideosTab primaryColor={primaryColor} refreshKey={refreshKey} onNewVideo={() => setVideoDialogOpen(true)} />
+                        </TabsContent>
+
+                        <TabsContent value="calendario" className="mt-0 outline-none">
+                            <EventsTab primaryColor={primaryColor} refreshKey={refreshKey} onNewEvento={() => setEventoDialogOpen(true)} />
                         </TabsContent>
 
                         <TabsContent value="horarios" className="mt-0 outline-none">
@@ -113,13 +143,13 @@ export default function SiteManagementPage() {
     )
 }
 
-function BlogTab({ primaryColor }: { primaryColor: string }) {
+function BlogTab({ primaryColor, refreshKey, onNewPost }: { primaryColor: string; refreshKey: number; onNewPost: () => void }) {
     const [posts, setPosts] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
 
     React.useEffect(() => {
         loadPosts()
-    }, [])
+    }, [refreshKey])
 
     async function loadPosts() {
         try {
@@ -234,62 +264,125 @@ function BlogTab({ primaryColor }: { primaryColor: string }) {
     )
 }
 
-function AlbumsTab({ primaryColor }: { primaryColor: string }) {
-    const albums = [
-        { id: 1, title: 'Quebra Nozes 2025', count: 145, type: 'Público', sales: 'R$ 0', image: 'https://images.unsplash.com/photo-1547153760-18fc21fca24b?q=80&w=600' },
-        { id: 2, title: 'Ensaios de Verão', count: 48, type: 'Privado (Venda)', sales: 'R$ 1.250,00', image: 'https://images.unsplash.com/photo-1508700915892-45ecd05ae2ad?q=80&w=600' },
-        { id: 3, title: 'Baby Class - Aula Aberta', count: 12, type: 'Público', sales: 'R$ 0', image: 'https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?q=80&w=600' },
-    ]
+function VideosTab({ primaryColor, refreshKey, onNewVideo }: { primaryColor: string; refreshKey: number; onNewVideo: () => void }) {
+    const [videos, setVideos] = useState<any[]>([])
+
+    React.useEffect(() => {
+        async function load() {
+            const result = await getVideosSite()
+            setVideos(result.data)
+        }
+        load()
+    }, [refreshKey])
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {albums.map((album) => (
-                <Card key={album.id} className="bg-white/50 dark:bg-card/40 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-pink-500/30 transition-all shadow-xl">
-                    <div className="aspect-[16/10] relative overflow-hidden">
-                        <img src={album.image} alt={album.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 brightness-75 group-hover:brightness-100" />
-                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent" />
-                        <div className="absolute top-6 right-6">
-                            <Badge className={`h-10 px-4 rounded-xl border-none font-black text-[9px] uppercase tracking-widest shadow-2xl ${album.type.includes('Venda') ? 'bg-violet-600 text-white' : 'bg-emerald-600 text-white'}`}>
-                                {album.type === 'Público' ? <Globe className="w-3.5 h-3.5 mr-2" /> : <ShoppingBag className="w-3.5 h-3.5 mr-2" />}
-                                {album.type}
-                            </Badge>
+            {videos.map((video) => (
+                <Card key={video.id} className="bg-white/50 dark:bg-card/40 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-blue-500/30 transition-all shadow-xl">
+                    <div className="aspect-video relative overflow-hidden">
+                        <img src={video.thumbnail_url || 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071'} alt={video.titulo} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                            <ShoppingBag className="w-12 h-12 text-white opacity-80 group-hover:scale-125 transition-transform" />
                         </div>
                     </div>
                     <CardHeader className="p-8">
-                        <CardTitle className="text-2xl font-black uppercase tracking-tight leading-none mb-2">{album.title}</CardTitle>
-                        <CardDescription className="uppercase text-[10px] font-black tracking-widest text-muted-foreground flex items-center gap-2">
-                            <ImageIcon className="w-3.5 h-3.5" />
-                            {album.count} arquivos na vitrine
+                        <CardTitle className="text-2xl font-black uppercase tracking-tight leading-none mb-2">{video.titulo}</CardTitle>
+                        <CardDescription className="uppercase text-[10px] font-black tracking-widest text-muted-foreground line-clamp-2">
+                            {video.descricao || 'Sem descrição'}
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="px-8 pb-8 pt-0">
-                        {album.type.includes('Venda') && (
-                            <div className="p-4 rounded-2xl bg-violet-500/5 border border-violet-500/10 flex justify-between items-center mb-6">
-                                <span className="text-[10px] font-black text-violet-600 dark:text-violet-400 uppercase tracking-widest">Receita Acumulada</span>
-                                <span className="font-mono text-lg font-black text-zinc-900 dark:text-white">{album.sales}</span>
-                            </div>
-                        )}
-                        <div className="flex gap-4">
-                            <Link href={`/espaco-revelle/galeria/${album.id}`} className="flex-1">
-                                <Button className="w-full h-12 rounded-2xl bg-white text-black font-black uppercase text-[10px] tracking-widest hover:scale-105 transition-all">
-                                    Explorar no Site
-                                </Button>
-                            </Link>
-                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-2xl border border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all shrink-0">
-                                <Trash2 className="w-4 h-4" />
-                            </Button>
-                        </div>
-                    </CardContent>
                 </Card>
             ))}
-            <Card className="bg-zinc-50 dark:bg-white/[0.02] border-dashed border-4 border-zinc-200 dark:border-white/5 rounded-[2.5rem] flex flex-col items-center justify-center p-12 hover:border-pink-500/40 hover:bg-pink-500/[0.02] transition-all group cursor-pointer shadow-inner">
+            <Card
+                onClick={onNewVideo}
+                className="bg-zinc-50 dark:bg-white/[0.02] border-dashed border-4 border-zinc-200 dark:border-white/5 rounded-[2.5rem] flex flex-col items-center justify-center p-12 hover:border-blue-500/40 hover:bg-blue-500/[0.02] transition-all group cursor-pointer shadow-inner h-full"
+            >
                 <div className="w-20 h-20 rounded-[2rem] bg-card border border-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-all shadow-2xl">
-                    <Plus className="w-10 h-10 text-muted-foreground group-hover:text-pink-500" />
+                    <Plus className="w-10 h-10 text-muted-foreground group-hover:text-blue-500" />
                 </div>
-                <h4 className="text-lg font-black uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">Novo Álbum</h4>
-                <p className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.2em] mt-2">Expanda seu portfólio</p>
+                <h4 className="text-lg font-black uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">Novo Vídeo</h4>
             </Card>
         </div>
+    )
+}
+
+function EventsTab({ primaryColor, refreshKey, onNewEvento }: { primaryColor: string; refreshKey: number; onNewEvento: () => void }) {
+    const [eventos, setEventos] = useState<any[]>([])
+
+    React.useEffect(() => {
+        async function load() {
+            const result = await getEventosCalendario(false)
+            setEventos(result.data)
+        }
+        load()
+    }, [refreshKey])
+
+    return (
+        <Card className="bg-white/50 dark:bg-card/40 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+            <header className="p-8 border-b border-zinc-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-zinc-50 dark:bg-white/[0.02]">
+                <div className="space-y-1">
+                    <h3 className="font-black uppercase text-xl tracking-tight flex items-center gap-3">
+                        <CalendarIcon style={{ color: primaryColor }} />
+                        Eventos Programados
+                    </h3>
+                    <p className="text-muted-foreground text-sm font-medium">Estes eventos aparecem no site público.</p>
+                </div>
+                <Button
+                    onClick={onNewEvento}
+                    className="h-12 px-6 rounded-xl text-[10px] uppercase font-black tracking-widest gap-2 bg-rose-600 hover:bg-rose-500 text-white border-none shadow-lg shadow-rose-500/20"
+                >
+                    <Plus className="w-4 h-4" />
+                    NOVO EVENTO
+                </Button>
+            </header>
+            <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                    <thead>
+                        <tr className="border-b border-zinc-200 dark:border-white/5">
+                            <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Evento</th>
+                            <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Data e Local</th>
+                            <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Status</th>
+                            <th className="p-8 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
+                        {eventos.map((item) => (
+                            <tr key={item.id} className="hover:bg-zinc-50 dark:hover:bg-white/[0.01] transition-colors group">
+                                <td className="p-8">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-2 h-8 rounded-full" style={{ backgroundColor: item.cor || primaryColor }} />
+                                        <div>
+                                            <div className="font-black text-xl italic uppercase tracking-tighter text-zinc-900 dark:text-white group-hover:text-rose-500 transition-colors">{item.titulo}</div>
+                                            <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">{item.tipo}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="p-8">
+                                    <div className="space-y-1">
+                                        <div className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-tight">
+                                            {new Date(item.data_inicio).toLocaleDateString()}
+                                        </div>
+                                        <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{item.local || 'Local não informado'}</div>
+                                    </div>
+                                </td>
+                                <td className="p-8">
+                                    <Badge className={`px-4 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest ${item.is_publico ? 'bg-emerald-500/10 text-emerald-500' : 'bg-muted text-muted-foreground'}`}>
+                                        {item.is_publico ? 'Público' : 'Interno'}
+                                    </Badge>
+                                </td>
+                                <td className="p-8 text-right">
+                                    <div className="flex justify-end gap-3">
+                                        <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-white/5 hover:bg-red-500/10 hover:text-red-500 transition-all">
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </Card>
     )
 }
 

@@ -3,39 +3,23 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Calendar, MapPin, Clock } from 'lucide-react'
-
-const fallbackEventos = [
-    {
-        titulo: "Apresentação de Final de Ano",
-        data_inicio: "2026-12-20T19:00:00",
-        local: "Teatro Municipal",
-        tipo: "recital",
-        cor: "#ec4899"
-    },
-    {
-        titulo: "Aula Experimental Gratuita",
-        data_inicio: "2026-02-15T14:00:00",
-        local: "Espaço Revelle",
-        tipo: "aula_aberta",
-        cor: "#22c55e"
-    }
-]
+import { getEventosCalendario } from '@/app/actions/fotos-venda'
 
 export function CalendarSection() {
-    const [eventos, setEventos] = useState<any[]>(fallbackEventos)
+    const [eventos, setEventos] = useState<any[]>([])
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         async function fetchEventos() {
             try {
-                const response = await fetch('/api/calendario/publico')
-                if (response.ok) {
-                    const data = await response.json()
-                    if (data.length > 0) {
-                        setEventos(data.slice(0, 4))
-                    }
+                const { data } = await getEventosCalendario(true)
+                if (data.length > 0) {
+                    setEventos(data.slice(0, 4))
                 }
             } catch (e) {
-                // Use fallback events
+                console.error('Erro ao buscar eventos:', e)
+            } finally {
+                setIsLoading(false)
             }
         }
         fetchEventos()
@@ -60,56 +44,64 @@ export function CalendarSection() {
         return tipos[tipo] || 'Evento'
     }
 
+    if (!isLoading && eventos.length === 0) return null
+
     return (
         <section id="calendario" className="py-32 bg-neutral-950">
             <div className="container mx-auto px-6">
-                <div className="text-center mb-16">
-                    <span className="text-red-500 font-bold uppercase tracking-[0.3em] text-xs mb-4 block">Próximos Eventos</span>
-                    <h2 className="text-5xl font-black tracking-tighter uppercase">Calendário <span className="text-red-600">Revelle</span></h2>
+                <div className="text-center mb-16 space-y-4">
+                    <span className="text-rose-500 font-black uppercase tracking-[0.4em] text-[10px]">Upcoming Events</span>
+                    <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white">Calendário <span className="text-rose-600">Revelle</span></h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                    {eventos.map((evento: any, i: number) => {
-                        const date = formatDate(evento.data_inicio)
-                        return (
-                            <Card key={i} className="bg-neutral-900/50 border-white/5 overflow-hidden group hover:border-red-600/30 transition-all">
-                                <CardContent className="p-6">
-                                    <div className="flex gap-4 mb-4">
-                                        <div className="shrink-0 w-16 h-16 rounded-2xl bg-red-600/10 border border-red-600/20 flex flex-col items-center justify-center">
-                                            <div className="text-2xl font-bold text-red-500">{date.day}</div>
-                                            <div className="text-[10px] font-bold uppercase text-neutral-400">{date.month}</div>
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="text-[9px] font-bold uppercase tracking-wider text-red-500 mb-1.5">
-                                                {getTipoLabel(evento.tipo)}
+                    {isLoading ? (
+                        [1, 2, 3, 4].map((i) => (
+                            <div key={i} className="aspect-[4/5] bg-white/5 rounded-[2rem] animate-pulse" />
+                        ))
+                    ) : (
+                        eventos.map((evento: any, i: number) => {
+                            const date = formatDate(evento.data_inicio)
+                            return (
+                                <Card key={i} className="bg-neutral-900/50 border-white/5 overflow-hidden group hover:border-rose-600/30 transition-all rounded-[2rem]">
+                                    <CardContent className="p-6">
+                                        <div className="flex gap-4 mb-4">
+                                            <div className="shrink-0 w-16 h-16 rounded-2xl bg-rose-600/10 border border-rose-600/20 flex flex-col items-center justify-center">
+                                                <div className="text-2xl font-black text-rose-500">{date.day}</div>
+                                                <div className="text-[10px] font-black uppercase text-zinc-500 tracking-tighter">{date.month}</div>
                                             </div>
-                                            <h3 className="font-bold text-sm leading-tight line-clamp-2">
-                                                {evento.titulo}
-                                            </h3>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="text-[9px] font-black uppercase tracking-widest text-rose-500 mb-1.5">
+                                                    {getTipoLabel(evento.tipo)}
+                                                </div>
+                                                <h3 className="font-bold text-sm leading-tight line-clamp-2 uppercase italic text-white group-hover:text-rose-500 transition-colors">
+                                                    {evento.titulo}
+                                                </h3>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="space-y-2 text-[11px] text-neutral-500">
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="w-3.5 h-3.5 text-neutral-600" />
-                                            <span>{date.time}</span>
-                                        </div>
-                                        {evento.local && (
+                                        <div className="space-y-2 text-[11px] text-zinc-500">
                                             <div className="flex items-center gap-2">
-                                                <MapPin className="w-3.5 h-3.5 text-neutral-600" />
-                                                <span className="line-clamp-1">{evento.local}</span>
+                                                <Clock className="w-3.5 h-3.5 text-zinc-600" />
+                                                <span className="font-medium">{date.time}</span>
                                             </div>
-                                        )}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        )
-                    })}
+                                            {evento.local && (
+                                                <div className="flex items-center gap-2">
+                                                    <MapPin className="w-3.5 h-3.5 text-zinc-600" />
+                                                    <span className="line-clamp-1 font-medium">{evento.local}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            )
+                        })
+                    )}
                 </div>
 
-                {eventos.length === 0 && (
-                    <div className="text-center py-12">
-                        <Calendar className="w-16 h-16 mx-auto mb-4 text-neutral-700" />
-                        <p className="text-neutral-500 text-sm">Nenhum evento programado no momento</p>
+                {!isLoading && eventos.length === 0 && (
+                    <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-white/5">
+                        <Calendar className="w-16 h-16 mx-auto mb-6 text-zinc-700" />
+                        <p className="text-zinc-500 text-sm font-medium uppercase tracking-widest">Nenhum evento programado no momento</p>
                     </div>
                 )}
             </div>

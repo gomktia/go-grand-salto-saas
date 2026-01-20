@@ -174,7 +174,7 @@ export default function AlunosPage() {
 
             {/* Quick Stats & Search */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                <Card className="lg:col-span-1 bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-2xl shadow-sm relative group">
+                <Card className="lg:col-span-1 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl shadow-lg relative group">
                     <div className="space-y-3">
                         <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Busca Inteligente</div>
                         <div className="relative">
@@ -190,7 +190,7 @@ export default function AlunosPage() {
                 </Card>
 
                 <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                    <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 p-4 rounded-xl shadow-lg relative overflow-hidden group hover:border-rose-500/30 transition-all">
                         <div className="flex flex-row items-center justify-between pb-1">
                             <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Total</div>
                             <div className="p-1.5 rounded-lg bg-blue-500/10">
@@ -205,7 +205,7 @@ export default function AlunosPage() {
                         </div>
                     </Card>
 
-                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                    <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 p-4 rounded-xl shadow-lg relative overflow-hidden group hover:border-rose-500/30 transition-all">
                         <div className="flex flex-row items-center justify-between pb-1">
                             <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Matrículas</div>
                             <div className="p-1.5 rounded-lg bg-emerald-500/10">
@@ -220,7 +220,7 @@ export default function AlunosPage() {
                         </div>
                     </Card>
 
-                    <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm relative overflow-hidden group hover:border-rose-500/30 transition-all">
+                    <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 p-4 rounded-xl shadow-lg relative overflow-hidden group hover:border-rose-500/30 transition-all">
                         <div className="flex flex-row items-center justify-between pb-1">
                             <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">Métricas</div>
                             <div className="p-1.5 rounded-lg bg-amber-500/10">
@@ -238,7 +238,7 @@ export default function AlunosPage() {
             </div>
 
             {/* Table Container */}
-            <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 overflow-hidden rounded-2xl shadow-sm">
+            <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 overflow-hidden rounded-[2rem] shadow-xl">
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center p-24 space-y-4">
                         <Loader2 className="w-10 h-10 animate-spin" style={{ color: primaryColor }} />

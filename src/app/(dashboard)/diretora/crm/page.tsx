@@ -1,73 +1,77 @@
 'use client'
 
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
     Users,
     Search,
     Filter,
     Plus,
-    MoreHorizontal,
     Mail,
     Phone,
     MessageSquare,
     TrendingUp,
     UserPlus,
-    ChevronRight,
-    ArrowUpRight
+    CheckCircle2,
+    Clock,
+    Target,
+    Loader2,
+    MoreHorizontal,
+    Edit2,
+    Trash2,
+    ArrowRight
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { useTenant } from '@/hooks/use-tenant'
 import { getLeads, createLead, updateLeadStatus } from '@/app/actions/crm'
 import { toast } from 'sonner'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
-const leads = [
-    {
-        id: 1,
-        name: 'Carolina Mendes (Mãe da Alice)',
-        status: 'Novo',
-        interest: 'Ballet Baby',
-        date: '2 horas atrás',
-        lastContact: '-',
-        priority: 'Alta'
-    },
-    {
-        id: 2,
-        name: 'Pedro Rocha (Pai da Sofia)',
-        status: 'Aula Experimental',
-        interest: 'Jazz Juvenil',
-        date: 'Ontem',
-        lastContact: 'Agendado para 20/01',
-        priority: 'Média'
-    },
-    {
-        id: 3,
-        name: 'Mariana Silva',
-        status: 'Aguardando Resposta',
-        interest: 'Contemporary Dance',
-        date: '3 dias atrás',
-        lastContact: 'Enviado proposta via WhatsApp',
-        priority: 'Baixa'
-    },
-]
+const STATUS_CONFIG: Record<string, { color: string; bgColor: string; icon: any }> = {
+    'Novo': { color: 'text-blue-600 dark:text-blue-400', bgColor: 'bg-blue-500/10', icon: UserPlus },
+    'Aula Experimental': { color: 'text-rose-600 dark:text-rose-400', bgColor: 'bg-rose-500/10', icon: Target },
+    'Aguardando Resposta': { color: 'text-amber-600 dark:text-amber-400', bgColor: 'bg-amber-500/10', icon: Clock },
+    'Matriculado': { color: 'text-emerald-600 dark:text-emerald-400', bgColor: 'bg-emerald-500/10', icon: CheckCircle2 },
+}
+
+const PRIORIDADE_CONFIG: Record<string, string> = {
+    'Alta': 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
+    'Média': 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    'Baixa': 'bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20',
+}
 
 export default function CRMLeadsPage() {
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#ec4899'
 
-    const [leads, setLeads] = React.useState<any[]>([])
-    const [loading, setLoading] = React.useState(true)
-    const [showNewLeadModal, setShowNewLeadModal] = React.useState(false)
-    const [newLead, setNewLead] = React.useState({ nome: '', interesse: '', contato: '', prioridade: 'Média' })
+    const [leads, setLeads] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState('')
+    const [statusFilter, setStatusFilter] = useState<string>('all')
+    const [showNewLeadModal, setShowNewLeadModal] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [newLead, setNewLead] = useState({
+        nome: '',
+        interesse: '',
+        contato: '',
+        prioridade: 'Média'
+    })
 
-    React.useEffect(() => {
+    useEffect(() => {
         loadLeads()
     }, [])
 
@@ -75,7 +79,7 @@ export default function CRMLeadsPage() {
         try {
             setLoading(true)
             const result = await getLeads()
-            setLeads(result.data)
+            setLeads(result.data || [])
         } catch (error) {
             toast.error('Erro ao carregar leads')
         } finally {
@@ -84,6 +88,12 @@ export default function CRMLeadsPage() {
     }
 
     const handleCreateLead = async () => {
+        if (!newLead.nome || !newLead.interesse) {
+            toast.error('Preencha nome e interesse')
+            return
+        }
+
+        setIsSubmitting(true)
         try {
             await createLead(newLead)
             toast.success('Lead criado com sucesso!')
@@ -92,6 +102,8 @@ export default function CRMLeadsPage() {
             loadLeads()
         } catch (error) {
             toast.error('Erro ao criar lead')
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
@@ -101,7 +113,12 @@ export default function CRMLeadsPage() {
             'Aula Experimental': 'Aguardando Resposta',
             'Aguardando Resposta': 'Matriculado'
         }
-        const nextStatus = statusMap[currentStatus] || 'Finalizado'
+        const nextStatus = statusMap[currentStatus]
+        if (!nextStatus) {
+            toast.info('Lead já está no status final')
+            return
+        }
+
         try {
             await updateLeadStatus(leadId, nextStatus)
             toast.success(`Lead avançado para: ${nextStatus}`)
@@ -109,6 +126,21 @@ export default function CRMLeadsPage() {
         } catch (error) {
             toast.error('Erro ao atualizar lead')
         }
+    }
+
+    const filteredLeads = leads.filter(lead => {
+        const matchesSearch = lead.nome?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            lead.contato?.includes(searchTerm)
+        const matchesStatus = statusFilter === 'all' || lead.status === statusFilter
+        return matchesSearch && matchesStatus
+    })
+
+    const stats = {
+        total: leads.length,
+        novos: leads.filter(l => l.status === 'Novo').length,
+        experimental: leads.filter(l => l.status === 'Aula Experimental').length,
+        matriculados: leads.filter(l => l.status === 'Matriculado').length,
+        conversao: leads.length > 0 ? ((leads.filter(l => l.status === 'Matriculado').length / leads.length) * 100).toFixed(1) : '0',
     }
 
     return (
@@ -119,22 +151,15 @@ export default function CRMLeadsPage() {
                     <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />
                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
-                            Núcleo de Expansão e Matrículas
+                            Nucleo de Expansao e Matriculas
                         </span>
                     </div>
                     <h1 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-none">
-                        CRM de <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Prospecção</span>
+                        CRM de <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">Prospeccao</span>
                     </h1>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Button
-                        variant="outline"
-                        className="h-10 px-4 rounded-xl border-zinc-200 dark:border-zinc-800 font-bold text-[10px] text-zinc-600 dark:text-zinc-400 uppercase tracking-widest hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
-                    >
-                        <Filter className="w-3.5 h-3.5 mr-2" />
-                        FILTROS
-                    </Button>
                     <Button
                         onClick={() => setShowNewLeadModal(true)}
                         className="h-10 px-6 rounded-xl font-bold text-[10px] text-white shadow-lg shadow-rose-500/20 hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest border-none"
@@ -146,134 +171,316 @@ export default function CRMLeadsPage() {
                 </div>
             </div>
 
-            {/* CRM Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[
-                    { label: 'Leads do Mês', value: '24', detail: '+15%', color: 'text-emerald-500' },
-                    { label: 'Taxa de Conversão', value: '18.5%', detail: 'Meta: 25%', color: 'text-violet-500' },
-                    { label: 'Ações Urgentes', value: '8', detail: 'Hoje', color: 'text-rose-500' },
-                ].map((stat, i) => (
-                    <Card key={i} className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl overflow-hidden relative group hover:border-rose-500/30 transition-all">
-                        <CardHeader className="flex flex-row items-center justify-between pb-1 p-4">
-                            <CardTitle className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">{stat.label}</CardTitle>
-                            <TrendingUp className="w-3.5 h-3.5 text-zinc-300 dark:text-zinc-700" />
-                        </CardHeader>
-                        <CardContent className="p-4 pt-0">
-                            <div className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">{stat.value}</div>
-                            <div className={`text-[9px] ${stat.color} mt-1 flex items-center gap-1 font-bold uppercase tracking-widest`}>
-                                {stat.detail}
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg">
+                    <CardContent className="p-5">
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="p-2 rounded-xl bg-blue-500/10">
+                                <Users className="w-5 h-5 text-blue-500" />
                             </div>
-                        </CardContent>
-                    </Card>
-                ))}
+                            <TrendingUp className="w-4 h-4 text-emerald-500" />
+                        </div>
+                        <p className="text-3xl font-black text-zinc-900 dark:text-white">{stats.total}</p>
+                        <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Total de Leads</p>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg">
+                    <CardContent className="p-5">
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="p-2 rounded-xl bg-rose-500/10">
+                                <Target className="w-5 h-5 text-rose-500" />
+                            </div>
+                        </div>
+                        <p className="text-3xl font-black text-zinc-900 dark:text-white">{stats.experimental}</p>
+                        <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Aula Experimental</p>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg">
+                    <CardContent className="p-5">
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="p-2 rounded-xl bg-emerald-500/10">
+                                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                            </div>
+                        </div>
+                        <p className="text-3xl font-black text-zinc-900 dark:text-white">{stats.matriculados}</p>
+                        <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Matriculados</p>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg">
+                    <CardContent className="p-5">
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="p-2 rounded-xl bg-violet-500/10">
+                                <TrendingUp className="w-5 h-5 text-violet-500" />
+                            </div>
+                        </div>
+                        <p className="text-3xl font-black text-zinc-900 dark:text-white">{stats.conversao}%</p>
+                        <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Taxa Conversao</p>
+                    </CardContent>
+                </Card>
             </div>
 
-            {/* Leads List */}
-            <Card className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 overflow-hidden rounded-2xl shadow-sm">
-                <CardHeader className="p-5 border-b border-zinc-50 dark:border-zinc-800">
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                        <div>
-                            <CardTitle className="text-lg font-bold uppercase tracking-tight text-zinc-900 dark:text-white">Leads em Prospecção</CardTitle>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
-                                <Input placeholder="Nome ou contato..." className="pl-9 h-9 w-64 bg-zinc-100 dark:bg-black/40 border-none rounded-xl text-[10px] focus-visible:ring-1 focus-visible:ring-rose-500/50" />
-                            </div>
-                        </div>
-                    </div>
-                </CardHeader>
-                <CardContent className="p-0">
-                    <div className="divide-y divide-zinc-50 dark:divide-zinc-800/50">
-                        {leads.map((lead) => (
-                            <div
-                                key={lead.id}
-                                className="flex flex-col lg:flex-row lg:items-center justify-between p-4 px-6 hover:bg-zinc-50 dark:hover:bg-zinc-800/20 transition-all gap-4 group relative"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <Avatar className="h-10 w-10 border border-zinc-100 dark:border-zinc-800">
-                                        <AvatarFallback className="bg-zinc-100 dark:bg-zinc-800 font-bold text-sm uppercase text-zinc-600 dark:text-zinc-400">{lead.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <div className="font-bold text-xs uppercase tracking-tight text-zinc-900 dark:text-white group-hover:text-rose-600 transition-colors">{lead.name}</div>
-                                        <div className="flex flex-wrap items-center gap-2 mt-1">
-                                            <Badge variant="outline" className={`text-[8px] font-bold uppercase tracking-widest h-5 px-2 rounded-full ${lead.status === 'Novo' ? 'border-blue-500/30 text-blue-600 bg-blue-500/5' :
-                                                lead.status === 'Aula Experimental' ? 'border-rose-500/30 text-rose-600 bg-rose-500/5' :
-                                                    'border-amber-500/30 text-amber-600 bg-amber-500/5'
-                                                }`}>
-                                                {lead.status}
-                                            </Badge>
-                                            <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">• {lead.interest}</span>
-                                        </div>
-                                    </div>
-                                </div>
+            {/* Filters */}
+            <div className="flex flex-col md:flex-row gap-4">
+                <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+                    <Input
+                        placeholder="Buscar por nome ou contato..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="h-12 pl-12 rounded-xl bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+                    />
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                    {['all', 'Novo', 'Aula Experimental', 'Aguardando Resposta', 'Matriculado'].map((status) => (
+                        <Button
+                            key={status}
+                            variant={statusFilter === status ? 'default' : 'outline'}
+                            onClick={() => setStatusFilter(status)}
+                            className={`h-10 px-4 rounded-xl uppercase text-[9px] font-bold tracking-wider ${statusFilter === status
+                                    ? 'bg-rose-600 text-white border-rose-600'
+                                    : 'border-zinc-200 dark:border-zinc-800'
+                                }`}
+                        >
+                            {status === 'all' ? 'Todos' : status}
+                        </Button>
+                    ))}
+                </div>
+            </div>
 
-                                <div className="flex flex-row lg:items-center gap-4 ml-14 lg:ml-0">
-                                    <div className="text-[9px] text-zinc-500 bg-zinc-100 dark:bg-zinc-800/50 px-3 py-1 rounded-full font-bold uppercase tracking-widest h-fit">
-                                        <span className="opacity-50">Contato:</span> {lead.lastContact}
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Button size="icon" variant="outline" className="h-8 w-8 rounded-lg border-zinc-200 dark:border-zinc-800 hover:text-rose-600 hover:border-rose-500 transition-all">
-                                            <MessageSquare className="w-3.5 h-3.5" />
-                                        </Button>
-                                        <Button size="icon" variant="outline" className="h-8 w-8 rounded-lg border-zinc-200 dark:border-zinc-800 hover:text-blue-500 hover:border-blue-500 transition-all">
-                                            <Phone className="w-3.5 h-3.5" />
-                                        </Button>
-                                        <Button
-                                            onClick={() => handleAdvanceStatus(lead.id, lead.status)}
-                                            className="h-8 px-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 font-bold uppercase text-[9px] tracking-widest rounded-lg transition-all border-none"
-                                        >
-                                            AVANÇAR
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+            {/* Leads Table */}
+            <Card className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md border-zinc-200 dark:border-zinc-800 overflow-hidden rounded-[2rem] shadow-xl">
+                {loading ? (
+                    <div className="flex items-center justify-center py-20">
+                        <Loader2 className="w-8 h-8 animate-spin text-rose-500" />
                     </div>
-                </CardContent>
+                ) : filteredLeads.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-center">
+                        <div className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-4">
+                            <Users className="w-8 h-8 text-zinc-400" />
+                        </div>
+                        <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">Nenhum lead encontrado</h3>
+                        <p className="text-zinc-500 mb-4">Comece adicionando seu primeiro lead.</p>
+                        <Button onClick={() => setShowNewLeadModal(true)} style={{ backgroundColor: primaryColor }} className="text-white border-none">
+                            <UserPlus className="w-4 h-4 mr-2" />
+                            Novo Lead
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                            <thead>
+                                <tr className="border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-white/[0.02]">
+                                    <th className="p-6 text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Lead</th>
+                                    <th className="p-6 text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Interesse</th>
+                                    <th className="p-6 text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Status</th>
+                                    <th className="p-6 text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Prioridade</th>
+                                    <th className="p-6 text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Contato</th>
+                                    <th className="p-6 text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] text-right">Acoes</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                                <AnimatePresence>
+                                    {filteredLeads.map((lead, index) => {
+                                        const statusConfig = STATUS_CONFIG[lead.status] || STATUS_CONFIG['Novo']
+                                        const StatusIcon = statusConfig.icon
+
+                                        return (
+                                            <motion.tr
+                                                key={lead.id}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: index * 0.03 }}
+                                                className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors group"
+                                            >
+                                                <td className="p-6">
+                                                    <div className="flex items-center gap-4">
+                                                        <Avatar className="h-11 w-11 border-2 border-zinc-100 dark:border-zinc-800">
+                                                            <AvatarFallback className="bg-gradient-to-br from-rose-500 to-pink-600 text-white font-bold">
+                                                                {lead.nome?.charAt(0).toUpperCase()}
+                                                            </AvatarFallback>
+                                                        </Avatar>
+                                                        <div>
+                                                            <p className="font-black text-sm text-zinc-900 dark:text-white uppercase tracking-tight group-hover:text-rose-500 transition-colors">
+                                                                {lead.nome}
+                                                            </p>
+                                                            <p className="text-[10px] text-zinc-500 mt-0.5">
+                                                                {lead.created_at ? new Date(lead.created_at).toLocaleDateString('pt-BR') : '-'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="p-6">
+                                                    <span className="text-sm font-bold text-zinc-700 dark:text-zinc-300">
+                                                        {lead.interesse || '-'}
+                                                    </span>
+                                                </td>
+                                                <td className="p-6">
+                                                    <Badge className={`${statusConfig.bgColor} ${statusConfig.color} border-none font-bold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full`}>
+                                                        <StatusIcon className="w-3 h-3 mr-1.5" />
+                                                        {lead.status}
+                                                    </Badge>
+                                                </td>
+                                                <td className="p-6">
+                                                    <Badge className={`${PRIORIDADE_CONFIG[lead.prioridade] || PRIORIDADE_CONFIG['Média']} border font-bold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full`}>
+                                                        {lead.prioridade || 'Média'}
+                                                    </Badge>
+                                                </td>
+                                                <td className="p-6">
+                                                    <div className="flex items-center gap-2">
+                                                        {lead.contato && (
+                                                            <>
+                                                                <Button
+                                                                    size="icon"
+                                                                    variant="ghost"
+                                                                    onClick={() => window.open(`https://wa.me/55${lead.contato.replace(/\D/g, '')}`, '_blank')}
+                                                                    className="h-9 w-9 rounded-xl hover:bg-emerald-500/10 hover:text-emerald-500"
+                                                                >
+                                                                    <MessageSquare className="w-4 h-4" />
+                                                                </Button>
+                                                                <Button
+                                                                    size="icon"
+                                                                    variant="ghost"
+                                                                    onClick={() => window.open(`tel:${lead.contato}`, '_blank')}
+                                                                    className="h-9 w-9 rounded-xl hover:bg-blue-500/10 hover:text-blue-500"
+                                                                >
+                                                                    <Phone className="w-4 h-4" />
+                                                                </Button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="p-6 text-right">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        {lead.status !== 'Matriculado' && (
+                                                            <Button
+                                                                onClick={() => handleAdvanceStatus(lead.id, lead.status)}
+                                                                className="h-9 px-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 font-bold uppercase text-[9px] tracking-widest rounded-xl transition-all border-none"
+                                                            >
+                                                                <ArrowRight className="w-3.5 h-3.5 mr-1" />
+                                                                Avancar
+                                                            </Button>
+                                                        )}
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl">
+                                                                    <MoreHorizontal className="w-4 h-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end" className="w-48 rounded-xl">
+                                                                <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Acoes</DropdownMenuLabel>
+                                                                <DropdownMenuSeparator />
+                                                                <DropdownMenuItem className="rounded-lg cursor-pointer">
+                                                                    <Edit2 className="w-4 h-4 mr-2" />
+                                                                    Editar
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem className="rounded-lg cursor-pointer text-red-500 focus:text-red-500">
+                                                                    <Trash2 className="w-4 h-4 mr-2" />
+                                                                    Excluir
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </div>
+                                                </td>
+                                            </motion.tr>
+                                        )
+                                    })}
+                                </AnimatePresence>
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </Card>
 
             {/* New Lead Modal */}
             <Dialog open={showNewLeadModal} onOpenChange={setShowNewLeadModal}>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[500px] bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 rounded-2xl">
                     <DialogHeader>
-                        <DialogTitle>Novo Lead</DialogTitle>
-                        <DialogDescription>Cadastre um novo contato interessado</DialogDescription>
+                        <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                            <UserPlus className="w-5 h-5 text-rose-500" />
+                            Novo Lead
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-500">
+                            Cadastre um novo contato interessado em suas aulas.
+                        </DialogDescription>
                     </DialogHeader>
+
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label>Nome Completo (ou Responsável)</Label>
-                            <Input value={newLead.nome} onChange={e => setNewLead({ ...newLead, nome: e.target.value })} placeholder="Ex: Maria Silva" />
+                            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Nome Completo *</Label>
+                            <Input
+                                value={newLead.nome}
+                                onChange={e => setNewLead({ ...newLead, nome: e.target.value })}
+                                placeholder="Ex: Maria Silva (Mae da Julia)"
+                                className="h-11 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700"
+                            />
                         </div>
+
                         <div className="space-y-2">
-                            <Label>Interesse</Label>
-                            <Input value={newLead.interesse} onChange={e => setNewLead({ ...newLead, interesse: e.target.value })} placeholder="Ex: Ballet Baby" />
+                            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Interesse *</Label>
+                            <Input
+                                value={newLead.interesse}
+                                onChange={e => setNewLead({ ...newLead, interesse: e.target.value })}
+                                placeholder="Ex: Ballet Baby, Jazz Juvenil"
+                                className="h-11 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700"
+                            />
                         </div>
+
                         <div className="space-y-2">
-                            <Label>Contato (WhatsApp/Telefone)</Label>
-                            <Input value={newLead.contato} onChange={e => setNewLead({ ...newLead, contato: e.target.value })} placeholder="(00) 00000-0000" />
+                            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">WhatsApp/Telefone</Label>
+                            <Input
+                                value={newLead.contato}
+                                onChange={e => setNewLead({ ...newLead, contato: e.target.value })}
+                                placeholder="(00) 00000-0000"
+                                className="h-11 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700"
+                            />
                         </div>
+
                         <div className="space-y-2">
-                            <Label>Prioridade</Label>
+                            <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Prioridade</Label>
                             <Select value={newLead.prioridade} onValueChange={v => setNewLead({ ...newLead, prioridade: v })}>
-                                <SelectTrigger>
+                                <SelectTrigger className="h-11 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="Baixa">Baixa</SelectItem>
-                                    <SelectItem value="Média">Média</SelectItem>
+                                    <SelectItem value="Média">Media</SelectItem>
                                     <SelectItem value="Alta">Alta</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                     </div>
-                    <div className="flex justify-end gap-3">
-                        <Button variant="outline" onClick={() => setShowNewLeadModal(false)}>Cancelar</Button>
-                        <Button onClick={handleCreateLead} style={{ backgroundColor: primaryColor }} className="text-white border-none">Criar Lead</Button>
-                    </div>
+
+                    <DialogFooter className="gap-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowNewLeadModal(false)}
+                            disabled={isSubmitting}
+                            className="border-zinc-200 dark:border-zinc-700"
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            onClick={handleCreateLead}
+                            disabled={isSubmitting}
+                            className="text-white border-none"
+                            style={{ backgroundColor: primaryColor }}
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    Criando...
+                                </>
+                            ) : (
+                                'Criar Lead'
+                            )}
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
         </div>
     )
 }
-

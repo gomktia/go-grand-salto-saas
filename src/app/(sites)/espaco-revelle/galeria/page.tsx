@@ -48,73 +48,73 @@ export default async function AlbunsPage() {
         <div className="min-h-screen bg-neutral-950 text-white font-sans">
             {/* Header */}
             <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/80 backdrop-blur-2xl px-6 h-20 flex items-center">
-                <Link href="/espaco-revelle" className="flex items-center gap-3 group">
-                    <ArrowLeft className="w-5 h-5 text-neutral-500 group-hover:text-red-500 transition-colors" />
-                    <span className="text-sm font-bold uppercase tracking-widest">Voltar ao Site</span>
+                <Link href="/espaco-revelle" className="flex items-center gap-3 group border-none">
+                    <ArrowLeft className="w-5 h-5 text-neutral-500 group-hover:text-rose-500 transition-colors" />
+                    <span className="text-sm font-black uppercase tracking-widest">Site Revelle</span>
                 </Link>
             </nav>
 
             {/* Main Content */}
             <main className="container mx-auto px-6 pt-32 pb-20">
                 <div className="max-w-5xl mx-auto">
-                    <div className="mb-12">
-                        <Badge className="bg-red-600 mb-4 uppercase text-[10px]">Galeria de Fotos</Badge>
-                        <h1 className="text-5xl font-black tracking-tighter uppercase mb-4">
-                            Álbuns <span className="text-red-600">Disponíveis</span>
+                    <div className="mb-12 space-y-4">
+                        <Badge className="bg-rose-600 mb-4 uppercase text-[10px] font-black tracking-widest px-4 py-1.5 rounded-full shadow-2xl shadow-rose-600/20">Galeria de Fotos</Badge>
+                        <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white">
+                            Álbuns <span className="text-rose-600">Disponíveis</span>
                         </h1>
-                        <p className="text-neutral-500 text-lg">
-                            Escolha um álbum para visualizar e adquirir fotos em alta resolução dos nossos eventos.
+                        <p className="text-zinc-500 text-lg font-medium max-w-2xl leading-relaxed">
+                            Escolha um álbum para visualizar e adquirir fotos em alta resolução dos nossos eventos. Todo investimento é revertido para a produção dos espetáculos.
                         </p>
                     </div>
 
                     {albums.length === 0 ? (
-                        <div className="text-center py-20">
-                            <ImageIcon className="w-16 h-16 mx-auto mb-4 text-neutral-700" />
-                            <p className="text-neutral-500">Nenhum álbum disponível no momento</p>
+                        <div className="text-center py-40 bg-white/5 rounded-[3rem] border border-white/5">
+                            <ImageIcon className="w-16 h-16 mx-auto mb-6 text-zinc-700" />
+                            <p className="text-zinc-500 font-black uppercase tracking-widest text-sm">Nenhum álbum disponível no momento</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {albums.map((album: any) => (
-                                <Link key={album.id} href={`/espaco-revelle/galeria/${album.id}`}>
-                                    <Card className="bg-neutral-900 border-white/5 overflow-hidden group hover:border-red-600/30 transition-all cursor-pointer">
-                                        <div className="aspect-video relative overflow-hidden">
+                                <Link key={album.id} href={`/espaco-revelle/galeria/${album.id}`} className="border-none">
+                                    <Card className="bg-neutral-900 border-white/5 overflow-hidden group hover:border-rose-600/30 transition-all cursor-pointer rounded-[2rem] shadow-2xl">
+                                        <div className="aspect-video relative overflow-hidden bg-neutral-800">
                                             <Image
                                                 src={album.capa_url || 'https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?q=80&w=2083&auto=format&fit=crop'}
                                                 alt={album.titulo}
                                                 fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                                className="object-cover group-hover:scale-110 transition-transform duration-700"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                                            <div className="absolute bottom-4 right-4">
+                                            <div className="absolute bottom-6 right-6">
                                                 {album.is_venda_ativa ? (
-                                                    <Badge className="bg-emerald-600 text-white text-[10px]">
+                                                    <Badge className="bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-2xl shadow-emerald-500/20">
                                                         Venda Ativa
                                                     </Badge>
                                                 ) : (
-                                                    <Badge variant="outline" className="border-neutral-600 text-neutral-400 text-[10px]">
+                                                    <Badge variant="outline" className="border-zinc-600 text-zinc-400 text-[10px] uppercase font-black tracking-widest px-4 py-1.5 rounded-full">
                                                         Venda Encerrada
                                                     </Badge>
                                                 )}
                                             </div>
                                         </div>
-                                        <CardContent className="p-6 space-y-4">
+                                        <CardContent className="p-8 space-y-6 bg-zinc-950/80 backdrop-blur-sm">
                                             <div>
-                                                <h3 className="text-2xl font-black uppercase mb-2 group-hover:text-red-500 transition-colors">
+                                                <h3 className="text-3xl font-black uppercase italic mb-2 group-hover:text-rose-500 transition-colors text-white tracking-tighter">
                                                     {album.titulo}
                                                 </h3>
                                                 {album.descricao && (
-                                                    <p className="text-neutral-500 text-sm line-clamp-2">
+                                                    <p className="text-zinc-500 text-sm line-clamp-2 font-medium">
                                                         {album.descricao}
                                                     </p>
                                                 )}
                                             </div>
-                                            <div className="flex items-center justify-between text-xs text-neutral-600">
+                                            <div className="flex items-center justify-between text-[10px] text-zinc-600 font-black uppercase tracking-widest">
                                                 <div className="flex items-center gap-2">
-                                                    <Calendar className="w-4 h-4" />
+                                                    <Calendar className="w-4 h-4 text-rose-500" />
                                                     <span>{album.evento_data ? formatDate(album.evento_data) : 'Data não informada'}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <ImageIcon className="w-4 h-4" />
+                                                    <ImageIcon className="w-4 h-4 text-rose-500" />
                                                     <span>
                                                         {Array.isArray(album.fotos) && album.fotos.length > 0
                                                             ? album.fotos[0].count || album.fotos.length
@@ -123,9 +123,9 @@ export default async function AlbunsPage() {
                                                 </div>
                                             </div>
                                             <Button
-                                                className="w-full h-12 bg-red-600 hover:bg-red-500 font-bold uppercase tracking-wide text-xs rounded-xl"
+                                                className="w-full h-14 bg-rose-600 hover:bg-rose-500 font-black uppercase tracking-widest text-[10px] rounded-2xl shadow-2xl shadow-rose-600/20 border-none transition-all hover:scale-[1.02]"
                                             >
-                                                Ver Álbum
+                                                Explorar Álbum
                                             </Button>
                                         </CardContent>
                                     </Card>
