@@ -421,10 +421,54 @@ export async function createVideoSite(rawData: unknown) {
         .select()
         .single()
 
-    if (error) throw new Error(`Erro ao criar vídeo: ${error.message}`)
+    revalidatePath('/espaco-revelle')
+    return { data }
+}
+
+export async function updateVideoSite(id: string, rawData: unknown) {
+    const supabase = await createClient()
+    const { perfil } = await getAuthenticatedUser()
+    requireDiretora(perfil.role)
+
+    const validated = z.object({
+        titulo: z.string().min(3),
+        descricao: z.string().optional(),
+        url_video: z.string().url(),
+        thumbnail_url: z.string().url().optional(),
+        tipo: z.enum(['youtube', 'vimeo', 'storage']).default('youtube'),
+        ordem: z.number().int().default(0),
+        is_destaque: z.boolean().default(false),
+    }).partial().parse(rawData)
+
+    const { data, error } = await supabase
+        .from('videos_site')
+        .update(validated)
+        .eq('id', id)
+        .eq('escola_id', perfil.escola_id)
+        .select()
+        .single()
+
+    if (error) throw new Error(`Erro ao atualizar vídeo: ${error.message}`)
 
     revalidatePath('/espaco-revelle')
     return { data }
+}
+
+export async function deleteVideoSite(id: string) {
+    const supabase = await createClient()
+    const { perfil } = await getAuthenticatedUser()
+    requireDiretora(perfil.role)
+
+    const { error } = await supabase
+        .from('videos_site')
+        .delete()
+        .eq('id', id)
+        .eq('escola_id', perfil.escola_id)
+
+    if (error) throw new Error(`Erro ao deletar vídeo: ${error.message}`)
+
+    revalidatePath('/espaco-revelle')
+    return { success: true }
 }
 
 // ============================================
@@ -483,4 +527,51 @@ export async function createEventoCalendario(rawData: unknown) {
 
     revalidatePath('/espaco-revelle')
     return { data }
+}
+
+export async function updateEventoCalendario(id: string, rawData: unknown) {
+    const supabase = await createClient()
+    const { perfil } = await getAuthenticatedUser()
+    requireDiretora(perfil.role)
+
+    const validated = z.object({
+        titulo: z.string().min(3),
+        descricao: z.string().optional(),
+        data_inicio: z.string(), // ISO datetime
+        data_fim: z.string().optional(),
+        local: z.string().optional(),
+        tipo: z.enum(['evento', 'aula_aberta', 'recital', 'feriado']).default('evento'),
+        cor: z.string().default('#ec4899'),
+        is_publico: z.boolean().default(true),
+    }).partial().parse(rawData)
+
+    const { data, error } = await supabase
+        .from('eventos_calendario')
+        .update(validated)
+        .eq('id', id)
+        .eq('escola_id', perfil.escola_id)
+        .select()
+        .single()
+
+    if (error) throw new Error(`Erro ao atualizar evento: ${error.message}`)
+
+    revalidatePath('/espaco-revelle')
+    return { data }
+}
+
+export async function deleteEventoCalendario(id: string) {
+    const supabase = await createClient()
+    const { perfil } = await getAuthenticatedUser()
+    requireDiretora(perfil.role)
+
+    const { error } = await supabase
+        .from('eventos_calendario')
+        .delete()
+        .eq('id', id)
+        .eq('escola_id', perfil.escola_id)
+
+    if (error) throw new Error(`Erro ao deletar evento: ${error.message}`)
+
+    revalidatePath('/espaco-revelle')
+    return { success: true }
 }

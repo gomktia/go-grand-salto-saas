@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2, AlertCircle, CheckCircle2, Calendar, MapPin, Globe, Lock } from 'lucide-react'
-import { createEventoCalendario } from '@/app/actions/fotos-venda'
+import { createEventoCalendario, updateEventoCalendario } from '@/app/actions/fotos-venda'
 
 type Evento = {
     id: string
@@ -125,8 +125,11 @@ export function EventoDialog({ open, onOpenChange, evento, onSuccess }: EventoDi
                 is_publico: formData.is_publico,
             }
 
-            // TODO: Add updateEventoCalendario when edit is needed
-            await createEventoCalendario(payload)
+            if (evento) {
+                await updateEventoCalendario(evento.id, payload)
+            } else {
+                await createEventoCalendario(payload)
+            }
 
             setSuccess(true)
             setTimeout(() => {
@@ -334,11 +337,10 @@ export function EventoDialog({ open, onOpenChange, evento, onSuccess }: EventoDi
                             type="button"
                             onClick={() => handleChange('is_publico', !formData.is_publico)}
                             disabled={isLoading || success}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
-                                formData.is_publico
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${formData.is_publico
                                     ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
                                     : 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400'
-                            }`}
+                                }`}
                         >
                             {formData.is_publico ? <Globe className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
                             <span className="text-sm font-medium">

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2, AlertCircle, CheckCircle2, Video, Star, StarOff, Youtube, Play } from 'lucide-react'
-import { createVideoSite } from '@/app/actions/fotos-venda'
+import { createVideoSite, updateVideoSite } from '@/app/actions/fotos-venda'
 
 type VideoData = {
     id: string
@@ -115,8 +115,11 @@ export function VideoDialog({ open, onOpenChange, video, onSuccess }: VideoDialo
                 is_destaque: formData.is_destaque,
             }
 
-            // TODO: Add updateVideoSite when edit is needed
-            await createVideoSite(payload)
+            if (video) {
+                await updateVideoSite(video.id, payload)
+            } else {
+                await createVideoSite(payload)
+            }
 
             setSuccess(true)
             setTimeout(() => {
@@ -301,11 +304,10 @@ export function VideoDialog({ open, onOpenChange, video, onSuccess }: VideoDialo
                             type="button"
                             onClick={() => handleChange('is_destaque', !formData.is_destaque)}
                             disabled={isLoading || success}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
-                                formData.is_destaque
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${formData.is_destaque
                                     ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400'
                                     : 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400'
-                            }`}
+                                }`}
                         >
                             {formData.is_destaque ? <Star className="w-4 h-4 fill-current" /> : <StarOff className="w-4 h-4" />}
                             <span className="text-sm font-medium">

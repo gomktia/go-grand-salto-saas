@@ -253,26 +253,54 @@ export async function getStudents() {
 }
 
 export async function getStats() {
-    const { user, perfil } = await getAuthenticatedUser()
+    const { perfil } = await getAuthenticatedUser()
     const supabase = await createClient()
 
-    // Buscar estatísticas da escola
+    // 1. Total de Alunos Ativos
     const { count: totalStudents } = await supabase
         .from('estudantes')
         .select('*', { count: 'exact', head: true })
         .eq('escola_id', perfil.escola_id)
         .eq('status_matricula', 'ativo')
 
+    // 2. Total de Turmas
     const { count: totalTurmas } = await supabase
         .from('turmas')
         .select('*', { count: 'exact', head: true })
         .eq('escola_id', perfil.escola_id)
+
+    // 3. Novas Matrículas (últimos 30 dias)
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+    const { count: newStudents } = await supabase
+        .from('estudantes')
+        .select('*', { count: 'exact', head: true })
+        .eq('escola_id', perfil.escola_id)
+        .gte('created_at', thirtyDaysAgo)
+
+    // 4. Liquidez / Financeiro (simplificado)
+    const mesAtual = new Date().getMonth() + 1
+    const anoAtual = new Date().getFullYear()
+
+    const { data: mensalidades } = await supabase
+        .from('mensalidades')
+        .select('status, valor')
+        .eq('ano_referencia', anoAtual)
+        .eq('mes_referencia', mesAtual)
+        .eq('estudantes.escola_id', perfil.escola_id)
+
+    const totalExpected = mensalidades?.reduce((acc, m) => acc + Number(m.valor), 0) || 0
+    const totalPaid = mensalidades?.filter(m => m.status === 'pago').reduce((acc, m) => acc + Number(m.valor), 0) || 0
+    const liquidity = totalExpected > 0 ? Math.round((totalPaid / totalExpected) * 100) : 0
 
     return {
         success: true,
         data: {
             totalStudents: totalStudents || 0,
             totalTurmas: totalTurmas || 0,
+            newStudents: newStudents || 0,
+            liquidity: liquidity || 0,
+            totalPaid: totalPaid || 0,
+            totalExpected: totalExpected || 0
         }
     }
 }
@@ -1170,4 +1198,248 @@ export async function sendNotification(rawData: {
     revalidatePath('/diretora/notificacoes')
     revalidatePath('/responsavel')
     return { success: true, data }
+}
+
+// ============================================
+// SISTEMA DE NOTIFICAÇÕES AVANÇADO
+// ============================================
+
+/**
+ * Busca opções de destinatários para notificações
+ * Retorna turmas, contagem de inadimplentes, total de responsáveis
+ */
+export async function getDestinatariosNotificacao() {
+    const { perfil } = await getAuthenticatedUser()
+    const supabase = await createClient()
+
+    // Buscar turmas da escola
+    const { data: turmas } = await supabase
+        .from('turmas')
+        .select(`
+            id,
+            nome,
+            nivel,
+            cor_etiqueta,
+            matriculas_turmas (count)
+        `)
+        .eq('escola_id', perfil.escola_id)
+        .order('nome')
+
+    // Buscar total de responsáveis
+    const { count: totalResponsaveis } = await supabase
+        .from('responsaveis')
+        .select('*', { count: 'exact', head: true })
+        .eq('escola_id', perfil.escola_id)
+
+    // Buscar inadimplentes (mensalidades pendentes ou atrasadas)
+    const mesAtual = new Date().getMonth() + 1
+    const anoAtual = new Date().getFullYear()
+
+    const { data: mensalidadesPendentes } = await supabase
+        .from('mensalidades')
+        .select(`
+            estudante_id,
+            estudantes!inner (
+                id,
+                escola_id
+            )
+        `)
+        .eq('estudantes.escola_id', perfil.escola_id)
+        .in('status', ['pendente', 'atrasado'])
+        .lte('mes_referencia', mesAtual)
+        .lte('ano_referencia', anoAtual)
+
+    // Contar estudantes únicos inadimplentes
+    const estudantesInadimplentes = new Set(mensalidadesPendentes?.map(m => m.estudante_id) || [])
+
+    return {
+        data: {
+            turmas: turmas?.map(t => ({
+                id: t.id,
+                nome: t.nome,
+                nivel: t.nivel,
+                cor: t.cor_etiqueta,
+                totalAlunos: t.matriculas_turmas?.[0]?.count || 0
+            })) || [],
+            totalResponsaveis: totalResponsaveis || 0,
+            totalInadimplentes: estudantesInadimplentes.size
+        }
+    }
+}
+
+/**
+ * Envia notificação para grupo específico
+ */
+export async function enviarNotificacaoGrupo(rawData: {
+    titulo: string
+    mensagem: string
+    tipo: 'geral' | 'financeiro' | 'evento'
+    grupo: 'todos' | 'turma' | 'inadimplentes'
+    turma_id?: string
+}) {
+    const { perfil } = await getAuthenticatedUser()
+    const supabase = await createClient()
+
+    let destinatarios: string[] = []
+
+    if (rawData.grupo === 'todos') {
+        // Buscar todos os responsáveis da escola
+        const { data: responsaveis } = await supabase
+            .from('responsaveis')
+            .select('perfil_id')
+            .eq('escola_id', perfil.escola_id)
+
+        destinatarios = responsaveis?.map(r => r.perfil_id).filter(Boolean) as string[] || []
+    }
+    else if (rawData.grupo === 'turma' && rawData.turma_id) {
+        // Buscar responsáveis dos alunos da turma específica
+        const { data: matriculas } = await supabase
+            .from('matriculas_turmas')
+            .select(`
+                estudantes!inner (
+                    id,
+                    estudantes_responsaveis (
+                        responsaveis (
+                            perfil_id
+                        )
+                    )
+                )
+            `)
+            .eq('turma_id', rawData.turma_id)
+            .eq('status', 'ativo')
+
+        // Extrair perfil_ids dos responsáveis
+        matriculas?.forEach((m: any) => {
+            m.estudantes?.estudantes_responsaveis?.forEach((er: any) => {
+                if (er.responsaveis?.perfil_id) {
+                    destinatarios.push(er.responsaveis.perfil_id)
+                }
+            })
+        })
+        // Remover duplicados
+        destinatarios = [...new Set(destinatarios)]
+    }
+    else if (rawData.grupo === 'inadimplentes') {
+        // Buscar responsáveis de alunos inadimplentes
+        const mesAtual = new Date().getMonth() + 1
+        const anoAtual = new Date().getFullYear()
+
+        const { data: mensalidadesPendentes } = await supabase
+            .from('mensalidades')
+            .select(`
+                estudantes!inner (
+                    id,
+                    escola_id,
+                    estudantes_responsaveis (
+                        responsaveis (
+                            perfil_id
+                        )
+                    )
+                )
+            `)
+            .eq('estudantes.escola_id', perfil.escola_id)
+            .in('status', ['pendente', 'atrasado'])
+            .lte('mes_referencia', mesAtual)
+            .lte('ano_referencia', anoAtual)
+
+        mensalidadesPendentes?.forEach((m: any) => {
+            m.estudantes?.estudantes_responsaveis?.forEach((er: any) => {
+                if (er.responsaveis?.perfil_id) {
+                    destinatarios.push(er.responsaveis.perfil_id)
+                }
+            })
+        })
+        destinatarios = [...new Set(destinatarios)]
+    }
+
+    // Se não houver destinatários específicos, enviar para todos (broadcast)
+    if (destinatarios.length === 0) {
+        // Enviar notificação broadcast (destinatario_id = null)
+        const { error } = await supabase
+            .from('notificacoes')
+            .insert([{
+                titulo: rawData.titulo,
+                mensagem: rawData.mensagem,
+                tipo: rawData.tipo,
+                escola_id: perfil.escola_id,
+                destinatario_id: null,
+                lido: false
+            }])
+
+        if (error) throw new Error(`Erro ao enviar notificação: ${error.message}`)
+    } else {
+        // Criar uma notificação para cada destinatário
+        const notificacoes = destinatarios.map(destId => ({
+            titulo: rawData.titulo,
+            mensagem: rawData.mensagem,
+            tipo: rawData.tipo,
+            escola_id: perfil.escola_id,
+            destinatario_id: destId,
+            lido: false
+        }))
+
+        const { error } = await supabase
+            .from('notificacoes')
+            .insert(notificacoes)
+
+        if (error) throw new Error(`Erro ao enviar notificações: ${error.message}`)
+    }
+
+    revalidatePath('/diretora/notificacoes')
+    revalidatePath('/responsavel')
+
+    return {
+        success: true,
+        totalEnviados: destinatarios.length || 1,
+        grupo: rawData.grupo
+    }
+}
+
+/**
+ * Busca histórico de notificações enviadas pela escola
+ */
+export async function getHistoricoNotificacoes(limite: number = 20) {
+    const { perfil } = await getAuthenticatedUser()
+    const supabase = await createClient()
+
+    const { data, error } = await supabase
+        .from('notificacoes')
+        .select(`
+            id,
+            titulo,
+            mensagem,
+            tipo,
+            destinatario_id,
+            created_at,
+            perfis:perfis!notificacoes_destinatario_id_fkey (
+                full_name
+            )
+        `)
+        .eq('escola_id', perfil.escola_id)
+        .order('created_at', { ascending: false })
+        .limit(limite)
+
+    if (error) throw new Error(`Erro ao buscar histórico: ${error.message}`)
+
+    // Agrupar por created_at para mostrar envios em lote
+    const agrupado = data?.reduce((acc: any[], notif: any) => {
+        const existente = acc.find(
+            n => n.titulo === notif.titulo &&
+                n.mensagem === notif.mensagem &&
+                Math.abs(new Date(n.created_at).getTime() - new Date(notif.created_at).getTime()) < 60000
+        )
+
+        if (existente) {
+            existente.totalDestinatarios++
+        } else {
+            acc.push({
+                ...notif,
+                totalDestinatarios: 1,
+                destinatarioNome: notif.perfis?.full_name || 'Todos'
+            })
+        }
+        return acc
+    }, [])
+
+    return { data: agrupado || [] }
 }

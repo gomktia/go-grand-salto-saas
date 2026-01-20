@@ -17,6 +17,7 @@ import {
     UserPlus,
     LayoutGrid,
     Library,
+    Bell,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -28,6 +29,7 @@ import { DeleteTurmaDialog } from '@/components/dashboard/delete-turma-dialog'
 import { HorariosTurmaDialog } from '@/components/dashboard/horarios-turma-dialog'
 import { MatriculasTurmaDialog } from '@/components/dashboard/matriculas-turma-dialog'
 import { RecursosTurmaDialog } from '@/components/dashboard/recursos-turma-dialog'
+import { NotificacaoTurmaDialog } from '@/components/dashboard/notificacao-turma-dialog'
 import { TurmasCalendarView } from '@/components/dashboard/turmas-calendar-view'
 import {
     DropdownMenu,
@@ -85,6 +87,7 @@ export default function TurmasPage() {
     const [horariosDialogOpen, setHorariosDialogOpen] = useState(false)
     const [matriculasDialogOpen, setMatriculasDialogOpen] = useState(false)
     const [recursosDialogOpen, setRecursosDialogOpen] = useState(false)
+    const [notificacaoDialogOpen, setNotificacaoDialogOpen] = useState(false)
     const [selectedTurma, setSelectedTurma] = useState<Turma | null>(null)
 
     useEffect(() => {
@@ -132,6 +135,11 @@ export default function TurmasPage() {
     const handleManageRecursos = (turma: Turma) => {
         setSelectedTurma(turma)
         setRecursosDialogOpen(true)
+    }
+
+    const handleNotifyTurma = (turma: Turma) => {
+        setSelectedTurma(turma)
+        setNotificacaoDialogOpen(true)
     }
 
     const handleSuccess = () => {
@@ -316,6 +324,9 @@ export default function TurmasPage() {
                                                         <DropdownMenuItem onClick={() => handleManageRecursos(turma)} className="text-[10px] font-bold uppercase tracking-widest px-3 py-2 cursor-pointer rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 !outline-none">
                                                             <Library className="w-3.5 h-3.5 mr-2" /> Biblioteca de Mídia
                                                         </DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => handleNotifyTurma(turma)} className="text-[10px] font-bold uppercase tracking-widest px-3 py-2 cursor-pointer rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 !outline-none">
+                                                            <Bell className="w-3.5 h-3.5 mr-2" /> Enviar Aviso
+                                                        </DropdownMenuItem>
                                                         <DropdownMenuSeparator className="bg-zinc-100 dark:bg-zinc-800" />
                                                         <DropdownMenuItem onClick={() => handleDeleteTurma(turma)} className="text-[10px] font-bold uppercase tracking-widest px-3 py-2 cursor-pointer rounded-lg text-red-500 hover:bg-red-500/10 !outline-none">
                                                             <Trash2 className="w-3.5 h-3.5 mr-2" /> Deletar Turma
@@ -419,6 +430,13 @@ export default function TurmasPage() {
                         turmaId={selectedTurma.id}
                         turmaNome={selectedTurma.nome}
                         canEdit={true}
+                    />
+
+                    <NotificacaoTurmaDialog
+                        open={notificacaoDialogOpen}
+                        onOpenChange={setNotificacaoDialogOpen}
+                        turmaId={selectedTurma.id}
+                        turmaNome={selectedTurma.nome}
                     />
                 </>
             )}

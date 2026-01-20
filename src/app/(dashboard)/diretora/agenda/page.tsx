@@ -30,7 +30,8 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { useTenant } from '@/hooks/use-tenant'
-import { getTurmas } from '@/app/actions/admin'
+import { getTurmas, enviarNotificacaoGrupo } from '@/app/actions/admin'
+import { NotificacaoTurmaDialog } from '@/components/dashboard/notificacao-turma-dialog'
 import { toast } from 'sonner'
 
 const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
@@ -256,49 +257,14 @@ export default function AgendaPage() {
             </Dialog>
 
             {/* Notification Modal */}
-            <Dialog open={isNotifyModalOpen} onOpenChange={() => setIsNotifyModalOpen(false)}>
-                <DialogContent className="sm:max-w-[400px] bg-card border-border rounded-3xl p-6">
-                    <DialogHeader>
-                        <DialogTitle className="text-lg font-bold">Enviar Notificação</DialogTitle>
-                        <DialogDescription className="text-xs">
-                            Para: Turma <strong style={{ color: primaryColor }}>{selectedEvent?.name}</strong>.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4 py-4">
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Canal</label>
-                            <div className="grid grid-cols-2 gap-2">
-                                <Button className="h-10 rounded-xl text-xs font-bold gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/10">
-                                    WhatsApp
-                                </Button>
-                                <Button variant="outline" className="h-10 rounded-xl text-xs font-bold border-border">
-                                    App Push
-                                </Button>
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Mensagem</label>
-                            <textarea
-                                className="w-full h-24 bg-muted/40 border border-border rounded-xl p-3 text-sm focus:ring-2 focus:ring-[var(--primary)]/20 outline-none resize-none"
-                                defaultValue={`Olá! Lembrando da aula de ${selectedEvent?.name} hoje às ${selectedEvent?.time}.`}
-                            />
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <Button
-                            onClick={() => {
-                                toast.success('Notificação enviada para a turma!')
-                                setIsNotifyModalOpen(false)
-                            }}
-                            className="w-full h-11 rounded-xl font-bold text-xs shadow-md gap-2 text-white"
-                            style={{ backgroundColor: primaryColor }}
-                        >
-                            <CheckCircle2 size={16} /> Enviar Agora
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            {selectedEvent && (
+                <NotificacaoTurmaDialog
+                    open={isNotifyModalOpen}
+                    onOpenChange={setIsNotifyModalOpen}
+                    turmaId={selectedEvent.turmaId}
+                    turmaNome={selectedEvent.name}
+                />
+            )}
         </div>
     )
 }
-

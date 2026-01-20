@@ -58,6 +58,7 @@ export function ClientGalleryContent({ albums }: Props) {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
     const [selectedAlbumId, setSelectedAlbumId] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [editingAlbumId, setEditingAlbumId] = useState<string | null>(null)
 
     const [albumData, setAlbumData] = useState({
         titulo: '',
@@ -68,7 +69,7 @@ export function ClientGalleryContent({ albums }: Props) {
         is_venda_ativa: true
     })
 
-    const handleCreateAlbum = async () => {
+    const handleSaveAlbum = async () => {
         if (!albumData.titulo) {
             toast.error('Título é obrigatório')
             return
@@ -76,9 +77,15 @@ export function ClientGalleryContent({ albums }: Props) {
 
         setIsSubmitting(true)
         try {
-            await createAlbumVenda(albumData)
-            toast.success('Álbum criado com sucesso!')
+            if (editingAlbumId) {
+                await updateAlbumVenda(editingAlbumId, albumData)
+                toast.success('Álbum atualizado!')
+            } else {
+                await createAlbumVenda(albumData)
+                toast.success('Álbum criado com sucesso!')
+            }
             setIsCreateModalOpen(false)
+            setEditingAlbumId(null)
             setAlbumData({
                 titulo: '',
                 descricao: '',
@@ -93,6 +100,19 @@ export function ClientGalleryContent({ albums }: Props) {
         } finally {
             setIsSubmitting(false)
         }
+    }
+
+    const openEditAlbum = (album: Album) => {
+        setEditingAlbumId(album.id)
+        setAlbumData({
+            titulo: album.titulo,
+            descricao: album.descricao || '',
+            evento_data: album.evento_data?.split('T')[0] || new Date().toISOString().split('T')[0],
+            preco_padrao: album.preco_padrao,
+            is_publico: album.is_publico,
+            is_venda_ativa: album.is_venda_ativa
+        })
+        setIsCreateModalOpen(true)
     }
 
     const handleDeleteAlbum = async (id: string) => {
@@ -202,6 +222,14 @@ export function ClientGalleryContent({ albums }: Props) {
                                     <div className="flex flex-col items-end gap-2">
                                         <div className="text-[10px] font-black italic text-rose-500 uppercase tracking-widest">R$ {Number(album.preco_padrao).toFixed(2)}</div>
                                         <div className="flex gap-1">
+                                            <Button
+                                                size="icon"
+                                                variant="ghost"
+                                                className="h-8 w-8 rounded-lg text-zinc-400 hover:text-blue-500"
+                                                onClick={() => openEditAlbum(album)}
+                                            >
+                                                <MoreVertical className="w-4 h-4" />
+                                            </Button>
                                             <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg text-zinc-400 hover:text-rose-500" onClick={() => toggleStatus(album, 'is_publico')}>
                                                 {album.is_publico ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                                             </Button>
@@ -225,12 +253,29 @@ export function ClientGalleryContent({ albums }: Props) {
                 </div>
             )}
 
-            {/* Create Album Modal */}
-            <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+            {/* Create/Edit Album Modal */}
+            <Dialog open={isCreateModalOpen} onOpenChange={(open) => {
+                setIsCreateModalOpen(open)
+                if (!open) {
+                    setEditingAlbumId(null)
+                    setAlbumData({
+                        titulo: '',
+                        descricao: '',
+                        evento_data: new Date().toISOString().split('T')[0],
+                        preco_padrao: 15,
+                        is_publico: true,
+                        is_venda_ativa: true
+                    })
+                }
+            }}>
                 <DialogContent className="bg-neutral-950 border-white/10 text-white max-w-lg rounded-[2.5rem] p-10">
                     <DialogHeader>
-                        <DialogTitle className="text-3xl font-black uppercase italic tracking-tighter">Novo Álbum</DialogTitle>
-                        <DialogDescription className="text-zinc-500 font-medium">Configure o álbum e defina o preço base das fotos.</DialogDescription>
+                        <DialogTitle className="text-3xl font-black uppercase italic tracking-tighter">
+                            {editingAlbumId ? 'Editar Álbum' : 'Novo Álbum'}
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-500 font-medium">
+                            {editingAlbumId ? 'Atualize as informações do álbum selecionado.' : 'Configure o álbum e defina o preço base das fotos.'}
+                        </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-6 py-6">
@@ -289,11 +334,11 @@ export function ClientGalleryContent({ albums }: Props) {
 
                     <DialogFooter>
                         <Button
-                            onClick={handleCreateAlbum}
+                            onClick={handleSaveAlbum}
                             disabled={isSubmitting}
                             className="w-full h-16 bg-rose-600 hover:bg-rose-500 font-black uppercase text-xs tracking-widest shadow-2xl shadow-rose-600/20 rounded-2xl border-none"
                         >
-                            {isSubmitting ? 'CRIANDO...' : 'CRIAR ÁLBUM AGORA'}
+                            {isSubmitting ? 'SALVANDO...' : editingAlbumId ? 'ATUALIZAR ÁLBUM' : 'CRIAR ÁLBUM AGORA'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

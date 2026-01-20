@@ -22,7 +22,14 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 export default function AdminDashboard() {
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#f43f5e'
-    const [realStats, setRealStats] = useState({ totalStudents: 0, totalTurmas: 0 })
+    const [realStats, setRealStats] = useState({
+        totalStudents: 0,
+        totalTurmas: 0,
+        newStudents: 0,
+        liquidity: 0,
+        totalPaid: 0,
+        totalExpected: 0
+    })
 
     const loadStats = React.useCallback(async () => {
         try {
@@ -52,31 +59,31 @@ export default function AdminDashboard() {
             title: 'Turmas Ativas',
             value: realStats.totalTurmas.toString(),
             description: 'Classes em andamento',
-            icon: DollarSign,
+            icon: Zap,
             trend: '+8.4%',
             trendUp: true,
-            color: 'text-emerald-500',
-            bg: 'bg-emerald-500/10'
+            color: 'text-amber-500',
+            bg: 'bg-amber-500/10'
         },
         {
-            title: 'Taxa de Retenção',
-            value: '94%',
-            description: 'Alunos que permanecem',
+            title: 'Novas Matrículas',
+            value: realStats.newStudents.toString(),
+            description: 'Conversão (Últ. 30 dias)',
             icon: TrendingUp,
-            trend: '+1.2%',
+            trend: '+5%',
             trendUp: true,
             color: 'text-blue-500',
             bg: 'bg-blue-500/10'
         },
         {
-            title: 'Novas Matrículas',
-            value: '18',
-            description: 'Conversão este mês',
-            icon: Zap,
-            trend: '+5%',
-            trendUp: true,
-            color: 'text-amber-500',
-            bg: 'bg-amber-500/10'
+            title: 'Taxa de Liquidez',
+            value: `${realStats.liquidity}%`,
+            description: `R$ ${realStats.totalPaid.toLocaleString()} de R$ ${realStats.totalExpected.toLocaleString()}`,
+            icon: DollarSign,
+            trend: realStats.liquidity > 90 ? '+2.4%' : '-1.2%',
+            trendUp: realStats.liquidity > 90,
+            color: 'text-emerald-500',
+            bg: 'bg-emerald-500/10'
         }
     ]
 

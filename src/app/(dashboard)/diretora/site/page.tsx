@@ -24,7 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useTenant } from '@/hooks/use-tenant'
 import Link from 'next/link'
 import { getPostsBlog, deletePostBlog, updatePostBlog } from '@/app/actions/blog'
-import { getVideosSite, getEventosCalendario, getAlbunsVenda } from '@/app/actions/fotos-venda'
+import { getVideosSite, deleteVideoSite, getEventosCalendario, deleteEventoCalendario, getAlbunsVenda } from '@/app/actions/fotos-venda'
 import { toast } from 'sonner'
 import { BlogDialog } from '@/components/dashboard/blog-dialog'
 import { VideoDialog } from '@/components/dashboard/video-dialog'
@@ -35,6 +35,9 @@ export default function SiteManagementPage() {
     const [blogDialogOpen, setBlogDialogOpen] = useState(false)
     const [videoDialogOpen, setVideoDialogOpen] = useState(false)
     const [eventoDialogOpen, setEventoDialogOpen] = useState(false)
+    const [postToEdit, setPostToEdit] = useState<any>(null)
+    const [videoToEdit, setVideoToEdit] = useState<any>(null)
+    const [eventoToEdit, setEventoToEdit] = useState<any>(null)
     const [refreshKey, setRefreshKey] = useState(0)
     const tenant = useTenant()
     const primaryColor = tenant?.primaryColor || '#ec4899'
@@ -48,17 +51,29 @@ export default function SiteManagementPage() {
             {/* Dialogs */}
             <BlogDialog
                 open={blogDialogOpen}
-                onOpenChange={setBlogDialogOpen}
+                onOpenChange={(open) => {
+                    setBlogDialogOpen(open)
+                    if (!open) setPostToEdit(null)
+                }}
+                post={postToEdit}
                 onSuccess={handleRefresh}
             />
             <VideoDialog
                 open={videoDialogOpen}
-                onOpenChange={setVideoDialogOpen}
+                onOpenChange={(open) => {
+                    setVideoDialogOpen(open)
+                    if (!open) setVideoToEdit(null)
+                }}
+                video={videoToEdit}
                 onSuccess={handleRefresh}
             />
             <EventoDialog
                 open={eventoDialogOpen}
-                onOpenChange={setEventoDialogOpen}
+                onOpenChange={(open) => {
+                    setEventoDialogOpen(open)
+                    if (!open) setEventoToEdit(null)
+                }}
+                evento={eventoToEdit}
                 onSuccess={handleRefresh}
             />
 
@@ -122,15 +137,30 @@ export default function SiteManagementPage() {
                         transition={{ duration: 0.3 }}
                     >
                         <TabsContent value="blog" className="mt-0 outline-none">
-                            <BlogTab primaryColor={primaryColor} refreshKey={refreshKey} onNewPost={() => setBlogDialogOpen(true)} />
+                            <BlogTab
+                                primaryColor={primaryColor}
+                                refreshKey={refreshKey}
+                                onNewPost={() => { setPostToEdit(null); setBlogDialogOpen(true); }}
+                                onEditPost={(post) => { setPostToEdit(post); setBlogDialogOpen(true); }}
+                            />
                         </TabsContent>
-
+                        ...
                         <TabsContent value="videos" className="mt-0 outline-none">
-                            <VideosTab primaryColor={primaryColor} refreshKey={refreshKey} onNewVideo={() => setVideoDialogOpen(true)} />
+                            <VideosTab
+                                primaryColor={primaryColor}
+                                refreshKey={refreshKey}
+                                onNewVideo={() => { setVideoToEdit(null); setVideoDialogOpen(true); }}
+                                onEditVideo={(video) => { setVideoToEdit(video); setVideoDialogOpen(true); }}
+                            />
                         </TabsContent>
 
                         <TabsContent value="calendario" className="mt-0 outline-none">
-                            <EventsTab primaryColor={primaryColor} refreshKey={refreshKey} onNewEvento={() => setEventoDialogOpen(true)} />
+                            <EventsTab
+                                primaryColor={primaryColor}
+                                refreshKey={refreshKey}
+                                onNewEvento={() => { setEventoToEdit(null); setEventoDialogOpen(true); }}
+                                onEditEvento={(evento) => { setEventoToEdit(evento); setEventoDialogOpen(true); }}
+                            />
                         </TabsContent>
 
                         <TabsContent value="horarios" className="mt-0 outline-none">
@@ -143,7 +173,7 @@ export default function SiteManagementPage() {
     )
 }
 
-function BlogTab({ primaryColor, refreshKey, onNewPost }: { primaryColor: string; refreshKey: number; onNewPost: () => void }) {
+function BlogTab({ primaryColor, refreshKey, onNewPost, onEditPost }: { primaryColor: string; refreshKey: number; onNewPost: () => void; onEditPost: (post: any) => void }) {
     const [posts, setPosts] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
 
@@ -241,7 +271,12 @@ function BlogTab({ primaryColor, refreshKey, onNewPost }: { primaryColor: string
                                     </td>
                                     <td className="p-8 text-right">
                                         <div className="flex justify-end gap-3">
-                                            <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all">
+                                            <Button
+                                                onClick={() => onEditPost(post)}
+                                                size="icon"
+                                                variant="ghost"
+                                                className="h-12 w-12 rounded-xl border border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all"
+                                            >
                                                 <Edit2 className="w-4 h-4" />
                                             </Button>
                                             <Button
@@ -264,30 +299,52 @@ function BlogTab({ primaryColor, refreshKey, onNewPost }: { primaryColor: string
     )
 }
 
-function VideosTab({ primaryColor, refreshKey, onNewVideo }: { primaryColor: string; refreshKey: number; onNewVideo: () => void }) {
+function VideosTab({ primaryColor, refreshKey, onNewVideo, onEditVideo }: { primaryColor: string; refreshKey: number; onNewVideo: () => void; onEditVideo: (video: any) => void }) {
     const [videos, setVideos] = useState<any[]>([])
 
+    const loadVideos = async () => {
+        const result = await getVideosSite()
+        setVideos(result.data)
+    }
+
     React.useEffect(() => {
-        async function load() {
-            const result = await getVideosSite()
-            setVideos(result.data)
-        }
-        load()
+        loadVideos()
     }, [refreshKey])
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Deseja excluir este vídeo?')) return
+        try {
+            await deleteVideoSite(id)
+            toast.success('Vídeo excluído com sucesso!')
+            loadVideos()
+        } catch (error) {
+            toast.error('Erro ao excluir vídeo')
+        }
+    }
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {videos.map((video) => (
-                <Card key={video.id} className="bg-white/50 dark:bg-card/40 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-blue-500/30 transition-all shadow-xl">
-                    <div className="aspect-video relative overflow-hidden">
+                <Card key={video.id} className="bg-white/50 dark:bg-card/40 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-blue-500/30 transition-all shadow-xl flex flex-col">
+                    <div className="aspect-video relative overflow-hidden cursor-pointer" onClick={() => onEditVideo(video)}>
                         <img src={video.thumbnail_url || 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071'} alt={video.titulo} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                            <ShoppingBag className="w-12 h-12 text-white opacity-80 group-hover:scale-125 transition-transform" />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Edit2 className="w-12 h-12 text-white opacity-80 group-hover:scale-125 transition-transform" />
                         </div>
                     </div>
-                    <CardHeader className="p-8">
-                        <CardTitle className="text-2xl font-black uppercase tracking-tight leading-none mb-2">{video.titulo}</CardTitle>
-                        <CardDescription className="uppercase text-[10px] font-black tracking-widest text-muted-foreground line-clamp-2">
+                    <CardHeader className="p-8 flex-1">
+                        <div className="flex justify-between items-start gap-2">
+                            <CardTitle className="text-2xl font-black uppercase tracking-tight leading-loose line-clamp-2">{video.titulo}</CardTitle>
+                            <Button
+                                onClick={() => handleDelete(video.id)}
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-500/10 shrink-0"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </Button>
+                        </div>
+                        <CardDescription className="uppercase text-[10px] font-black tracking-widest text-muted-foreground line-clamp-2 mt-4">
                             {video.descricao || 'Sem descrição'}
                         </CardDescription>
                     </CardHeader>
@@ -306,16 +363,28 @@ function VideosTab({ primaryColor, refreshKey, onNewVideo }: { primaryColor: str
     )
 }
 
-function EventsTab({ primaryColor, refreshKey, onNewEvento }: { primaryColor: string; refreshKey: number; onNewEvento: () => void }) {
+function EventsTab({ primaryColor, refreshKey, onNewEvento, onEditEvento }: { primaryColor: string; refreshKey: number; onNewEvento: () => void; onEditEvento: (evento: any) => void }) {
     const [eventos, setEventos] = useState<any[]>([])
 
+    const loadEvents = async () => {
+        const result = await getEventosCalendario(false)
+        setEventos(result.data)
+    }
+
     React.useEffect(() => {
-        async function load() {
-            const result = await getEventosCalendario(false)
-            setEventos(result.data)
-        }
-        load()
+        loadEvents()
     }, [refreshKey])
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Deseja excluir este evento?')) return
+        try {
+            await deleteEventoCalendario(id)
+            toast.success('Evento excluído com sucesso!')
+            loadEvents()
+        } catch (error) {
+            toast.error('Erro ao excluir evento')
+        }
+    }
 
     return (
         <Card className="bg-white/50 dark:bg-card/40 backdrop-blur-md border border-zinc-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
@@ -372,7 +441,20 @@ function EventsTab({ primaryColor, refreshKey, onNewEvento }: { primaryColor: st
                                 </td>
                                 <td className="p-8 text-right">
                                     <div className="flex justify-end gap-3">
-                                        <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl border border-white/5 hover:bg-red-500/10 hover:text-red-500 transition-all">
+                                        <Button
+                                            onClick={() => onEditEvento(item)}
+                                            size="icon"
+                                            variant="ghost"
+                                            className="h-12 w-12 rounded-xl border border-zinc-200 dark:border-white/5 hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all"
+                                        >
+                                            <Edit2 className="w-4 h-4" />
+                                        </Button>
+                                        <Button
+                                            onClick={() => handleDelete(item.id)}
+                                            size="icon"
+                                            variant="ghost"
+                                            className="h-12 w-12 rounded-xl border border-white/5 hover:bg-red-500/10 hover:text-red-500 transition-all"
+                                        >
                                             <Trash2 className="w-4 h-4" />
                                         </Button>
                                     </div>
