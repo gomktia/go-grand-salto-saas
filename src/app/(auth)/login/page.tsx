@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Sparkles, Mail, Lock, ArrowRight, Loader2, Search, Building, AlertCircle } from 'lucide-react'
+import { Sparkles, Mail, Lock, ArrowRight, Loader2, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getTenantByHostname, TenantConfig } from '@/lib/tenant-resolver'
@@ -24,9 +24,39 @@ export default function LoginPage() {
         setIsMounted(true)
         const searchParams = new URLSearchParams(window.location.search)
         const forcedHost = searchParams.get('host')
-        const hostname = forcedHost || 'revelle.grandsalto.ia'
 
-        const detectedTenant = getTenantByHostname(hostname)
+        // Se tem parâmetro host=platform ou host=saas, é login do SaaS (sem tenant)
+        if (forcedHost === 'platform' || forcedHost === 'saas') {
+            setTenant(null)
+            return
+        }
+
+        // Pegar hostname real do navegador
+        const realHostname = window.location.hostname
+
+        // Lista de domínios que são do SaaS (não de escolas)
+        const saasDomainsMain = [
+            'localhost',
+            'grandsalto.ia',
+            'www.grandsalto.ia',
+            'go-grand-salto-saas.vercel.app',
+            '127.0.0.1'
+        ]
+
+        // Se é domínio principal do SaaS, não mostrar tenant
+        if (saasDomainsMain.some(d => realHostname.includes(d) || realHostname === d)) {
+            // Só mostrar tenant se tiver parâmetro host específico de escola
+            if (forcedHost && forcedHost !== 'platform' && forcedHost !== 'saas') {
+                const detectedTenant = getTenantByHostname(forcedHost)
+                setTenant(detectedTenant)
+            } else {
+                setTenant(null)
+            }
+            return
+        }
+
+        // Se não é domínio do SaaS, tentar detectar escola pelo hostname
+        const detectedTenant = getTenantByHostname(realHostname)
         setTenant(detectedTenant)
     }, [])
 
@@ -69,7 +99,8 @@ export default function LoginPage() {
                 'professor': '/professor',
                 'estudante': '/aluno',
                 'responsavel': '/responsavel',
-                'super_admin': '/superadmin'
+                'superadmin': '/superadmin',
+                'super_admin': '/superadmin'  // suporte a ambos formatos
             }
 
             const redirectPath = roleRoutes[perfil.role] || '/diretora'
@@ -84,7 +115,7 @@ export default function LoginPage() {
     }
 
     // Cores dinâmicas ou padrão do SaaS
-    const primaryColor = tenant?.primaryColor || '#db2777' // Pink-600 default
+    const primaryColor = tenant?.primaryColor || '#f59e0b' // Amber-500 - cor do SaaS
     const schoolName = tenant?.nome || 'Grand Salto'
 
     if (!isMounted) return null
@@ -95,7 +126,7 @@ export default function LoginPage() {
             <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] blur-[120px] rounded-full -z-10 transition-colors duration-1000"
                 style={{ backgroundColor: `${primaryColor}15` }} />
             <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] blur-[120px] rounded-full -z-10 transition-colors duration-1000"
-                style={{ backgroundColor: tenant ? `${tenant.secondaryColor}10` : '#7c3aed10' }} />
+                style={{ backgroundColor: tenant ? `${tenant.secondaryColor}10` : '#f59e0b10' }} />
 
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -108,13 +139,17 @@ export default function LoginPage() {
                     <Link href="/" className="flex items-center gap-3 group">
                         <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-500 group-hover:scale-110"
                             style={{
-                                background: `linear-gradient(135deg, ${primaryColor}, ${tenant?.secondaryColor || '#7c3aed'})`,
-                                boxShadow: `0 10px 30px -10px ${primaryColor}60`
+                                background: tenant
+                                    ? `linear-gradient(135deg, ${primaryColor}, ${tenant.secondaryColor})`
+                                    : '#ffffff',
+                                boxShadow: tenant
+                                    ? `0 10px 30px -10px ${primaryColor}60`
+                                    : '0 10px 30px -10px rgba(255,255,255,0.2)'
                             }}>
-                            {tenant?.logo_url ? (
+                            {tenant ? (
                                 <span className="text-white font-black text-2xl">{tenant.nome.substring(0, 2).toUpperCase()}</span>
                             ) : (
-                                <Sparkles className="text-white w-7 h-7" />
+                                <Sparkles className="text-black w-7 h-7" />
                             )}
                         </div>
                     </Link>
@@ -123,7 +158,7 @@ export default function LoginPage() {
                             {tenant ? (
                                 <span style={{ color: primaryColor }}>{tenant.nome}</span>
                             ) : (
-                                <>Grand Salto<span className="text-pink-500">.IA</span></>
+                                <>Grand Salto<span className="text-amber-400">.IA</span></>
                             )}
                         </h1>
                         {!tenant && <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest mt-1">Plataforma de Gestão para Escolas de Dança</p>}
@@ -198,24 +233,31 @@ export default function LoginPage() {
                             </Button>
                         </form>
                     </CardContent>
-                    <CardFooter className="flex flex-col gap-6 pt-2">
+                    <CardFooter className="flex flex-col gap-4 pt-2">
                         <div className="text-center text-[10px] text-neutral-500 font-medium">
                             Problemas para entrar? <Link href="#" className="hover:underline" style={{ color: primaryColor }}>Recuperar acesso</Link>
                         </div>
-                        <div className="text-center">
-                            <Link href="/login?host=platform" className="text-[9px] text-neutral-600 uppercase tracking-widest hover:text-white transition-colors">
-                                Login Administrativo (SaaS)
-                            </Link>
-                        </div>
 
                         {!tenant && (
-                            <div className="w-full bg-white/5 rounded-xl p-4 border border-white/5">
-                                <p className="text-[10px] text-neutral-400 uppercase tracking-widest text-center font-bold mb-3 flex items-center justify-center gap-2">
-                                    <Search className="w-3 h-3" /> Encontre sua Escola
-                                </p>
-                                <Button variant="outline" className="w-full text-xs h-9 bg-transparent border-white/10 hover:bg-white/5 text-neutral-300">
-                                    Buscar por nome ou cidade
-                                </Button>
+                            <>
+                                <div className="w-full border-t border-white/5 pt-4">
+                                    <p className="text-center text-sm text-neutral-400 mb-3">
+                                        Ainda não tem uma conta?
+                                    </p>
+                                    <Link href="/cadastro" className="block">
+                                        <Button variant="outline" className="w-full h-11 bg-transparent border-amber-500/30 hover:bg-amber-500/10 text-amber-400 font-bold">
+                                            Cadastrar minha escola
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </>
+                        )}
+
+                        {tenant && (
+                            <div className="text-center">
+                                <Link href="/login" className="text-[9px] text-neutral-600 uppercase tracking-widest hover:text-white transition-colors">
+                                    Acessar outra escola
+                                </Link>
                             </div>
                         )}
 
@@ -223,15 +265,6 @@ export default function LoginPage() {
                             <p className="text-[10px] text-neutral-600 text-center uppercase tracking-widest font-bold opacity-60">
                                 Powered by <span className="text-neutral-400">Grand Salto</span>
                             </p>
-                        </div>
-
-                        {/* Atalhos de Demo (Apenas para visualização) */}
-                        <div className="grid grid-cols-5 gap-1 opacity-20 hover:opacity-100 transition-opacity">
-                            <Link href="/diretora"><div className="h-1 bg-pink-500 rounded-full" title="Diretora" /></Link>
-                            <Link href="/professor"><div className="h-1 bg-violet-500 rounded-full" title="Professor" /></Link>
-                            <Link href="/aluno"><div className="h-1 bg-emerald-500 rounded-full" title="Aluno" /></Link>
-                            <Link href="/responsavel"><div className="h-1 bg-amber-500 rounded-full" title="Responsável" /></Link>
-                            <Link href="/superadmin"><div className="h-1 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]" title="Super Admin" /></Link>
                         </div>
                     </CardFooter>
                 </Card>
