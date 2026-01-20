@@ -202,7 +202,12 @@ export default function WhiteLabelSettings() {
                                 <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Seu Domínio de Autoridade</label>
                                 <div className="flex flex-col md:flex-row gap-2">
                                     <Input placeholder="exemplo.com.br" className="h-10 rounded-lg bg-zinc-50 dark:bg-black/20 border-zinc-200 dark:border-zinc-800 text-sm font-bold px-4 focus:ring-1 focus:ring-emerald-500/50 transition-all shadow-none" />
-                                    <Button className="h-10 px-6 font-bold uppercase text-[10px] tracking-widest rounded-lg shadow-sm hover:opacity-90 transition-all border-none bg-zinc-900 dark:bg-white text-white dark:text-zinc-900">Validar DNS</Button>
+                                    <Button
+                                        onClick={() => toast.info('A validação de DNS está sendo processada pelo Cloudflare.')}
+                                        className="h-10 px-6 font-bold uppercase text-[10px] tracking-widest rounded-lg shadow-sm hover:opacity-90 transition-all border-none bg-zinc-900 dark:bg-white text-white dark:text-zinc-900"
+                                    >
+                                        Validar DNS
+                                    </Button>
                                 </div>
                             </div>
 

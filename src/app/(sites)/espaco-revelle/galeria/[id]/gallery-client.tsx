@@ -66,12 +66,12 @@ export function GalleryClient({ album, fotos }: Props) {
         if (!pedidoId || !pixData) return
 
         const interval = setInterval(async () => {
-            const { pago } = await verificarStatusPagamento(pedidoId)
+            const { pago, download_token } = await verificarStatusPagamento(pedidoId)
             if (pago) {
                 toast.success('Pagamento confirmado! Redirecionando...')
                 clearInterval(interval)
-                // Redirecionar para página de download
-                window.location.href = `/espaco-revelle/download/${pedidoId}`
+                // Redirecionar para página de download com o token
+                window.location.href = `/espaco-revelle/download/${pedidoId}?token=${download_token}`
             }
         }, 5000) // Verificar a cada 5 segundos
 

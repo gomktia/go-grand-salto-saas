@@ -225,7 +225,11 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades, st
                                     Fluxo de Recebimentos
                                 </CardTitle>
                             </div>
-                            <Button variant="ghost" className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-600/10 h-8 px-4 rounded-xl transition-all">
+                            <Button
+                                onClick={() => toast.info('O relatório financeiro detalhado está sendo processado.')}
+                                variant="ghost"
+                                className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-600/10 h-8 px-4 rounded-xl transition-all"
+                            >
                                 Ver Relatório <ChevronRight className="ml-1 w-3 h-3" />
                             </Button>
                         </div>
@@ -333,7 +337,10 @@ export function ClientFinanceiroContent({ financialStats, recentMensalidades, st
                                 </div>
                             </div>
                         ))}
-                        <Button className="w-full h-14 mt-4 rounded-2xl font-black uppercase tracking-widest text-xs bg-white text-black hover:bg-zinc-200 transition-all border-none shadow-xl">
+                        <Button
+                            onClick={() => toast.info('O ajuste de réguas de cobrança será liberado na próxima atualização.')}
+                            className="w-full h-14 mt-4 rounded-2xl font-black uppercase tracking-widest text-xs bg-white text-black hover:bg-zinc-200 transition-all border-none shadow-xl"
+                        >
                             AJUSTAR REGRAS
                         </Button>
                     </CardContent>

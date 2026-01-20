@@ -203,6 +203,7 @@ export async function verificarStatusPagamento(pedidoId: string): Promise<{
     error?: string
     status?: string
     pago?: boolean
+    download_token?: string
 }> {
     const supabase = await createClient()
 
@@ -219,7 +220,11 @@ export async function verificarStatusPagamento(pedidoId: string): Promise<{
 
     // Se já está pago no banco, retornar
     if (pedido.status === 'pago') {
-        return { status: 'pago', pago: true }
+        return {
+            status: 'pago',
+            pago: true,
+            download_token: pedido.download_token
+        }
     }
 
     // Se tem ID do Asaas, verificar status lá
@@ -230,7 +235,13 @@ export async function verificarStatusPagamento(pedidoId: string): Promise<{
             if (isPagamentoConfirmado(payment.status)) {
                 // Atualizar pedido no banco
                 await confirmarPagamentoPedido(pedidoId, payment.id)
-                return { status: 'pago', pago: true }
+
+                // Buscar o pedido atualizado para pegar o token (ou apenas retornar do objeto que já temos)
+                return {
+                    status: 'pago',
+                    pago: true,
+                    download_token: pedido.download_token
+                }
             }
 
             return { status: payment.status.toLowerCase(), pago: false }

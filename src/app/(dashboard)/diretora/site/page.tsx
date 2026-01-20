@@ -221,7 +221,11 @@ function BlogTab({ primaryColor, refreshKey, onNewPost, onEditPost }: { primaryC
                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-pink-500 transition-colors" />
                     <Input placeholder="Pesquisar por título ou palavra-chave..." className="h-16 pl-14 pr-6 rounded-[1.25rem] bg-card border-zinc-200 dark:border-white/5 focus-visible:ring-1 focus-visible:ring-pink-500/50 text-lg font-medium transition-all shadow-inner" />
                 </div>
-                <Button variant="outline" className="h-16 rounded-[1.25rem] border-zinc-200 dark:border-white/10 uppercase font-black text-[10px] tracking-widest hover:bg-zinc-100 dark:hover:bg-white/5">
+                <Button
+                    onClick={() => toast.info('A filtragem avançada de posts será liberada em breve.')}
+                    variant="outline"
+                    className="h-16 rounded-[1.25rem] border-zinc-200 dark:border-white/10 uppercase font-black text-[10px] tracking-widest hover:bg-zinc-100 dark:hover:bg-white/5"
+                >
                     Filtrar por Status
                 </Button>
             </div>
@@ -486,7 +490,11 @@ function SchedulesTab({ primaryColor }: { primaryColor: string }) {
                         </h3>
                         <p className="text-muted-foreground text-sm font-medium">Estes horários são exibidos no site para converter novos alunos.</p>
                     </div>
-                    <Button variant="outline" className="h-12 px-6 rounded-xl border-white/10 text-[10px] uppercase font-black tracking-widest gap-2 bg-white/5 hover:bg-white/10">
+                    <Button
+                        onClick={() => toast.info('A sincronização automática de grade está em desenvolvimento.')}
+                        variant="outline"
+                        className="h-12 px-6 rounded-xl border-white/10 text-[10px] uppercase font-black tracking-widest gap-2 bg-white/5 hover:bg-white/10"
+                    >
                         <ArrowUpRight className="w-4 h-4" />
                         Sincronizar com Sistema
                     </Button>

@@ -41,6 +41,7 @@ type Estatisticas = {
     totalEscolas: number
     totalAlunos: number
     totalProfessores: number
+    totalTurmas: number
     mrrGlobal: number
 }
 
@@ -128,23 +129,24 @@ export default function SuperAdminDashboard() {
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {[
                     { label: 'Escolas Ativas', value: estatisticas?.totalEscolas || 0, icon: Globe, color: 'text-blue-500', trend: 'Tenants ativos' },
                     { label: 'MRR Global', value: formatCurrency(estatisticas?.mrrGlobal || 0), icon: TrendingUp, color: 'text-emerald-500', trend: 'Receita mensal' },
                     { label: 'Total Alunos', value: estatisticas?.totalAlunos || 0, icon: GraduationCap, color: 'text-violet-500', trend: 'Matriculados' },
                     { label: 'Professores', value: estatisticas?.totalProfessores || 0, icon: Users, color: 'text-orange-500', trend: 'No sistema' },
+                    { label: 'Turmas Ativas', value: estatisticas?.totalTurmas || 0, icon: Activity, color: 'text-pink-500', trend: 'Grade global' },
                 ].map((stat, i) => (
                     <Card key={i} className="bg-neutral-900 border-white/5 shadow-xl rounded-[2rem] hover:border-white/10 transition-all group">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 flex items-center justify-between">
+                        <CardHeader className="pb-2 p-6">
+                            <CardTitle className="text-[9px] font-black uppercase tracking-[0.2em] text-neutral-500 flex items-center justify-between">
                                 {stat.label}
-                                <stat.icon className={`w-4 h-4 ${stat.color}`} />
+                                <stat.icon className={`w-3.5 h-3.5 ${stat.color}`} />
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-black text-white tracking-tighter mb-1">{stat.value}</div>
-                            <div className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">{stat.trend}</div>
+                        <CardContent className="p-6 pt-0">
+                            <div className="text-2xl font-black text-white tracking-tighter mb-1">{stat.value}</div>
+                            <div className="text-[8px] font-bold text-neutral-400 uppercase tracking-widest">{stat.trend}</div>
                         </CardContent>
                     </Card>
                 ))}

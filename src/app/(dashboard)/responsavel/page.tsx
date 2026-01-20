@@ -439,10 +439,26 @@ export default function ResponsavelDashboard() {
                                         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent opacity-0 group-hover/photo:opacity-100 transition-all flex flex-col justify-end p-8 gap-4">
                                             <p className="text-white font-black text-[10px] uppercase tracking-widest">Em breve</p>
                                             <div className="flex items-center gap-2">
-                                                <Button size="icon" variant="ghost" className="text-white hover:bg-[var(--primary)] h-12 w-12 p-0 bg-white/10 backdrop-blur-md rounded-2xl transition-all border border-white/10">
+                                                <Button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        toast.info('O download de fotos originais será liberado na próxima atualização.')
+                                                    }}
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    className="text-white hover:bg-[var(--primary)] h-12 w-12 p-0 bg-white/10 backdrop-blur-md rounded-2xl transition-all border border-white/10"
+                                                >
                                                     <Download size={20} />
                                                 </Button>
-                                                <Button size="icon" variant="ghost" className="text-white hover:bg-pink-500 h-12 w-12 p-0 bg-white/10 backdrop-blur-md rounded-2xl transition-all border border-white/10">
+                                                <Button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        toast.success('Foto favoritada com sucesso!')
+                                                    }}
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    className="text-white hover:bg-pink-500 h-12 w-12 p-0 bg-white/10 backdrop-blur-md rounded-2xl transition-all border border-white/10"
+                                                >
                                                     <Heart size={20} className="fill-current" />
                                                 </Button>
                                             </div>

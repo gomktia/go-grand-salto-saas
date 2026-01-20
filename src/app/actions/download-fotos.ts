@@ -30,6 +30,8 @@ async function getAuthenticatedUser() {
 
 export async function verificarDownloadPermitido(pedidoId: string, token?: string) {
     const supabase = await createClient()
+    const auth = await getAuthenticatedUser()
+    const isDiretora = auth?.perfil && ['diretora', 'super_admin'].includes(auth.perfil.role)
 
     // Buscar pedido
     const { data: pedido, error } = await supabase
@@ -42,24 +44,29 @@ export async function verificarDownloadPermitido(pedidoId: string, token?: strin
         return { permitido: false, motivo: 'Pedido não encontrado', pedido: null }
     }
 
-    // Verificar token se fornecido
-    if (token && pedido.download_token !== token) {
-        return { permitido: false, motivo: 'Token inválido', pedido: null }
+    // Se não for diretora, o token é OBRIGATÓRIO e deve ser válido
+    if (!isDiretora) {
+        if (!token) {
+            return { permitido: false, motivo: 'Token de acesso não fornecido', pedido: null }
+        }
+        if (pedido.download_token !== token) {
+            return { permitido: false, motivo: 'Token de acesso inválido', pedido: null }
+        }
     }
 
-    // Verificar status de pagamento
+    // Verificar status de pagamento (diretoras podem ver mesmo se não estiver pago para testes, mas vamos manter rigoroso)
     if (pedido.status !== 'pago') {
         return { permitido: false, motivo: 'Pagamento não confirmado', pedido }
     }
 
     // Verificar se download está liberado
     if (!pedido.liberado_para_download) {
-        return { permitido: false, motivo: 'Download não liberado', pedido }
+        return { permitido: false, motivo: 'Download não liberado pela administração', pedido }
     }
 
-    // Verificar expiração
-    if (pedido.download_expira_em && new Date(pedido.download_expira_em) < new Date()) {
-        return { permitido: false, motivo: 'Link de download expirado', pedido }
+    // Verificar expiração (Diretoras ignoram expiração)
+    if (!isDiretora && pedido.download_expira_em && new Date(pedido.download_expira_em) < new Date()) {
+        return { permitido: false, motivo: 'Link de download expirado (duram 7 dias)', pedido }
     }
 
     return { permitido: true, motivo: 'Download permitido', pedido }

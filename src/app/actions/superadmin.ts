@@ -53,6 +53,11 @@ export async function getEstatisticasGlobais() {
         .select('*', { count: 'exact', head: true })
         .eq('role', 'professor')
 
+    // Buscar total de turmas
+    const { count: totalTurmas } = await supabase
+        .from('turmas')
+        .select('*', { count: 'exact', head: true })
+
     // Buscar MRR (soma das mensalidades pagas no mês atual)
     const mesAtual = new Date().getMonth() + 1
     const anoAtual = new Date().getFullYear()
@@ -71,6 +76,7 @@ export async function getEstatisticasGlobais() {
             totalEscolas: totalEscolas || 0,
             totalAlunos: totalAlunos || 0,
             totalProfessores: totalProfessores || 0,
+            totalTurmas: totalTurmas || 0,
             mrrGlobal,
         }
     }
