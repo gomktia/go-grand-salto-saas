@@ -1121,7 +1121,7 @@ export default function EspacoRevelleSite() {
                         </p>
                         <div className="flex items-center gap-2">
                             <span className="text-[10px] font-medium text-white/30">Desenvolvido por</span>
-                            <span className="text-[11px] font-black text-white/60 tracking-wider uppercase">Grand Salto</span>
+                            <span className="text-[11px] font-black text-white/60 tracking-wider uppercase">Geison Höehr</span>
                         </div>
                     </div>
                 </div>
