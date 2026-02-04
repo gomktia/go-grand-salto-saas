@@ -71,7 +71,7 @@ export default function EspacoRevelleSite() {
                 <div className="absolute inset-0 z-0">
                     <Image
                         src="/revelle-hero-ballerina.png"
-                        alt="Ballet Elegante - Espaço Revelle"
+                        alt="Ballet Elegante - Espaço Revelle 2026"
                         fill
                         className="object-cover object-top scale-105 animate-slow-zoom"
                         priority
