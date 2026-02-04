@@ -1,0 +1,24 @@
+{
+  "plugins": [
+    "marketplace:anthropic/claude-code",
+    "marketplace:buildatscale/claude-code-plugins",
+    "https://github.com/demj93/claude-design-skill"
+  ],
+  "capabilities": {
+    "nano-banana-pro": {
+      "enabled": true,
+      "style": "high-end-tech-minimalism",
+      "engine": "gemini-2.0-flash"
+    },
+    "design-principles": {
+      "enabled": true,
+      "strictMode": true,
+      "preset": "linear-app-aesthetic"
+    }
+  },
+  "context": {
+    "organization": "GOMKT.IA",
+    "preferredStack": ["Next.js 14+", "TailwindCSS", "Supabase", "Shadcn/UI"],
+    "designPhilosophy": "Elite UI, High-contrast, Mono-spaced data, Precision Spacing"
+  }
+}
