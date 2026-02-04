@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
     Check,
     MessageCircle,
@@ -18,7 +18,9 @@ import {
     Play,
     Heart,
     Clock,
-    Quote
+    Quote,
+    Menu,
+    X
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -29,6 +31,17 @@ import { CalendarSection } from './calendar-section'
 import { VideosSection } from './videos-section'
 
 export default function EspacoRevelleSite() {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
+
+    // Prevent scroll when menu is open
+    React.useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'unset'
+        }
+    }, [isMobileMenuOpen])
+
     return (
         <div className="min-h-screen bg-zinc-50 text-zinc-900 selection:bg-[#800020]/30 overflow-x-hidden font-sans">
             {/* Header / Navbar */}
@@ -58,11 +71,98 @@ export default function EspacoRevelleSite() {
                                 Login
                             </Button>
                         </Link>
-                        <Button className="bg-[#800020] hover:bg-[#600018] text-white rounded-xl px-5 h-8 text-[9px] font-black uppercase tracking-widest shadow-lg shadow-[#800020]/20 transition-all hover:scale-105 active:scale-95 border-none">
+                        <Button className="bg-[#800020] hover:bg-[#600018] text-white rounded-xl px-4 sm:px-5 h-8 text-[9px] font-black uppercase tracking-widest shadow-lg shadow-[#800020]/20 transition-all hover:scale-105 active:scale-95 border-none">
                             Matricule-se
+                        </Button>
+
+                        {/* Mobile Menu Button */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="lg:hidden w-8 h-8 text-zinc-900"
+                            onClick={() => setIsMobileMenuOpen(true)}
+                        >
+                            <Menu className="w-5 h-5" />
                         </Button>
                     </div>
                 </div>
+
+                {/* Mobile Menu Overlay */}
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                            className="fixed inset-0 z-[110] bg-white text-zinc-900 flex flex-col"
+                        >
+                            {/* Header inside Menu */}
+                            <div className="container mx-auto px-6 h-16 flex items-center justify-between border-b border-zinc-100">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg overflow-hidden shadow-lg shadow-[#800020]/30">
+                                        <Image src="/revelle-logo-icon.jpg" alt="Revelle Logo" width={32} height={32} className="object-cover" />
+                                    </div>
+                                    <span className="text-lg font-black tracking-tighter uppercase leading-none italic">Revelle</span>
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="w-8 h-8 text-zinc-900"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    <X className="w-5 h-5" />
+                                </Button>
+                            </div>
+
+                            {/* Menu Links */}
+                            <div className="flex-1 flex flex-col justify-center items-center gap-8 p-6 bg-[radial-gradient(circle_at_top_right,rgba(128,0,32,0.05),transparent_40%)]">
+                                {[
+                                    { href: '#home', label: 'Início' },
+                                    { href: '#about', label: 'A Escola' },
+                                    { href: '#modalidades', label: 'Modalidades' },
+                                    { href: '#horarios', label: 'Horários' },
+                                    { href: '#reviews', label: 'Depoimentos' },
+                                ].map((link, i) => (
+                                    <motion.a
+                                        key={link.href}
+                                        href={link.href}
+                                        className="text-3xl font-black uppercase italic tracking-tight hover:text-[#800020] transition-colors"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 + i * 0.1 }}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        {link.label}
+                                    </motion.a>
+                                ))}
+
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.6 }}
+                                    className="mt-8 flex flex-col gap-4 w-full max-w-xs"
+                                >
+                                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                                        <Button variant="outline" className="w-full h-12 rounded-xl uppercase font-bold tracking-widest border-zinc-200">
+                                            Área do Aluno
+                                        </Button>
+                                    </Link>
+                                    <Link href="/espaco-revelle/matricula" onClick={() => setIsMobileMenuOpen(false)}>
+                                        <Button className="w-full h-12 bg-[#800020] hover:bg-[#600018] text-white rounded-xl uppercase font-black tracking-widest shadow-xl shadow-[#800020]/20">
+                                            Quero me Matricular
+                                        </Button>
+                                    </Link>
+                                </motion.div>
+                            </div>
+
+                            {/* Footer inside Menu */}
+                            <div className="p-6 text-center text-[10px] text-zinc-400 font-medium uppercase tracking-widest">
+                                Espaço Revelle © 2026
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </nav>
 
             {/* Hero Section - Futuristic Animated Design */}
