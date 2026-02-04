@@ -9,7 +9,6 @@ import {
     Music,
     Award,
     Users,
-    Sparkles,
     Star,
     ChevronRight,
     MapPin,
@@ -36,8 +35,8 @@ export default function EspacoRevelleSite() {
             <nav className="fixed top-0 w-full z-[100] border-b border-zinc-200/50 bg-white/80 backdrop-blur-xl">
                 <div className="container mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-[#800020] rounded-lg flex items-center justify-center shadow-lg shadow-[#800020]/30 rotate-3 hover:rotate-0 transition-transform duration-500">
-                            <Sparkles className="text-white w-4 h-4" />
+                        <div className="w-8 h-8 rounded-lg overflow-hidden shadow-lg shadow-[#800020]/30 rotate-3 hover:rotate-0 transition-transform duration-500">
+                            <Image src="/revelle-logo-icon.jpg" alt="Revelle Logo" width={32} height={32} className="object-cover" />
                         </div>
                         <div className="flex flex-col -space-y-0.5">
                             <span className="text-lg font-black tracking-tighter uppercase leading-none italic text-zinc-900">Revelle</span>
@@ -66,84 +65,537 @@ export default function EspacoRevelleSite() {
                 </div>
             </nav>
 
-            {/* Hero Section */}
-            <section id="home" className="relative h-screen min-h-[700px] flex items-center overflow-hidden">
-                <div className="absolute inset-0 z-0">
+            {/* Hero Section - Futuristic Animated Design */}
+            <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+                {/* Background Image with Slow Zoom */}
+                <motion.div
+                    className="absolute inset-0 z-0"
+                    initial={{ scale: 1.1 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 10, ease: 'easeOut' }}
+                >
                     <Image
-                        src="/revelle-hero-ballerina.png"
-                        alt="Ballet Elegante - Espaço Revelle 2026"
+                        src="/ballet-dancer-illuminated-stockcake.webp"
+                        alt="Ballet Elegante - Espaço Revelle"
                         fill
-                        className="object-cover object-top scale-105 animate-slow-zoom"
+                        className="object-cover object-center"
                         priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/40 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-80" />
+                    {/* Gradient Overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+                </motion.div>
+
+                {/* Animated Floating Particles */}
+                <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            className="absolute w-1 h-1 bg-white/30 rounded-full"
+                            style={{
+                                left: `${15 + i * 15}%`,
+                                top: `${20 + (i % 3) * 25}%`,
+                            }}
+                            animate={{
+                                y: [0, -30, 0],
+                                opacity: [0.2, 0.6, 0.2],
+                            }}
+                            transition={{
+                                duration: 3 + i * 0.5,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                                delay: i * 0.3,
+                            }}
+                        />
+                    ))}
                 </div>
 
-                <div className="container mx-auto px-6 relative z-10 pt-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, ease: 'easeOut' }}
-                        className="max-w-3xl"
-                    >
-                        <div className="inline-flex items-center gap-3 px-3 py-1.5 rounded-full bg-[#800020]/10 border border-[#800020]/20 text-[#800020] text-[9px] font-black uppercase tracking-[0.3em] mb-8 shadow-xl shadow-[#800020]/10 backdrop-blur-md">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#800020] animate-pulse" />
-                            Escola de Dança de Elite • Santa Maria
-                        </div>
-                        <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.85] uppercase italic text-zinc-900">
-                            Onde a <br />
-                            <span className="text-[#800020]">Arte</span> <br />
-                            Floresce.
+                {/* Animated Glowing Orbs */}
+                <motion.div
+                    className="absolute top-20 left-1/4 w-64 h-64 bg-[#800020]/20 rounded-full blur-[100px] pointer-events-none"
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.2, 0.3, 0.2],
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                    }}
+                />
+                <motion.div
+                    className="absolute bottom-40 right-1/4 w-48 h-48 bg-[#800020]/10 rounded-full blur-[80px] pointer-events-none"
+                    animate={{
+                        scale: [1, 1.3, 1],
+                        opacity: [0.1, 0.2, 0.1],
+                    }}
+                    transition={{
+                        duration: 5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                        delay: 1,
+                    }}
+                />
+
+                {/* Animated Line Accent */}
+                <motion.div
+                    className="absolute left-0 top-1/2 w-32 h-[1px] bg-gradient-to-r from-[#800020] to-transparent"
+                    initial={{ scaleX: 0, originX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 1.5, delay: 1, ease: 'easeOut' }}
+                />
+
+                <div className="container mx-auto px-6 relative z-10 pt-28 pb-20">
+                    <div className="max-w-2xl">
+                        {/* Location Badge - Animated */}
+                        <motion.div
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/90 text-[9px] font-black uppercase tracking-[0.3em] mb-8 backdrop-blur-sm"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                        >
+                            <motion.div
+                                animate={{ scale: [1, 1.2, 1] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            >
+                                <MapPin className="w-3 h-3" />
+                            </motion.div>
+                            Santa Maria — RS
+                        </motion.div>
+
+                        {/* Main Title - Stagger Animation */}
+                        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 leading-[0.9] uppercase italic text-white">
+                            <motion.span
+                                className="block"
+                                initial={{ opacity: 0, y: 40 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.3 }}
+                            >
+                                Onde a
+                            </motion.span>
+                            <motion.span
+                                className="block text-[#800020] relative"
+                                initial={{ opacity: 0, y: 40 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.5 }}
+                            >
+                                <motion.span
+                                    className="relative z-10"
+                                    animate={{
+                                        textShadow: [
+                                            '0 0 20px rgba(128,0,32,0.5)',
+                                            '0 0 40px rgba(128,0,32,0.8)',
+                                            '0 0 20px rgba(128,0,32,0.5)',
+                                        ],
+                                    }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                >
+                                    Arte
+                                </motion.span>
+                            </motion.span>
+                            <motion.span
+                                className="block text-white/90"
+                                initial={{ opacity: 0, y: 40 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.7 }}
+                            >
+                                Floresce.
+                            </motion.span>
                         </h1>
-                        <p className="text-lg md:text-xl text-zinc-700 mb-12 max-w-xl leading-relaxed font-medium">
+
+                        {/* Animated Decorative Line */}
+                        <motion.div
+                            className="w-20 h-[2px] bg-gradient-to-r from-[#800020] via-[#800020] to-transparent mb-6"
+                            initial={{ scaleX: 0, originX: 0 }}
+                            animate={{ scaleX: 1 }}
+                            transition={{ duration: 1, delay: 1 }}
+                        />
+
+                        {/* Subtitle - Fade In */}
+                        <motion.p
+                            className="text-lg md:text-xl text-white/70 mb-8 max-w-xl leading-relaxed font-medium"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.9 }}
+                        >
                             Transcenda o movimento. Descubra uma experiência educacional transformadora que une disciplina, técnica e alma.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-5">
+                        </motion.p>
+
+                        {/* CTA Buttons - Animated */}
+                        <motion.div
+                            className="flex flex-col sm:flex-row gap-4 mb-12"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 1.1 }}
+                        >
                             <Link href="/espaco-revelle/matricula">
-                                <Button className="h-14 px-10 bg-[#800020] hover:bg-[#600018] rounded-2xl text-xs font-black uppercase tracking-[0.2em] group shadow-xl shadow-[#800020]/30 text-white">
-                                    Quero Iniciar
-                                    <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                </Button>
+                                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                    <Button className="h-14 px-10 bg-[#800020] hover:bg-[#9a0028] text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] group shadow-2xl shadow-[#800020]/40 transition-colors relative overflow-hidden">
+                                        <motion.div
+                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                                            initial={{ x: '-100%' }}
+                                            whileHover={{ x: '100%' }}
+                                            transition={{ duration: 0.6 }}
+                                        />
+                                        <span className="relative z-10 flex items-center">
+                                            Quero Iniciar
+                                            <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                        </span>
+                                    </Button>
+                                </motion.div>
                             </Link>
                             <a href="#modalidades">
-                                <Button variant="outline" className="h-14 px-10 border-[#800020]/20 bg-white/50 hover:bg-white/80 text-[#800020] rounded-2xl text-xs font-black uppercase tracking-[0.2em] transition-all backdrop-blur-xl">
-                                    Explorar Aulas
-                                </Button>
+                                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                    <Button variant="outline" className="h-14 px-10 border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] transition-all backdrop-blur-sm hover:border-white/40">
+                                        Explorar Aulas
+                                    </Button>
+                                </motion.div>
                             </a>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+
+                        {/* Mini Stats - Stagger Animation */}
+                        <motion.div
+                            className="flex flex-wrap items-center gap-6 md:gap-8 text-white/60"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.8, delay: 1.3 }}
+                        >
+                            {[
+                                { icon: <Star className="w-4 h-4 text-amber-400 fill-amber-400" />, text: '4.9 Google' },
+                                { icon: <Music className="w-4 h-4 text-white/50" />, text: '15+ Modalidades' },
+                                { icon: <Heart className="w-4 h-4 text-white/50" />, text: '1000+ Alunos' },
+                            ].map((stat, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="flex items-center gap-2"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: 1.4 + i * 0.1 }}
+                                >
+                                    <motion.div
+                                        animate={{ rotate: [0, 5, -5, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, delay: i * 0.5 }}
+                                    >
+                                        {stat.icon}
+                                    </motion.div>
+                                    <span className="text-xs font-bold tracking-wide">{stat.text}</span>
+                                    {i < 2 && <div className="w-1 h-1 rounded-full bg-white/30 ml-4 hidden sm:block" />}
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    </div>
                 </div>
 
-                {/* Scroll Indicator */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-                    <div className="w-5 h-9 rounded-full border border-zinc-400 flex justify-center p-1.5 backdrop-blur-sm">
-                        <div className="w-1 h-2 bg-[#800020] rounded-full animate-bounce" />
+                {/* Scroll Indicator - Animated */}
+                <motion.div
+                    className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 2 }}
+                >
+                    <motion.div
+                        className="w-6 h-10 rounded-full border border-white/30 flex justify-center p-2"
+                        animate={{ y: [0, 5, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                    >
+                        <motion.div
+                            className="w-1 h-2 bg-white/60 rounded-full"
+                            animate={{ y: [0, 8, 0], opacity: [1, 0.3, 1] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                        />
+                    </motion.div>
+                </motion.div>
+            </section>
+
+            {/* Premium Stats Section */}
+            <section className="py-20 bg-white relative overflow-hidden">
+                <div className="container mx-auto px-6">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+                            {[
+                                { value: '4.9', label: 'Nota Google', sub: 'Avaliações reais' },
+                                { value: '15+', label: 'Modalidades', sub: 'Para todas idades' },
+                                { value: '1000+', label: 'Alunos', sub: 'Vidas transformadas' },
+                                { value: '12', label: 'Anos', sub: 'De experiência' }
+                            ].map((stat, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="text-center group"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                                >
+                                    <div className="text-4xl md:text-5xl lg:text-6xl font-black text-[#800020] tracking-tighter mb-2">
+                                        {stat.value}
+                                    </div>
+                                    <div className="text-sm md:text-base font-bold text-zinc-900 uppercase tracking-wide mb-1">
+                                        {stat.label}
+                                    </div>
+                                    <div className="text-xs text-zinc-400 font-medium">
+                                        {stat.sub}
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Premium Stats Section */}
-            <section className="py-16 bg-white border-y border-zinc-100 relative overflow-hidden">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#800020]/5 blur-[120px] rounded-full pointer-events-none" />
-                <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                            { value: '4.9', label: 'Nota Google', sub: 'Satisfação plena' },
-                            { value: '15+', label: 'Disciplinas', sub: 'Técnicas globais' },
-                            { value: '1k+', label: 'Vidas', sub: 'Transformadas' },
-                            { value: '100%', label: 'Paixão', sub: 'Em cada passo' }
-                        ].map((stat, i) => (
-                            <div key={i} className="space-y-1 group text-center md:text-left">
-                                <div className="text-3xl md:text-4xl font-black text-zinc-900 group-hover:text-[#800020] transition-colors tracking-tighter italic">
-                                    {stat.value}
-                                </div>
-                                <div className="space-y-0.5">
-                                    <div className="text-[8px] text-zinc-400 uppercase tracking-[0.3em] font-black">{stat.label}</div>
-                                    <div className="text-[7px] text-[#800020]/60 uppercase tracking-widest font-bold italic">{stat.sub}</div>
-                                </div>
+            {/* Matrículas Abertas - CTA Section */}
+            <section className="relative py-28 overflow-hidden">
+                {/* Background Image with Slow Zoom */}
+                <motion.div
+                    className="absolute inset-0 z-0"
+                    initial={{ scale: 1 }}
+                    whileInView={{ scale: 1.1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 20, ease: 'linear' }}
+                >
+                    <Image
+                        src="/elegant-ballet-performance-stockcake (1).webp"
+                        alt="Bailarina no palco - Matrículas Abertas"
+                        fill
+                        className="object-cover object-center"
+                    />
+                </motion.div>
+
+                {/* Dark Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/50 z-[1]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 z-[1]" />
+
+                {/* Floating Particles */}
+                <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
+                    {[...Array(12)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            className="absolute w-1 h-1 bg-white/40 rounded-full"
+                            style={{
+                                left: `${10 + (i * 8)}%`,
+                                top: `${20 + (i % 4) * 20}%`,
+                            }}
+                            animate={{
+                                y: [0, -40, 0],
+                                x: [0, i % 2 === 0 ? 20 : -20, 0],
+                                opacity: [0.2, 0.6, 0.2],
+                            }}
+                            transition={{
+                                duration: 4 + i * 0.3,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                                delay: i * 0.2,
+                            }}
+                        />
+                    ))}
+                </div>
+
+                {/* Animated Glows */}
+                <motion.div
+                    className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#800020]/30 rounded-full blur-[180px] pointer-events-none z-[2]"
+                    animate={{
+                        scale: [1, 1.3, 1],
+                        opacity: [0.2, 0.4, 0.2],
+                    }}
+                    transition={{
+                        duration: 5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                    }}
+                />
+                <motion.div
+                    className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#800020]/20 rounded-full blur-[150px] pointer-events-none z-[2]"
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.1, 0.3, 0.1],
+                    }}
+                    transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                        delay: 1,
+                    }}
+                />
+
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="max-w-3xl">
+                        {/* Badge - DESTAQUE MATRÍCULAS */}
+                        <motion.div
+                            className="relative inline-block mb-10"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, type: 'spring' }}
+                        >
+                            {/* Glow behind */}
+                            <motion.div
+                                className="absolute inset-0 bg-[#800020] rounded-2xl blur-xl -z-10"
+                                animate={{
+                                    opacity: [0.4, 0.8, 0.4],
+                                    scale: [1, 1.1, 1],
+                                }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            />
+
+                            {/* Main Badge */}
+                            <motion.div
+                                className="relative flex items-center gap-4 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#800020] via-[#a00028] to-[#800020] text-white border border-white/20 shadow-2xl overflow-hidden"
+                                animate={{
+                                    boxShadow: [
+                                        '0 0 20px rgba(128,0,32,0.5)',
+                                        '0 0 40px rgba(128,0,32,0.8)',
+                                        '0 0 20px rgba(128,0,32,0.5)',
+                                    ],
+                                }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            >
+                                {/* Animated dot */}
+                                <motion.div
+                                    className="w-3 h-3 bg-white rounded-full"
+                                    animate={{
+                                        scale: [1, 1.5, 1],
+                                        opacity: [1, 0.5, 1]
+                                    }}
+                                    transition={{ duration: 1, repeat: Infinity }}
+                                />
+
+                                {/* Text */}
+                                <span className="text-lg md:text-xl font-black uppercase tracking-wider relative z-10">
+                                    Matrículas Abertas 2026
+                                </span>
+
+                                {/* Shimmer effect - contained */}
+                                <motion.div
+                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                                    animate={{ x: ['-100%', '200%'] }}
+                                    transition={{ duration: 2.5, repeat: Infinity, ease: 'linear', repeatDelay: 1 }}
+                                />
+                            </motion.div>
+                        </motion.div>
+
+                        {/* Title with Stagger */}
+                        <div className="mb-8">
+                            <motion.h2
+                                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] uppercase italic text-white"
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.1 }}
+                            >
+                                Do Baby ao
+                            </motion.h2>
+                            <motion.h2
+                                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] uppercase italic"
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.3 }}
+                            >
+                                <motion.span
+                                    className="text-[#800020]"
+                                    animate={{
+                                        textShadow: [
+                                            '0 0 20px rgba(128,0,32,0.3)',
+                                            '0 0 60px rgba(128,0,32,0.6)',
+                                            '0 0 20px rgba(128,0,32,0.3)',
+                                        ],
+                                    }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                >
+                                    Adulto.
+                                </motion.span>
+                            </motion.h2>
+                        </div>
+
+                        {/* Animated Line Accent */}
+                        <motion.div
+                            className="w-24 h-1 bg-gradient-to-r from-[#800020] to-transparent mb-8"
+                            initial={{ scaleX: 0, originX: 0 }}
+                            whileInView={{ scaleX: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, delay: 0.5 }}
+                        />
+
+                        {/* Aula Experimental - Redesigned */}
+                        <motion.div
+                            className="relative inline-block mb-10"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                        >
+                            <div className="relative px-8 py-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md overflow-hidden">
+                                <motion.div
+                                    className="absolute inset-0 bg-gradient-to-r from-[#800020]/20 via-transparent to-[#800020]/20"
+                                    animate={{ x: ['-100%', '100%'] }}
+                                    transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                                />
+                                <span className="relative z-10 text-white text-xl md:text-2xl font-bold tracking-wide">
+                                    Aula Experimental <span className="text-[#800020] font-black">GRATUITA</span>
+                                </span>
                             </div>
-                        ))}
+                        </motion.div>
+
+                        {/* Turmas */}
+                        <motion.div
+                            className="mb-12"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.5 }}
+                        >
+                            <p className="text-white/50 text-xs uppercase tracking-[0.3em] font-bold mb-5">Nossas Modalidades</p>
+                            <div className="flex flex-wrap gap-3">
+                                {['Ballet', 'Jazz', 'K-Pop', 'Ritmos', 'Dança de Salão'].map((turma, i) => (
+                                    <motion.div
+                                        key={turma}
+                                        className="group relative px-6 py-3 rounded-full bg-white/5 border border-white/20 text-white font-bold text-sm cursor-pointer overflow-hidden"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.5, delay: 0.6 + i * 0.1 }}
+                                        whileHover={{ scale: 1.05, borderColor: 'rgba(128,0,32,1)' }}
+                                    >
+                                        <motion.div
+                                            className="absolute inset-0 bg-[#800020]"
+                                            initial={{ x: '-100%' }}
+                                            whileHover={{ x: '0%' }}
+                                            transition={{ duration: 0.3 }}
+                                        />
+                                        <span className="relative z-10">{turma}</span>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* CTA Buttons */}
+                        <motion.div
+                            className="flex flex-col sm:flex-row gap-4"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.7 }}
+                        >
+                            <Link href="/espaco-revelle/matricula">
+                                <motion.div
+                                    className="relative overflow-hidden rounded-2xl"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <Button className="h-16 px-12 bg-[#800020] hover:bg-[#9a0028] text-white rounded-2xl text-sm font-black uppercase tracking-[0.15em] group shadow-2xl shadow-[#800020]/50 transition-colors">
+                                        <span className="flex items-center">
+                                            Garantir Minha Vaga
+                                            <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                                        </span>
+                                    </Button>
+                                    {/* Shimmer contained */}
+                                    <motion.div
+                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"
+                                        animate={{ x: ['-100%', '200%'] }}
+                                        transition={{ duration: 2, repeat: Infinity, ease: 'linear', repeatDelay: 2 }}
+                                    />
+                                </motion.div>
+                            </Link>
+                        </motion.div>
                     </div>
                 </div>
             </section>
@@ -153,13 +605,14 @@ export default function EspacoRevelleSite() {
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-black/20 blur-[120px] rounded-full pointer-events-none" />
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                        <div className="relative order-2 lg:order-1">
-                            <div className="aspect-square rounded-full overflow-hidden border border-white/10 group shadow-2xl shadow-black/30 bg-white max-w-sm mx-auto lg:max-w-none">
+                        <div className="relative order-2 lg:order-1 flex justify-center">
+                            <div className="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white group shadow-2xl shadow-black/30 relative">
                                 <Image
                                     src="/revelle-owner.jpg"
                                     alt="Diretora Espaço Revelle"
                                     fill
-                                    className="object-cover object-top group-hover:scale-110 transition-transform duration-1000 grayscale-[0.1] group-hover:grayscale-0"
+                                    className="object-cover group-hover:scale-110 transition-transform duration-1000 grayscale-[0.1] group-hover:grayscale-0"
+                                    style={{ objectPosition: 'center 85%' }}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
@@ -208,48 +661,89 @@ export default function EspacoRevelleSite() {
                 </div>
             </section>
 
-            {/* Modalidades - The Collection (Keep White) */}
-            <section id="modalidades" className="py-20 bg-white relative">
-                <div className="container mx-auto px-6">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-                        <div className="max-w-xl space-y-4">
-                            <span className="text-[#800020] font-black uppercase tracking-[0.4em] text-[9px]">A Coleção</span>
-                            <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase italic text-zinc-900">Nossas Disciplinas</h2>
-                            <p className="text-zinc-500 text-base font-medium">Escolha o seu caminho na arte. Do clássico absoluto ao contemporâneo visceral.</p>
-                        </div>
-                        <Button variant="ghost" className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-[#800020] hover:bg-[#800020]/5 h-10 px-5 rounded-full border border-zinc-200">
-                            Ver Todas as Turmas <ArrowRight className="ml-2 w-3 h-3" />
-                        </Button>
-                    </div>
+            {/* Modalidades - Nossas Aulas */}
+            <section id="modalidades" className="py-24 bg-white relative overflow-hidden">
+                {/* Background subtle */}
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#800020]/5 blur-[200px] rounded-full pointer-events-none" />
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="container mx-auto px-6 relative z-10">
+                    {/* Header */}
+                    <motion.div
+                        className="text-center mb-16 space-y-4"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <span className="text-[#800020] font-black uppercase tracking-[0.4em] text-[9px]">Nossas Modalidades</span>
+                        <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase italic text-zinc-900">
+                            Escolha sua <span className="text-[#800020]">Arte</span>
+                        </h2>
+                        <p className="text-zinc-500 text-base font-medium max-w-2xl mx-auto">
+                            Do clássico ao moderno, temos a modalidade perfeita para você. Aulas para todas as idades e níveis.
+                        </p>
+                    </motion.div>
+
+                    {/* Grid de Modalidades */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
                         {[
-                            { title: "Baby Class", sub: "Primeiros Passos", age: "3 a 6 anos", img: "/revelle-class-baby.jpg" },
-                            { title: "Jazz Premium", sub: "Energia Dinâmica", age: "Infantil & Adulto", img: "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?q=80&w=2070&auto=format&fit=crop" },
-                            { title: "Neo Urban", sub: "Cultura Urbana", age: "Exploração Criativa", img: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?q=80&w=2070&auto=format&fit=crop" }
+                            { title: "Ballet", sub: "Clássico & Elegante", age: "Baby ao Adulto", img: "/elegant-ballet-performance-stockcake.webp" },
+                            { title: "Jazz", sub: "Energia & Expressão", age: "Infantil & Adulto", img: "https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?q=80&w=2069&auto=format&fit=crop" },
+                            { title: "K-Pop", sub: "Cultura Coreana", age: "Infantil & Juvenil", img: "https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=1974&auto=format&fit=crop" },
+                            { title: "Ritmos", sub: "Diversão & Movimento", age: "Todas as Idades", img: "https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?q=80&w=2070&auto=format&fit=crop" },
+                            { title: "Dança de Salão", sub: "Casais & Solo", age: "Adulto", img: "https://images.unsplash.com/photo-1545959570-a94084071b5d?q=80&w=1976&auto=format&fit=crop" },
+                            { title: "Baby Class", sub: "Primeiros Passos", age: "3 a 6 anos", img: "/revelle-class-baby.jpg" }
                         ].map((aula, i) => (
                             <motion.div
                                 key={i}
-                                whileHover={{ y: -5 }}
-                                className="group cursor-pointer relative aspect-[3/4] rounded-[2rem] overflow-hidden border border-zinc-200 shadow-lg"
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: i * 0.1 }}
+                                whileHover={{ y: -8 }}
+                                className="group cursor-pointer relative aspect-[4/5] rounded-[2rem] overflow-hidden shadow-xl"
                             >
-                                <Image src={aula.img} alt={aula.title} fill className="object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.2] group-hover:grayscale-0" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80" />
-                                <div className="absolute inset-0 bg-[#800020]/40 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <Image
+                                    src={aula.img}
+                                    alt={aula.title}
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                                <div className="absolute inset-0 bg-[#800020]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                <div className="absolute bottom-6 left-6 right-6 z-10">
-                                    <div className="text-white/90 text-[7px] font-black uppercase tracking-[0.4em] mb-1.5">{aula.sub}</div>
-                                    <h3 className="text-xl font-black uppercase italic mb-3 leading-none text-white">{aula.title}</h3>
-                                    <div className="flex items-center justify-between pt-3 border-t border-white/20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                                        <span className="text-[8px] font-black uppercase text-white/80 tracking-widest">{aula.age}</span>
-                                        <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-md">
-                                            <ChevronRight className="w-3 h-3 text-white" />
-                                        </div>
+                                <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                                    <div className="text-white/70 text-[9px] font-bold uppercase tracking-[0.3em] mb-2">{aula.sub}</div>
+                                    <h3 className="text-2xl font-black uppercase italic mb-3 leading-none text-white group-hover:text-white transition-colors">{aula.title}</h3>
+                                    <div className="flex items-center justify-between pt-3 border-t border-white/20">
+                                        <span className="text-[10px] font-bold uppercase text-white/60 tracking-wider">{aula.age}</span>
+                                        <motion.div
+                                            className="w-8 h-8 rounded-full bg-[#800020] flex items-center justify-center"
+                                            whileHover={{ scale: 1.1 }}
+                                        >
+                                            <ChevronRight className="w-4 h-4 text-white" />
+                                        </motion.div>
                                     </div>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* CTA */}
+                    <motion.div
+                        className="text-center mt-12"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                    >
+                        <Link href="/espaco-revelle/matricula">
+                            <Button className="h-14 px-10 bg-[#800020] hover:bg-[#9a0028] text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] group shadow-xl shadow-[#800020]/20">
+                                Agendar Aula Experimental
+                                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+                        </Link>
+                    </motion.div>
                 </div>
             </section>
 
@@ -427,34 +921,107 @@ export default function EspacoRevelleSite() {
                 </div>
             </section>
 
-            {/* Premium Footer */}
-            <footer className="py-20 bg-black border-t border-white/5 relative overflow-hidden">
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-10" />
-                <div className="container mx-auto px-6 text-center space-y-12">
-                    <div className="flex flex-col items-center gap-6">
-                        <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shadow-2xl shadow-black/20">
-                                <Sparkles className="text-white w-6 h-6" />
+            {/* Premium Footer - Multi-Column Design */}
+            <footer className="bg-[#0a0a0a] border-t border-white/5 relative overflow-hidden">
+                {/* Main Footer Content */}
+                <div className="container mx-auto px-6 py-16">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+                        {/* Brand Column */}
+                        <div className="lg:col-span-1 space-y-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-xl overflow-hidden shadow-2xl shadow-black/20">
+                                    <Image src="/revelle-logo-icon.jpg" alt="Revelle Logo" width={48} height={48} className="object-cover" />
+                                </div>
+                                <div className="flex flex-col -space-y-0.5">
+                                    <span className="text-2xl font-black tracking-tighter uppercase italic leading-none text-white">Revelle</span>
+                                    <span className="text-[9px] text-white/50 font-black uppercase tracking-[0.3em]">Espaço Criativo</span>
+                                </div>
                             </div>
-                            <div className="flex flex-col -space-y-0.5 text-left">
-                                <span className="text-2xl font-black tracking-tighter uppercase italic leading-none text-white">Revelle</span>
-                                <span className="text-[9px] text-white/60 font-black uppercase tracking-[0.4em] italic">Espaço de Arte</span>
+                            <p className="text-white/40 text-sm leading-relaxed max-w-xs">
+                                Transformando vidas através da dança há mais de uma década em Santa Maria.
+                            </p>
+                            <div className="flex gap-4">
+                                <a href="https://www.facebook.com/espacorevelle/" target="_blank" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all">
+                                    <Facebook size={18} />
+                                </a>
+                                <a href="https://www.instagram.com/espaco_revelle/" target="_blank" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all">
+                                    <Instagram size={18} />
+                                </a>
                             </div>
                         </div>
 
-                        <div className="flex justify-center gap-8 text-white/50">
-                            <a href="https://www.facebook.com/espacorevelle/" target="_blank" className="hover:text-white hover:scale-125 transition-all"><Facebook size={18} /></a>
-                            <a href="https://www.instagram.com/espaco_revelle/" target="_blank" className="hover:text-white hover:scale-125 transition-all"><Instagram size={18} /></a>
+                        {/* Navigation Column */}
+                        <div className="space-y-6">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Navegação</h4>
+                            <ul className="space-y-3">
+                                {[
+                                    { label: 'Início', href: '#home' },
+                                    { label: 'A Escola', href: '#about' },
+                                    { label: 'Grade de Horários', href: '#horarios' },
+                                    { label: 'Depoimentos', href: '#reviews' },
+                                    { label: 'Contato', href: '#contact' }
+                                ].map((item, i) => (
+                                    <li key={i}>
+                                        <a href={item.href} className="text-white/50 hover:text-white text-sm font-medium transition-colors hover:translate-x-1 inline-block">
+                                            {item.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Classes Column */}
+                        <div className="space-y-6">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Modalidades</h4>
+                            <ul className="space-y-3">
+                                {[
+                                    { label: 'Ballet Clássico', href: '#modalidades' },
+                                    { label: 'Jazz', href: '#modalidades' },
+                                    { label: 'Contemporâneo', href: '#modalidades' },
+                                    { label: 'Baby Class', href: '#modalidades' },
+                                    { label: 'Hip Hop', href: '#modalidades' }
+                                ].map((item, i) => (
+                                    <li key={i}>
+                                        <a href={item.href} className="text-white/50 hover:text-white text-sm font-medium transition-colors hover:translate-x-1 inline-block">
+                                            {item.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Contact Column */}
+                        <div className="space-y-6">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Contato</h4>
+                            <div className="space-y-4">
+                                <div className="flex items-start gap-3">
+                                    <MapPin className="w-4 h-4 text-[#800020] mt-0.5 shrink-0" />
+                                    <p className="text-white/50 text-sm leading-relaxed">
+                                        Av. Paulo Lauda, 225<br />
+                                        Tancredo Neves<br />
+                                        Santa Maria — RS
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Phone className="w-4 h-4 text-[#800020] shrink-0" />
+                                    <a href="tel:+5555996504558" className="text-white/50 hover:text-white text-sm font-medium transition-colors">
+                                        (55) 99650-4558
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                        <p className="text-white/40 text-[8px] font-black uppercase tracking-[0.4em]">
-                            © 2026 Espaço Revelle • Coleção de Dança Privada
+                {/* Bottom Bar */}
+                <div className="border-t border-white/5">
+                    <div className="container mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <p className="text-white/30 text-[10px] font-medium uppercase tracking-widest">
+                            © 2026 Espaço Revelle. Todos os direitos reservados.
                         </p>
                         <div className="flex items-center gap-2">
-                            <span className="text-[7px] font-black uppercase tracking-[0.2em] text-white/40">Desenvolvido por</span>
-                            <span className="text-[9px] font-black text-white tracking-widest uppercase italic">Grand Salto.IA</span>
+                            <span className="text-[10px] font-medium text-white/30">Desenvolvido por</span>
+                            <span className="text-[11px] font-black text-white/60 tracking-wider uppercase">Grand Salto</span>
                         </div>
                     </div>
                 </div>

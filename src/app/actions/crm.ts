@@ -79,3 +79,53 @@ export async function updateLeadStatus(id: string, status: string) {
     revalidatePath('/diretora/crm')
     return { success: true }
 }
+
+// Solicitação de Aula Experimental - SEM autenticação (visitante do site)
+export async function solicitarAulaExperimental(data: {
+    nome_aluno: string
+    idade_aluno: string
+    nome_responsavel?: string
+    whatsapp: string
+    email: string
+    modalidade: string
+    observacoes?: string
+}) {
+    const supabase = await createClient()
+
+    // Escola ID fixo do Espaço Revelle (ou buscar pelo domínio)
+    // Por enquanto vamos usar um ID fixo ou buscar a primeira escola
+    const { data: escola } = await supabase
+        .from('escolas')
+        .select('id')
+        .eq('slug', 'espaco-revelle')
+        .single()
+
+    const escolaId = escola?.id || '00000000-0000-0000-0000-000000000001'
+
+    const { error } = await supabase
+        .from('leads')
+        .insert([{
+            nome: data.nome_aluno,
+            interesse: data.modalidade,
+            contato: data.whatsapp,
+            email: data.email,
+            escola_id: escolaId,
+            status: 'Aula Experimental',
+            prioridade: 'Alta',
+            observacoes: JSON.stringify({
+                idade_aluno: data.idade_aluno,
+                nome_responsavel: data.nome_responsavel,
+                observacoes: data.observacoes,
+                origem: 'Site - Aula Experimental',
+                data_solicitacao: new Date().toISOString()
+            })
+        }])
+
+    if (error) {
+        console.error('Erro ao criar solicitação:', error)
+        throw new Error(`Erro ao enviar solicitação: ${error.message}`)
+    }
+
+    revalidatePath('/diretora/crm')
+    return { success: true, message: 'Solicitação enviada com sucesso!' }
+}
