@@ -66,14 +66,16 @@ export default function EspacoRevelleSite() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <Link href="/login">
+                        <Link href="https://go-grand-salto-saas.vercel.app/login?host=revelle.grandsalto.ia">
                             <Button variant="ghost" className="hidden sm:flex text-zinc-600 hover:text-[#800020] hover:bg-[#800020]/5 rounded-xl px-3 text-[9px] font-black uppercase tracking-widest transition-all h-8">
                                 Login
                             </Button>
                         </Link>
-                        <Button className="bg-[#800020] hover:bg-[#600018] text-white rounded-xl px-4 sm:px-5 h-8 text-[9px] font-black uppercase tracking-widest shadow-lg shadow-[#800020]/20 transition-all hover:scale-105 active:scale-95 border-none">
-                            Matricule-se
-                        </Button>
+                        <Link href="/espaco-revelle/matricula">
+                            <Button className="bg-[#800020] hover:bg-[#600018] text-white rounded-xl px-4 sm:px-5 h-8 text-[9px] font-black uppercase tracking-widest shadow-lg shadow-[#800020]/20 transition-all hover:scale-105 active:scale-95 border-none">
+                                Matricule-se
+                            </Button>
+                        </Link>
 
                         {/* Mobile Menu Button */}
                         <Button
@@ -143,7 +145,7 @@ export default function EspacoRevelleSite() {
                                     transition={{ delay: 0.6 }}
                                     className="mt-8 flex flex-col gap-4 w-full max-w-xs"
                                 >
-                                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Link href="https://go-grand-salto-saas.vercel.app/login?host=revelle.grandsalto.ia" onClick={() => setIsMobileMenuOpen(false)}>
                                         <Button variant="outline" className="w-full h-12 rounded-xl uppercase font-bold tracking-widest border-zinc-200">
                                             Área do Aluno
                                         </Button>
