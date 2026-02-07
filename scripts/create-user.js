@@ -1,7 +1,12 @@
 const { createClient } = require('@supabase/supabase-js')
 
-const supabaseUrl = 'https://oymqqxcmbesqczpkedya.supabase.co'
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'sb_secret_lA6PNKpIq7Wb14ut3N2C8w_1M1U2qZJ'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+if (!supabaseUrl || !supabaseServiceKey) {
+    console.error('Configure NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY nas variáveis de ambiente.')
+    process.exit(1)
+}
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
     auth: {

@@ -373,6 +373,23 @@ export async function getEstatisticasFinanceiras() {
         .eq('escola_id', perfil.escola_id)
         .eq('status', 'atrasado')
 
+    // Mensalidades pagas no mês
+    const { count: totalPagasMes } = await supabase
+        .from('mensalidades')
+        .select('*', { count: 'exact', head: true })
+        .eq('escola_id', perfil.escola_id)
+        .eq('status', 'pago')
+        .eq('mes_referencia', mesAtual)
+        .eq('ano_referencia', anoAtual)
+
+    // Total de mensalidades do mês (para calcular taxa)
+    const { count: totalMensalidadesMes } = await supabase
+        .from('mensalidades')
+        .select('*', { count: 'exact', head: true })
+        .eq('escola_id', perfil.escola_id)
+        .eq('mes_referencia', mesAtual)
+        .eq('ano_referencia', anoAtual)
+
     // Total de alunos ativos
     const { count: totalAlunos } = await supabase
         .from('estudantes')
@@ -381,14 +398,54 @@ export async function getEstatisticasFinanceiras() {
         .eq('status_matricula', 'ativo')
 
     const taxaInadimplencia = totalAlunos ? ((totalAtrasadas || 0) / totalAlunos) * 100 : 0
+    const taxaRecebimento = totalMensalidadesMes
+        ? ((totalPagasMes || 0) / totalMensalidadesMes) * 100
+        : 0
+
+    // Leads e taxa de conversão
+    let totalLeads = 0
+    let leadsConvertidos = 0
+    let taxaConversao = 0
+    try {
+        const { count: leads } = await supabase
+            .from('leads')
+            .select('*', { count: 'exact', head: true })
+            .eq('escola_id', perfil.escola_id)
+
+        const { count: convertidos } = await supabase
+            .from('leads')
+            .select('*', { count: 'exact', head: true })
+            .eq('escola_id', perfil.escola_id)
+            .eq('status', 'Matriculado')
+
+        totalLeads = leads || 0
+        leadsConvertidos = convertidos || 0
+        taxaConversao = totalLeads > 0 ? (leadsConvertidos / totalLeads) * 100 : 0
+    } catch {
+        // Tabela leads pode não existir ainda
+    }
+
+    // Valor pendente total
+    const { data: valorPendenteData } = await supabase
+        .from('mensalidades')
+        .select('valor')
+        .eq('escola_id', perfil.escola_id)
+        .in('status', ['pendente', 'atrasado'])
+
+    const valorPendente = valorPendenteData?.reduce((sum, m) => sum + Number(m.valor), 0) || 0
 
     return {
         data: {
             faturamentoMensal: totalFaturamento,
             totalPendentes: totalPendentes || 0,
             totalAtrasadas: totalAtrasadas || 0,
-            taxaInadimplencia: taxaInadimplencia.toFixed(1),
+            taxaInadimplencia: Number(taxaInadimplencia.toFixed(1)),
+            taxaRecebimento: Number(taxaRecebimento.toFixed(1)),
             totalAlunos: totalAlunos || 0,
+            valorPendente,
+            totalLeads,
+            leadsConvertidos,
+            taxaConversao: Number(taxaConversao.toFixed(1)),
         }
     }
 }

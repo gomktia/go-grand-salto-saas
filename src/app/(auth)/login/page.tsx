@@ -103,12 +103,15 @@ export default function LoginPage() {
 
             // Redirecionar baseado no role real do banco
             const roleRoutes: Record<string, string> = {
+                'super_admin': '/superadmin',
                 'diretora': '/diretora',
                 'professor': '/professor',
+                'monitor': '/monitor',
                 'estudante': '/aluno',
-                'responsavel': '/responsavel',
+                'pai': '/responsavel',
+                // Formatos legados (compatibilidade)
                 'superadmin': '/superadmin',
-                'super_admin': '/superadmin'  // suporte a ambos formatos
+                'responsavel': '/responsavel',
             }
 
             const redirectPath = roleRoutes[perfil.role] || '/diretora'

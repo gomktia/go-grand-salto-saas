@@ -10,11 +10,20 @@ Sempre utilize estas ferramentas antes de propor qualquer código:
 - `frontend-design`: Para validar a acessibilidade e o contraste.
 
 ## 🎨 Regras de Design de Elite
-1. **Tipografia:** Use fontes com forte contraste (Ex: Geist Sans ou Inter com variações de Black 900 e Thin 100).
+1. **Tipografia:** Use fontes com forte contraste (Ex: Geist Sans ou Inter com variações de Black 900 e Thin 100). Proibido fontes padrão.
 2. **Cores:** Proibido gradientes roxos genéricos. Use Dark Mode profundo (#050505) com acentos de cores sólidas e vibrantes.
-3. **Componentes:** Use Radix UI ou Shadcn/UI. Mantenha bordas com `rounded-xl` ou `rounded-2xl` e sombras sutis (`ring-1`).
+3. **Componentes:** Use Radix UI ou Shadcn/UI com Tailwind CSS. Mantenha bordas com `rounded-xl` ou `rounded-2xl` e sombras sutis (`ring-1`).
+4. **Imagens:** Devem ter estilo editorial ou tech-minimalista.
 
 ## 💾 Padrões Técnicos
+- **Framework:** Next.js 14+ (App Router) com TypeScript.
 - **Database:** Supabase (Sempre use RLS e Migrations).
-- **Frontend:** Next.js (App Router) com TypeScript.
+- **Auth:** Supabase Auth.
+- **Ícones:** Lucide React ou Font Awesome.
 - **Imagens:** Devem ser salvas em `/public/assets/images/`.
+
+## 📝 Sequência de Trabalho
+1. Analise o nicho do cliente.
+2. Gere 5 imagens conceituais com Nano Banana.
+3. Desenhe o Wireframe de alta fidelidade.
+4. Só então escreva o código React.

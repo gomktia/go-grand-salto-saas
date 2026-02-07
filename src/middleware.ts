@@ -66,7 +66,7 @@ export async function middleware(request: NextRequest) {
         }
 
         // 5. Proteção de Rotas
-        const protectedRoutes = ['/diretora', '/professor', '/aluno', '/responsavel', '/superadmin']
+        const protectedRoutes = ['/diretora', '/professor', '/monitor', '/aluno', '/responsavel', '/superadmin']
         const isProtectedRoute = protectedRoutes.some(route => url.pathname.startsWith(route))
 
         if (isProtectedRoute && !user) {
