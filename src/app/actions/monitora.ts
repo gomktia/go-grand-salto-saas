@@ -26,7 +26,7 @@ async function getAuthenticatedMonitora() {
     }
 
     // Verificar se é monitora (role principal ou secundário)
-    const isMonitoraPrincipal = perfil.role === 'monitora'
+    const isMonitoraPrincipal = perfil.role === 'monitor' || perfil.role === 'monitora'
 
     // Verificar perfil secundário
     const { data: perfilSecundario } = await supabase
@@ -251,7 +251,7 @@ export async function registrarPresencaMonitora(params: {
         if (error) throw new Error(`Erro ao registrar presença: ${error.message}`)
     }
 
-    revalidatePath('/monitora')
+    revalidatePath('/monitor')
     return { success: true, presentes: checkins.length }
 }
 

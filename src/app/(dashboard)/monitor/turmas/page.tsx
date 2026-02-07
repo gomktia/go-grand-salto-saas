@@ -71,7 +71,7 @@ export default function MonitoraTurmasPage() {
                         {turmas.length} turmas sob sua monitoria
                     </p>
                 </div>
-                <Link href="/monitora">
+                <Link href="/monitor">
                     <Button variant="outline" className="h-12 px-6 rounded-2xl font-black uppercase tracking-widest text-[10px]">
                         Voltar ao Dashboard
                     </Button>
@@ -177,7 +177,7 @@ export default function MonitoraTurmasPage() {
                                 {/* Actions */}
                                 <div className="flex gap-3 pt-4 border-t border-border">
                                     {vinculo.pode_chamada && (
-                                        <Link href="/monitora/chamada" className="flex-1">
+                                        <Link href="/monitor/chamada" className="flex-1">
                                             <Button
                                                 className="w-full h-12 rounded-2xl font-black uppercase text-[10px] tracking-widest text-white"
                                                 style={{ backgroundColor: primaryColor }}

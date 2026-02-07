@@ -167,7 +167,7 @@ export default function MonitoraChamadaPage() {
                         Voce nao possui permissao para fazer chamada em nenhuma turma.
                         Fale com a diretora para solicitar acesso.
                     </p>
-                    <Link href="/monitora">
+                    <Link href="/monitor">
                         <Button variant="outline" className="rounded-2xl font-bold">
                             Voltar ao Dashboard
                         </Button>
@@ -193,7 +193,7 @@ export default function MonitoraChamadaPage() {
                         {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                     </p>
                 </div>
-                <Link href="/monitora">
+                <Link href="/monitor">
                     <Button variant="outline" className="h-12 px-6 rounded-2xl font-black uppercase tracking-widest text-[10px]">
                         Voltar
                     </Button>

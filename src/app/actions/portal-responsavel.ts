@@ -24,8 +24,8 @@ async function getAuthenticatedResponsavel() {
         throw new Error('Perfil não encontrado')
     }
 
-    // Verificar se é responsável (role = 'pai')
-    if (perfil.role !== 'pai') {
+    // Verificar se é responsável
+    if (perfil.role !== 'responsavel') {
         throw new Error('Acesso negado: apenas responsáveis')
     }
 

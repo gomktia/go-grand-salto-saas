@@ -108,10 +108,9 @@ export default function LoginPage() {
                 'professor': '/professor',
                 'monitor': '/monitor',
                 'estudante': '/aluno',
-                'pai': '/responsavel',
-                // Formatos legados (compatibilidade)
-                'superadmin': '/superadmin',
                 'responsavel': '/responsavel',
+                // Formato legado
+                'superadmin': '/superadmin',
             }
 
             const redirectPath = roleRoutes[perfil.role] || '/diretora'

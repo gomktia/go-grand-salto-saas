@@ -467,7 +467,7 @@ export async function habilitarPortalResponsavel(responsavelId: string, senha: s
             id: authUser.user.id,
             escola_id: perfil.escola_id,
             full_name: responsavel.nome_completo,
-            role: 'pai',
+            role: 'responsavel',
         })
         .select()
         .single()

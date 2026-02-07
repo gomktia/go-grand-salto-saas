@@ -102,12 +102,12 @@ const roleConfig: Record<string, { items: NavigationItem[], label: string }> = {
             { name: 'Configuracoes', icon: Settings, href: '/superadmin/config' },
         ]
     },
-    monitora: {
-        label: 'Monitora',
+    monitor: {
+        label: 'Monitor(a)',
         items: [
-            { name: 'Dashboard', icon: LayoutDashboard, href: '/monitora' },
-            { name: 'Minhas Turmas', icon: Users, href: '/monitora/turmas' },
-            { name: 'Chamada Digital', icon: ClipboardCheck, href: '/monitora/chamada' },
+            { name: 'Dashboard', icon: LayoutDashboard, href: '/monitor' },
+            { name: 'Minhas Turmas', icon: Users, href: '/monitor/turmas' },
+            { name: 'Chamada Digital', icon: ClipboardCheck, href: '/monitor/chamada' },
         ]
     }
 }
