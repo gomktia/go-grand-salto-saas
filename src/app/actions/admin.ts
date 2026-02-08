@@ -438,14 +438,14 @@ export async function getTurmas() {
         .from('turmas')
         .select(`
             *,
-            perfis:professor_id (
+            professor:perfis!professor_id (
                 id,
                 full_name
             ),
-            matriculas_turmas (
+            matriculas:matriculas_turmas (
                 id,
                 status,
-                estudantes:estudante_id (
+                estudante:estudantes!estudante_id (
                     id,
                     nome_responsavel,
                     data_nascimento,
@@ -471,10 +471,10 @@ export async function getTurmas() {
     // Normalizar dados
     const transformedData = (data as any)?.map((turma: any) => ({
         ...turma,
-        professor: Array.isArray(turma.perfis) ? turma.perfis[0] : turma.perfis,
-        matriculas: turma.matriculas_turmas?.map((m: any) => ({
+        professor: Array.isArray(turma.professor) ? turma.professor[0] : turma.professor,
+        matriculas: turma.matriculas?.map((m: any) => ({
             ...m,
-            estudante: Array.isArray(m.estudantes) ? m.estudantes[0] : m.estudantes
+            estudante: Array.isArray(m.estudante) ? m.estudante[0] : m.estudante
         }))
     }))
 
@@ -489,14 +489,14 @@ export async function getTurmaById(turmaId: string) {
         .from('turmas')
         .select(`
             *,
-            perfis:professor_id (
+            professor:perfis!professor_id (
                 id,
                 full_name
             ),
-            matriculas_turmas (
+            matriculas:matriculas_turmas (
                 id,
                 status,
-                estudantes (
+                estudante:estudantes!estudante_id (
                     id,
                     nome_responsavel,
                     data_nascimento,
@@ -523,10 +523,10 @@ export async function getTurmaById(turmaId: string) {
     // Normalizar dados
     const transformedData = {
         ...(data as any),
-        professor: Array.isArray((data as any).perfis) ? (data as any).perfis[0] : (data as any).perfis,
-        matriculas: (data as any).matriculas_turmas?.map((m: any) => ({
+        professor: Array.isArray((data as any).professor) ? (data as any).professor[0] : (data as any).professor,
+        matriculas: (data as any).matriculas?.map((m: any) => ({
             ...m,
-            estudante: Array.isArray(m.estudantes) ? m.estudantes[0] : m.estudantes
+            estudante: Array.isArray(m.estudante) ? m.estudante[0] : m.estudante
         }))
     }
 
@@ -762,7 +762,7 @@ export async function getRecursosTurma(turmaId: string) {
         .from('recursos_turmas')
         .select(`
             *,
-            criador:criador_id (
+            criador:perfis!criador_id (
                 id,
                 full_name,
                 role
@@ -778,7 +778,13 @@ export async function getRecursosTurma(turmaId: string) {
         throw new Error(`Erro ao buscar recursos: ${error.message}`)
     }
 
-    return { data: recursos || [] }
+    // Normalizar criador
+    const transformed = recursos?.map(r => ({
+        ...r,
+        criador: Array.isArray(r.criador) ? r.criador[0] : r.criador
+    }))
+
+    return { data: transformed || [] }
 }
 
 /**
