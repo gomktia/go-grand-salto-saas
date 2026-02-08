@@ -19,7 +19,7 @@ type BodyMetricsDialogProps = {
         quadril?: number
         altura?: number
         torso?: number
-    }
+    } | null
     onSuccess: () => void
 }
 

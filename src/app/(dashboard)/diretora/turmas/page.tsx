@@ -48,14 +48,14 @@ type Turma = {
     cor_etiqueta: string
     professor_id?: string
     created_at: string
-    perfis?: {
+    professor?: {
         id: string
         full_name: string
     }
-    matriculas_turmas: Array<{
+    matriculas: Array<{
         id: string
         status: string
-        estudantes?: {
+        estudante?: {
             id: string
             nome_responsavel: string
             data_nascimento: string
@@ -156,12 +156,12 @@ export default function TurmasPage() {
     }
 
     const calculateFillRate = (turma: Turma) => {
-        const matriculados = turma.matriculas_turmas.filter(m => m.status === 'ativo').length
+        const matriculados = turma.matriculas.filter(m => m.status === 'ativo').length
         return turma.vagas_max > 0 ? Math.round((matriculados / turma.vagas_max) * 100) : 0
     }
 
     const getNumeroAlunos = (turma: Turma) => {
-        const matriculados = turma.matriculas_turmas.filter(m => m.status === 'ativo').length
+        const matriculados = turma.matriculas.filter(m => m.status === 'ativo').length
         return `${matriculados}/${turma.vagas_max}`
     }
 
@@ -222,7 +222,7 @@ export default function TurmasPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[
                     { label: 'Total de Turmas', value: turmas.length, icon: Layers, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-                    { label: 'Total de Alunos', value: turmas.reduce((acc, t) => acc + t.matriculas_turmas.filter(m => m.status === 'ativo').length, 0), icon: Users, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+                    { label: 'Total de Alunos', value: turmas.reduce((acc, t) => acc + (t.matriculas?.filter(m => m.status === 'ativo').length || 0), 0), icon: Users, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
                     { label: 'Ocupação Média', value: `${turmas.length > 0 ? Math.round(turmas.reduce((acc, t) => acc + calculateFillRate(t), 0) / turmas.length) : 0}%`, icon: CalendarIcon, color: 'text-amber-500', bg: 'bg-amber-500/10' }
                 ].map((stat, i) => (
                     <Card key={i} className="bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm overflow-hidden relative group">
@@ -420,7 +420,7 @@ export default function TurmasPage() {
                         onOpenChange={setMatriculasDialogOpen}
                         turmaId={selectedTurma.id}
                         turmaNome={selectedTurma.nome}
-                        matriculas={selectedTurma.matriculas_turmas}
+                        matriculas={selectedTurma.matriculas}
                         onSuccess={handleSuccess}
                     />
 

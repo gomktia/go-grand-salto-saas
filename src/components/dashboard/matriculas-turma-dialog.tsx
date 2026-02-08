@@ -17,7 +17,7 @@ type Aluno = {
 type Matricula = {
     id: string
     status: string
-    estudantes?: Aluno
+    estudante?: Aluno
 }
 
 type MatriculasTurmaDialogProps = {
@@ -67,7 +67,7 @@ export function MatriculasTurmaDialog({
 
     // Filtrar alunos que ainda não estão matriculados
     const alunosDisponiveis = todosAlunos.filter(aluno =>
-        !matriculas.some(m => m.estudantes?.id === aluno.id) &&
+        !matriculas.some(m => m.estudante?.id === aluno.id) &&
         aluno.status_matricula === 'ativo'
     )
 
@@ -182,8 +182,8 @@ export function MatriculasTurmaDialog({
                             </div>
                         ) : (
                             <div className="space-y-2">
-                                {matriculas.filter(m => m.estudantes).map((matricula) => {
-                                    const aluno = matricula.estudantes!
+                                {matriculas.filter(m => m.estudante).map((matricula) => {
+                                    const aluno = matricula.estudante!
                                     const idade = calculateAge(aluno.data_nascimento)
 
                                     return (

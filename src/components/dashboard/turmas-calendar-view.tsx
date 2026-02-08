@@ -13,14 +13,14 @@ type Turma = {
     cor_etiqueta: string
     professor_id?: string
     created_at: string
-    perfis?: {
+    professor?: {
         id: string
         full_name: string
     }
-    matriculas_turmas: Array<{
+    matriculas: Array<{
         id: string
         status: string
-        estudantes?: {
+        estudante?: {
             id: string
             nome_responsavel: string
             data_nascimento: string
@@ -71,7 +71,7 @@ export function TurmasCalendarView({ turmas, onTurmaClick }: TurmasCalendarViewP
     }
 
     const getNumeroAlunos = (turma: Turma) => {
-        return turma.matriculas_turmas.filter(m => m.status === 'ativo').length
+        return (turma.matriculas || []).filter(m => m.status === 'ativo').length
     }
 
     return (

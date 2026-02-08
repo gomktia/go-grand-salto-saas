@@ -47,14 +47,14 @@ type Student = {
     status_matricula: string
     observacoes_medicas?: string
     created_at: string
-    metricas_corpo: Array<{
+    metricas_corpo: {
         busto: number
         cintura: number
         quadril: number
         altura: number
         torso: number
         data_medicao: string
-    }>
+    } | null
 }
 
 export default function AlunosPage() {
@@ -228,7 +228,7 @@ export default function AlunosPage() {
                             </div>
                         </div>
                         <div className="text-2xl font-black text-zinc-900 dark:text-white">
-                            {students.filter(s => (s.metricas_corpo?.length || 0) > 0).length}
+                            {students.filter(s => !!s.metricas_corpo).length}
                         </div>
                         <div className="text-[9px] text-zinc-500 dark:text-zinc-500 font-bold uppercase tracking-widest mt-1 flex items-center gap-1.5">
                             Acompanhamento
@@ -277,7 +277,7 @@ export default function AlunosPage() {
                             </thead>
                             <tbody className="divide-y divide-zinc-50 dark:divide-zinc-800/50">
                                 {filteredStudents.map((student) => {
-                                    const latestMetric = student.metricas_corpo?.[0]
+                                    const latestMetric = student.metricas_corpo
                                     const age = calculateAge(student.data_nascimento)
 
                                     return (
@@ -420,7 +420,7 @@ export default function AlunosPage() {
                         onOpenChange={setMetricsDialogOpen}
                         studentId={selectedStudent.id}
                         studentName={selectedStudent.nome_responsavel}
-                        currentMetrics={selectedStudent.metricas_corpo?.[0]}
+                        currentMetrics={selectedStudent.metricas_corpo}
                         onSuccess={handleSuccess}
                     />
 

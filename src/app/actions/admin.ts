@@ -292,7 +292,7 @@ export async function getStats() {
         .select('status, valor')
         .eq('ano_referencia', anoAtual)
         .eq('mes_referencia', mesAtual)
-        .eq('estudantes.escola_id', perfil.escola_id)
+        .eq('escola_id', perfil.escola_id)
 
     const totalExpected = mensalidades?.reduce((acc, m) => acc + Number(m.valor), 0) || 0
     const totalPaid = mensalidades?.filter(m => m.status === 'pago').reduce((acc, m) => acc + Number(m.valor), 0) || 0
